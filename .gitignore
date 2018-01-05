@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /src/constants/keys.js
+/src/data
 
 # testing
 /coverage
