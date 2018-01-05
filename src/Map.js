@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
 import MapboxGl from 'mapbox-gl'
-import { MAPBOX_TOKEN } from './data/keys.js'
+import { MAPBOX_TOKEN } from './constants/keys.js'
+
+import bounds from './data/subunits-flint.json'
 
 export default class Map extends Component {
 	
@@ -31,6 +33,20 @@ export default class Map extends Component {
 
     map.on('load', (...args) => {
       this.setState({ map })
+
+      map.addLayer({
+        'id': 'boundsLayer',
+        'type': 'fill',
+        'source': {
+          'type': 'geojson',
+          'data': bounds
+        },
+        'layout': {},
+        'paint': {
+          'fill-color': '#fff',
+          'fill-opacity': 0.1
+        }
+      });
     });
 
     window.addEventListener('resize', this._resize);
