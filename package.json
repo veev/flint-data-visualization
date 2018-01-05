@@ -6,6 +6,7 @@
     "mapbox-gl": "^0.43.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-player-controls": "^0.5.17",
     "react-scripts": "1.0.17"
   },
   "scripts": {
