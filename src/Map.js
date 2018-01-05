@@ -6,24 +6,31 @@ import { MAPBOX_TOKEN } from './constants/keys.js'
 import bounds from './data/subunits-flint.json'
 
 export default class Map extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      map: null
+    };
+  }
 	
-	static childContextTypes = {
-		map: PropTypes.object
-	}
+  // static childContextTypes = {
+  //   map: PropTypes.object
+  // }
 
-	state = {
-		map: null
-	}
+  // state = {
+  // 	map: null
+  // }
 
-  getChildContext = () => ({
-    map: this.state.map
-  });
+  // getChildContext = () => ({
+  //   map: this.state.map
+  // });
 
   componentDidMount() {
     MapboxGl.accessToken = MAPBOX_TOKEN
 
-    const map = new MapboxGl.Map({
-      container: this.container,
+    this.map = new MapboxGl.Map({
+      container: this.mapContainer,
       style: 'mapbox://styles/mapbox/dark-v9',
       center: [-83.6969862, 43.0215524],
       zoom: 12,
@@ -31,10 +38,11 @@ export default class Map extends Component {
       bearing: 0
     });
 
-    map.on('load', (...args) => {
-      this.setState({ map })
+    this.map.on('load', (...args) => {
+      // this.setState({ this.getChildContext() })
 
-      map.addLayer({
+      // this layer is static and doesn't change - marks city boundaries
+      this.map.addLayer({
         'id': 'boundsLayer',
         'type': 'fill',
         'source': {
@@ -47,21 +55,37 @@ export default class Map extends Component {
           'fill-opacity': 0.1
         }
       });
+
+      //incidents layer
+      this.map.addLayer({
+        'id': 'incidentsLayer',
+        'type': 'circle',
+        'source': {
+          'type': 'geojson',
+          'data': this.props.sourceData
+        },
+        'layout': {},
+        'paint': {
+          'circle-color': 'red'
+        }
+      });
+
     });
 
     window.addEventListener('resize', this._resize);
-    this._resize();
+    // this._resize();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextProps.children !== this.props.children ||
-      nextState.map !== this.state.map
-    )
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return (
+  //     nextProps.children !== this.props.children ||
+  //     nextState.map !== this.state.map
+  //   )
+  // }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this._resize);
+    this.map.remove();
   }
 
   _resize = () => {
@@ -79,7 +103,7 @@ export default class Map extends Component {
     const { map } = this.state;
 
     return (
-      <div className='Map' ref={(x) => { this.container = x }}>
+      <div className='Map' ref={(el) => { this.mapContainer = el }}>
         { map && children }
       </div>
     )
