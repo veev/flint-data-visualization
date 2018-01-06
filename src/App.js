@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import './App.css'
 
 import Map from './Map'
+import Timeline from './Timeline'
 // import Source from './Source'
 // import Layer from './Layer'
 
@@ -10,16 +10,14 @@ import incidents from './data/may5-12-incidents.json'
 class App extends Component {
 
   state = {
-    sliderValue: 0.5,
-    purple: {
-      isLayerChecked: false
-    }
+    totalTime: 
   };
 
   render() {
     return (
       <div className="App">
         <Map sourceData={incidents} />
+        <Timeline />
       </div>
     );
   }
