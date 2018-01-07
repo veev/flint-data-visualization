@@ -9,7 +9,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-player-controls": "^0.5.17",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "semantic-ui-react": "^0.77.1"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
