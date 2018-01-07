@@ -1,0 +1,40 @@
+.App-header {
+  background-color: #222;
+  height: 50px;
+  padding: 20px;
+  color: white; }
+
+.App-title {
+  font-size: 1.5em; }
+
+.App-intro {
+  font-size: large; }
+
+.Map {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  height: 90vh;
+  /*  bottom: 0;*/ }
+
+.PlaybackControls {
+  position: absolute;
+  height: 10vh;
+  bottom: 0; }
+
+.PlayButton,
+.PauseButton {
+  margin-right: 10px;
+  padding: 8px;
+  background: white;
+  border: 2px solid green;
+  border-radius: 100%;
+  outline: none; }
+
+.Icon {
+  display: block;
+  width: 50px;
+  height: 50px; }
+
+.Icon-shape {
+  fill: green; }
