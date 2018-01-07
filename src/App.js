@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Map from './Map'
 import Timeline from './Timeline'
-import './styles/css/App.css'
+// import './styles/App.css'
 // import Source from './Source'
 // import Layer from './Layer'
 
