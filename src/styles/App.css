@@ -5,7 +5,15 @@
   color: white; }
 
 .App-title {
-  font-size: 1.5em; }
+  font-size: 1.5em;
+  font-family: "fgcm", "Helvetica", sans-serif;
+  /*color: #fb3f48;*/
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: 15px;
+  left: 20px; }
 
 .App-intro {
   font-size: large; }
@@ -14,27 +22,94 @@
   position: absolute;
   width: 100%;
   top: 0;
-  height: 90vh;
+  height: 94vh;
   /*  bottom: 0;*/ }
 
-.PlaybackControls {
+.Timeline {
   position: absolute;
-  height: 10vh;
+  width: 100vw;
   bottom: 0; }
-
-.PlayButton,
-.PauseButton {
-  margin-right: 10px;
-  padding: 8px;
-  background: #fefefe;
-  border: 2px solid #72D687;
-  border-radius: 100%;
-  outline: none; }
-
-.Icon {
-  display: block;
-  width: 50px;
-  height: 50px; }
-
-.Icon-shape {
-  fill: #72D687; }
+  .Timeline .PlaybackControls {
+    height: 6vh;
+    float: left;
+    width: 60px; }
+  .Timeline .PlayButton,
+  .Timeline .PauseButton {
+    margin-right: 10px;
+    padding: 8px;
+    background: #fefefe;
+    border: 2px solid #72D687;
+    border-radius: 100%;
+    outline: none; }
+    .Timeline .PlayButton[disabled],
+    .Timeline .PauseButton[disabled] {
+      opacity: 0.5; }
+    .Timeline .PlayButton.isEnabled,
+    .Timeline .PauseButton.isEnabled {
+      cursor: pointer; }
+      .Timeline .PlayButton.isEnabled:hover,
+      .Timeline .PauseButton.isEnabled:hover {
+        border-color: #3ea454; }
+        .Timeline .PlayButton.isEnabled:hover .Icon-shape,
+        .Timeline .PauseButton.isEnabled:hover .Icon-shape {
+          fill: #3ea454; }
+      .Timeline .PlayButton.isEnabled:active,
+      .Timeline .PauseButton.isEnabled:active {
+        border-color: rgba(62, 164, 84, 0.5); }
+        .Timeline .PlayButton.isEnabled:active .Icon-shape,
+        .Timeline .PauseButton.isEnabled:active .Icon-shape {
+          fill: rgba(62, 164, 84, 0.5); }
+  .Timeline .Icon {
+    display: block;
+    width: 30px;
+    height: 30px; }
+  .Timeline .Icon-shape {
+    fill: #72D687; }
+  .Timeline .ProgressBar {
+    position: relative;
+    background: #eee;
+    border-radius: 4px; }
+    .Timeline .ProgressBar-elapsed, .Timeline .ProgressBar-value {
+      background: #878C88;
+      border-radius: 4px; }
+    .Timeline .ProgressBar-seek {
+      position: absolute;
+      cursor: pointer; }
+    .Timeline .ProgressBar-handle {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #72D687;
+      border-radius: 100%;
+      transform: scale(0);
+      transition: transform 0.2s; }
+    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-handle, .Timeline .ProgressBar.isEnabled:hover .ProgressBar-handle {
+      transform: scale(1); }
+    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-intent, .Timeline .ProgressBar.isEnabled:hover .ProgressBar-intent {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.05); }
+    .Timeline .ProgressBar.isSeekable .ProgressBar-elapsed, .Timeline .ProgressBar.isEnabled .ProgressBar-elapsed {
+      background: #72D687; }
+  .Timeline .ProgressBar {
+    height: 8px;
+    margin: 20px 0px 10px 60px; }
+    .Timeline .ProgressBar-elapsed {
+      height: 100%; }
+    .Timeline .ProgressBar-seek {
+      top: -6px;
+      right: 0;
+      bottom: -6px;
+      left: 0; }
+    .Timeline .ProgressBar-handle {
+      top: 0;
+      margin: -4px 0 0 -8px; }
+    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-handle {
+      transform: scale(1); }
+    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-intent {
+      top: 0;
+      left: 0;
+      height: 100%; }
+    .Timeline .ProgressBar.isLoading {
+      opacity: 0.5;
+      background: #ccc;
+      animation: barLoading 2s infinite; }

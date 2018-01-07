@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import Map from './Map'
 import Timeline from './Timeline'
+import Title from './Title'
 // import './styles/App.css'
 // import Source from './Source'
 // import Layer from './Layer'
@@ -17,6 +18,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Title className="App-title" title="Flint Police Dispatches"/>
         <Map sourceData={incidents} />
         <Timeline />
       </div>

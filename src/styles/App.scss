@@ -4,6 +4,14 @@ $white: #fefefe;
 $blue: #0E52CE;
 $green: #72D687;
 
+$icon-size: 30px;
+
+// $color-hover: saturate(lighten($green, 10%), 20%);
+// $color-active: desaturate(darken($green, 20%), 20%);
+
+$color-hover: desaturate(darken($green, 20%), 10%);
+$color-active: fade-out($color-hover, 0.5);
+
 .App {
 
 }
@@ -17,6 +25,14 @@ $green: #72D687;
 
 .App-title {
   font-size: 1.5em;
+  font-family: "fgcm", "Helvetica", sans-serif;
+  /*color: #fb3f48;*/
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: 15px;
+  left: 20px;
 }
 
 .App-intro {
@@ -27,64 +43,154 @@ $green: #72D687;
   position: absolute;
   width: 100%;
   top: 0;
-  height: 90vh;
+  height: 94vh;
 /*  bottom: 0;*/
 }
 
-$icon-size: 30px;
-
-// $color-hover: saturate(lighten($green, 10%), 20%);
-// $color-active: desaturate(darken($green, 20%), 20%);
-
-$color-hover: desaturate(darken($green, 20%), 10%);
-$color-active: fade-out($color-hover, 0.5);
-
-.PlaybackControls {
+.Timeline {
   position: absolute;
-  height: 10vh;
+  width: 100vw;
   bottom: 0;
+
+  .PlaybackControls {
+    height: 6vh;
+    float: left;
+    width: 60px;
+  }
+
+  .PlayButton,
+  .PauseButton {
+    margin-right: 10px;
+    padding: 8px;
+    background: $white;
+    border: 2px solid $green;
+    border-radius: 100%;
+    outline: none;
+
+    &[disabled] {
+      opacity: 0.5;
+    }
+
+    &.isEnabled {
+      cursor: pointer;
+
+      &:hover {
+        border-color: $color-hover;
+
+        .Icon-shape {
+          fill: $color-hover;
+        }
+      }
+
+      &:active {
+        border-color: $color-active;
+
+        .Icon-shape {
+          fill: $color-active;
+        }
+      }
+    }
+  }
+
+  .Icon {
+    display: block;
+    width: 30px;
+    height: 30px;
+  }
+
+  .Icon-shape {
+    fill: $green;
+  }
+
+
+//
+// Sliders
+//
+
+  .ProgressBar {
+    position: relative;
+    background: #eee;
+    border-radius: 4px;
+
+    &-elapsed,
+    &-value {
+      background: $gray;
+      border-radius: 4px;
+    }
+
+    &-seek {
+      position: absolute;
+      cursor: pointer;
+    }
+
+    &-handle {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: $green;
+      border-radius: 100%;
+      transform: scale(0);
+      transition: transform 0.2s;
+    }
+
+    &.isSeekable,
+    &.isEnabled {
+      &:hover {
+        .ProgressBar-handle {
+          transform: scale(1);
+        }
+
+        .ProgressBar-intent {
+          position: absolute;
+          background: rgba(0,0,0,0.05);
+        }
+      }
+
+      .ProgressBar-elapsed {
+        background: $green;
+      }
+    }
+  }
+
+  .ProgressBar {
+    height: 8px;
+    margin: 20px 0px 10px 60px;
+
+    &-elapsed {
+      height: 100%;
+    }
+
+    &-seek {
+      top: -6px;
+      right: 0;
+      bottom: -6px;
+      left: 0;
+    }
+
+    &-handle {
+      top: 0;
+      margin: -4px 0 0 -8px;
+    }
+
+    &.isSeekable {
+      &:hover {
+        .ProgressBar-handle {
+          transform: scale(1);
+        }
+
+        .ProgressBar-intent {
+          top: 0;
+          left: 0;
+          height: 100%;
+        }
+      }
+    }
+
+    &.isLoading {
+      opacity: 0.5;
+      background: #ccc;
+      animation: barLoading 2s infinite;
+    }
+  }
 }
 
-.PlayButton,
-.PauseButton {
-  margin-right: 10px;
-  padding: 8px;
-  background: $white;
-  border: 2px solid $green;
-  border-radius: 100%;
-  outline: none;
-
-  // &[disabled] {
-  //   opacity: 0.5;
-  // }
-
-  // &.isEnabled {
-  //   cursor: pointer;
-
-  //   &:hover {
-  //     border-color: $color-hover;
-
-  //     .Icon-shape {
-  //       fill: $color-hover;
-  //     }
-  //   }
-
-  //   &:active {
-  //     border-color: $color-active;
-
-  //     .Icon-shape {
-  //       fill: $color-active;
-  //     }
-  //   }
-  // }
-}
-
-.Icon {
-  display: block;
-  width: 50px;
-  height: 50px;
-}
-
-.Icon-shape {
-  fill: $green;
-}
