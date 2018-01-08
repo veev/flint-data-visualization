@@ -25,18 +25,23 @@ export default class Timeline extends Component {
     this.timer = null
   }
 
-  componentDidMount() {
-    this.timer = window.setInterval(() => {
-      this.setState(Object.assign(
-        {},
-        this.state,
-        { currentTime: (this.state.currentTime + 1) % this.state.totalTime }
-      ))
-    }, 1000)
-  }
-
   componentWillUnmount() {
     window.clearInterval(this.timer)
+  }
+
+  handleTogglePlay(isPlaying) {
+    this.setState(Object.assign({}, this.state, { isPlaying: isPlaying }))
+    if (isPlaying) {
+      this.timer = window.setInterval(() => {
+          this.setState(Object.assign(
+            {},
+            this.state,
+            { currentTime: (this.state.currentTime + 1) % this.state.totalTime }
+          ))
+        }, 1000)
+      } else {
+        window.clearInterval(this.timer);
+      }
   }
 
   render() {
@@ -48,7 +53,7 @@ export default class Timeline extends Component {
         <PlaybackControls
           isPlayable={isPlayable}
           isPlaying={isPlaying}
-          onPlaybackChange={isPlaying => this.setState(Object.assign({}, this.state, { isPlaying: isPlaying }))}
+          onPlaybackChange={isPlaying => this.handleTogglePlay(isPlaying) }
           showPrevious={false}
           showNext={false}
           />
