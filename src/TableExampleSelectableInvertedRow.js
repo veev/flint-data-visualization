@@ -1,31 +1,21 @@
 import React from 'react'
 import { Table } from 'semantic-ui-react'
 
-const TableExampleSelectableInvertedRow = () => (
+const TableExampleSelectableInvertedRow = (props) => (
   <Table celled selectable>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>Name</Table.HeaderCell>
+        <Table.HeaderCell>Type</Table.HeaderCell>
         <Table.HeaderCell>Status</Table.HeaderCell>
-        <Table.HeaderCell>Notes</Table.HeaderCell>
+        <Table.HeaderCell>Active Time</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
 
     <Table.Body>
-      <Table.Row onSelect={console.log("row click")}>
-        <Table.Cell>John</Table.Cell>
+      <Table.Row>
+        <Table.Cell>{props.incidentInfo.properties.type}</Table.Cell>
         <Table.Cell>Approved</Table.Cell>
-        <Table.Cell textAlign='right'>None</Table.Cell>
-      </Table.Row>
-      <Table.Row onSelect={console.log("row click")}>
-        <Table.Cell>Jamie</Table.Cell>
-        <Table.Cell>Approved</Table.Cell>
-        <Table.Cell textAlign='right'>Requires call</Table.Cell>
-      </Table.Row>
-      <Table.Row onSelect={console.log("row click")}>
-        <Table.Cell>Jill</Table.Cell>
-        <Table.Cell>Denied</Table.Cell>
-        <Table.Cell textAlign='right'>None</Table.Cell>
+        <Table.Cell textAlign='right'>{props.incidentInfo.properties.time}</Table.Cell>
       </Table.Row>
     </Table.Body>
   </Table>

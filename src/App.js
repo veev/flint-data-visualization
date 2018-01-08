@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 
 import Map from './Map'
 import Timeline from './Timeline'
@@ -37,7 +38,7 @@ class App extends Component {
         <Map sourceData={incidents} />
         <Title title="Flint Police Dispatches"/>
         <Timeline onClick={this.update}/>
-        <Board />
+        <Board sourceData={incidents} />
         <h1>{this.state.currentEvent}</h1>
       </div>
     );
@@ -45,6 +46,8 @@ class App extends Component {
 
   componentDidMount() {
     // have access to the component in React DOM (has already rendered)
+    console.log('componentDidMount')
+    console.log(ReactDOM.findDOMNode(this))
   }
 }
 

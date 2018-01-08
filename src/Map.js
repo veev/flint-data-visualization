@@ -8,7 +8,7 @@ import bounds from './data/subunits-flint.json'
 export default class Map extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       map: null
     };
