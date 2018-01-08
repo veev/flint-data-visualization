@@ -47,6 +47,13 @@ $color-active: fade-out($color-hover, 0.5);
 /*  bottom: 0;*/
 }
 
+.Board {
+  position: absolute;
+  width: 40vw;
+  min-height: 100px;
+  top: 50px;
+}
+
 .Timeline {
   position: absolute;
   width: 100vw;
