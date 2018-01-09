@@ -49,8 +49,10 @@ $color-active: fade-out($color-hover, 0.5);
 
 .Board {
   position: absolute;
-  width: 40vw;
+  // width: 40vw;
   min-height: 100px;
+  height: 85vh;
+  overflow-y: scroll;
   top: 50px;
 }
 
