@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import TableExampleSelectableInvertedRow from './TableExampleSelectableInvertedRow'
-import { Table, Sticky } from 'semantic-ui-react'
+import { Table } from 'semantic-ui-react'
 
 export default class Board extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ export default class Board extends Component {
 
   render() {
     const activeIncidents = this.props.sourceData.features
-    const { contextRef } = this.state
+    // const { contextRef } = this.state
 
     return(
       <div className="Board" ref={this.handleContextRef}>

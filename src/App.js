@@ -16,9 +16,16 @@ class App extends Component {
   constructor() {
     super(); // for correct context
     this.state = {
-      isPlaying: false
+      isPlaying: false,
+      currentTime: 15
     }
-    this.update.bind(this)
+
+    this.timer = null
+    // this.update.bind(this)
+  }
+
+  static defaultProps = {
+    totalTime: 190
   }
 
   componentWillMount() {
@@ -26,9 +33,42 @@ class App extends Component {
     console.log('componentWillMount')
   }
 
-  update (e) {
+  componentWillUnmount() {
+    window.clearInterval(this.timer)
+  }
+
+  _update = (e) => {
     console.log(e.type)
     this.setState({currentEvent: e.type})
+  }
+
+  _updateTime = (t) => { // writing an arrow function this way means you don't have to bind things
+    // filter incidents / make a copy, whatever
+
+    this.setState({
+      currentTime: t,
+      //activeIncidents: // TODO - filtered incidents
+    })
+  }
+
+  handlePlayState = (playState) => {
+    console.log('handleClick')
+    // this is what toggles the play / pause button
+    this.setState({ isPlaying: playState })
+
+    // need to update progress bar
+    if (playState) {
+      console.log('playState is ', playState)
+      this.timer = window.setInterval(() => {
+        this.setState(Object.assign(
+          {},
+          this.state,
+          { currentTime: (this.state.currentTime + 1) % this.props.totalTime }
+        ))
+      }, 1000)
+    } else {
+      window.clearInterval(this.timer);
+    }
   }
 
   render() {
@@ -37,15 +77,21 @@ class App extends Component {
       <div className="App">
         <Map sourceData={incidents} />
         <Title title="Flint Police Dispatches"/>
-        <Timeline onClick={this.update}/>
+        <Timeline
+          handlePlay={this.handlePlayState}
+          setTime={this._updateTime}
+          currentTime={this.state.currentTime}
+          totalTime={this.props.totalTime}
+          isPlaying={this.state.isPlaying}
+          />
         <Board sourceData={incidents} />
-        <h1>{this.state.currentEvent}</h1>
       </div>
     );
   }
 
   componentDidMount() {
     // have access to the component in React DOM (has already rendered)
+    //debugger;this._handleClick()
     console.log('componentDidMount')
     console.log(ReactDOM.findDOMNode(this))
   }
