@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { PlaybackControls, ProgressBar } from 'react-player-controls'
+//import ProgressBar from './ProgressBar'
 import { PropTypes } from 'prop-types'
 
 export default class Timeline extends Component {
@@ -13,16 +14,13 @@ export default class Timeline extends Component {
     super(props)
 
     this.state = {
-      //isPlaying: this.props.isPlaying,
+      isPlaying: this.props.isPlaying,
       isPlayable: true,
       showPrevious: false,
       showNext: false,
 
       totalTime: this.props.totalTime,
       currentTime: this.props.currentTime,
-      // isSeekable: this.props.isSeekable
-      // totalTime: 190,
-      // currentTime: 15,
       isSeekable: true,
       // lastSeekStart: 0,
       // lastSeekEnd: 0,
@@ -38,29 +36,10 @@ export default class Timeline extends Component {
     // window.clearInterval(this.timer)
   }
 
-  handleTogglePlay = (playState) => {
-    console.log('isPlaying is ', this.props.isPlaying)
-    // // this is what toggles the play / pause button
-   // debugger;this.setState(Object.assign({}, this.state, { isPlaying: isPlaying }))
-   //this.setState({isPlaying: playState})
-
-    // if (this.props.isPlaying) {
-    //   this.timer = window.setInterval(() => {
-    //     this.setState(Object.assign(
-    //       {},
-    //       this.state,
-    //       { currentTime: (this.props.currentTime + 1) % this.state.totalTime }
-    //     ))
-    //   }, 1000)
-    // } else {
-    //   window.clearInterval(this.timer);
-    // }
-  }
-
   render() {
     const { isPlayable, showPrevious, showNext, isSeekable } = this.state
     const { currentTime, totalTime, isPlaying } = this.props
-
+    console.log(currentTime, totalTime)
     return(
       <div className='Timeline'>
         <PlaybackControls

@@ -9,7 +9,7 @@ import Board from './Board'
 // import './styles/App.css'
 // import Source from './Source'
 // import Layer from './Layer'
-
+import { map_range } from './utils'
 import incidents from './data/may5-12-incidents.json'
 
 class App extends Component {
@@ -17,7 +17,8 @@ class App extends Component {
     super(); // for correct context
     this.state = {
       isPlaying: false,
-      currentTime: 15
+      currentTime: 1493957314000
+      //currentTime: 30
     }
 
     this.timer = null
@@ -25,7 +26,12 @@ class App extends Component {
   }
 
   static defaultProps = {
-    totalTime: 190
+    totalTime: 1494649957000,
+    startTS: 1493957314000,
+    endTS: 1494649957000,
+    // startTS: 30,
+    // endTS: 90,
+    // totalTime: 90
   }
 
   componentWillMount() {
@@ -52,18 +58,18 @@ class App extends Component {
   }
 
   handlePlayState = (playState) => {
-    console.log('handleClick')
     // this is what toggles the play / pause button
     this.setState({ isPlaying: playState })
 
     // need to update progress bar
     if (playState) {
-      console.log('playState is ', playState)
+      //console.log('playState is ', playState)
+      
       this.timer = window.setInterval(() => {
         this.setState(Object.assign(
           {},
           this.state,
-          { currentTime: (this.state.currentTime + 1) % this.props.totalTime }
+          { currentTime: (this.state.currentTime + 10000000) % this.props.totalTime }
         ))
       }, 1000)
     } else {
@@ -71,18 +77,31 @@ class App extends Component {
     }
   }
 
+  convertTime = (value) => {
+    console.log(value)
+    let t = map_range(value, this.props.startTS, this.props.endTS, 0, (this.props.endTS - this.props.startTS))
+    console.log(t)
+    return t
+  }
+
+
+
   render() {
-    console.log('render')
+    const { isPlaying, currentTime } = this.state
+    const { totalTime, startTS, endTS } = this.props
+    //console.log(currentTime)
     return (
       <div className="App">
         <Map sourceData={incidents} />
         <Title title="Flint Police Dispatches"/>
+        <div className="timeOutput">{currentTime}</div>
         <Timeline
           handlePlay={this.handlePlayState}
-          setTime={this._updateTime}
-          currentTime={this.state.currentTime}
-          totalTime={this.props.totalTime}
-          isPlaying={this.state.isPlaying}
+          // setTime={this._updateTime}
+          //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
+          currentTime={this.convertTime(currentTime)}
+          totalTime={this.convertTime(totalTime)}
+          isPlaying={isPlaying}
           />
         <Board sourceData={incidents} />
       </div>

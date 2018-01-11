@@ -32,6 +32,11 @@
   overflow-y: scroll;
   top: 50px; }
 
+.timeOutput {
+  position: absolute;
+  top: 0;
+  right: 0; }
+
 .Timeline {
   position: absolute;
   width: 100vw;
