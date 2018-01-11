@@ -39,7 +39,7 @@ export default class Timeline extends Component {
   render() {
     const { isPlayable, showPrevious, showNext, isSeekable } = this.state
     const { currentTime, totalTime, isPlaying } = this.props
-    console.log(currentTime, totalTime)
+    console.log(currentTime)
     return(
       <div className='Timeline'>
         <PlaybackControls

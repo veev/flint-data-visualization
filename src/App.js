@@ -84,17 +84,24 @@ class App extends Component {
     return t
   }
 
+  // formatTime = (ts) => {
+
+  // }
+  filterIncidents = (cTime) => {
+
+  }
 
 
   render() {
     const { isPlaying, currentTime } = this.state
     const { totalTime, startTS, endTS } = this.props
+    let formattedTime = new Date(currentTime).toString().substring(0, 24)
     //console.log(currentTime)
     return (
       <div className="App">
         <Map sourceData={incidents} />
         <Title title="Flint Police Dispatches"/>
-        <div className="timeOutput">{currentTime}</div>
+        <div className="timeOutput">{formattedTime}</div>
         <Timeline
           handlePlay={this.handlePlayState}
           // setTime={this._updateTime}
