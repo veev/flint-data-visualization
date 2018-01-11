@@ -41,87 +41,93 @@
   position: absolute;
   width: 100vw;
   bottom: 0; }
-  .Timeline .PlaybackControls {
-    height: 6vh;
-    float: left;
-    width: 60px; }
-  .Timeline .PlayButton,
-  .Timeline .PauseButton {
-    margin-right: 10px;
-    padding: 8px;
-    background: #fefefe;
-    border: 2px solid #72D687;
-    border-radius: 100%;
-    outline: none; }
-    .Timeline .PlayButton[disabled],
-    .Timeline .PauseButton[disabled] {
-      opacity: 0.5; }
-    .Timeline .PlayButton.isEnabled,
-    .Timeline .PauseButton.isEnabled {
-      cursor: pointer; }
-      .Timeline .PlayButton.isEnabled:hover,
-      .Timeline .PauseButton.isEnabled:hover {
-        border-color: #3ea454; }
-        .Timeline .PlayButton.isEnabled:hover .Icon-shape,
-        .Timeline .PauseButton.isEnabled:hover .Icon-shape {
-          fill: #3ea454; }
-      .Timeline .PlayButton.isEnabled:active,
-      .Timeline .PauseButton.isEnabled:active {
-        border-color: rgba(62, 164, 84, 0.5); }
-        .Timeline .PlayButton.isEnabled:active .Icon-shape,
-        .Timeline .PauseButton.isEnabled:active .Icon-shape {
-          fill: rgba(62, 164, 84, 0.5); }
-  .Timeline .Icon {
-    display: block;
-    width: 30px;
-    height: 30px; }
-  .Timeline .Icon-shape {
-    fill: #72D687; }
-  .Timeline .ProgressBar {
-    position: relative;
-    background: #eee;
+
+.PlaybackControls {
+  height: 6vh;
+  float: left;
+  width: 60px; }
+
+.PlayButton,
+.PauseButton {
+  margin-right: 10px;
+  padding: 8px;
+  background: #fefefe;
+  border: 2px solid #72D687;
+  border-radius: 100%;
+  outline: none; }
+  .PlayButton[disabled],
+  .PauseButton[disabled] {
+    opacity: 0.5; }
+  .PlayButton.isEnabled,
+  .PauseButton.isEnabled {
+    cursor: pointer; }
+    .PlayButton.isEnabled:hover,
+    .PauseButton.isEnabled:hover {
+      border-color: #3ea454; }
+      .PlayButton.isEnabled:hover .Icon-shape,
+      .PauseButton.isEnabled:hover .Icon-shape {
+        fill: #3ea454; }
+    .PlayButton.isEnabled:active,
+    .PauseButton.isEnabled:active {
+      border-color: rgba(62, 164, 84, 0.5); }
+      .PlayButton.isEnabled:active .Icon-shape,
+      .PauseButton.isEnabled:active .Icon-shape {
+        fill: rgba(62, 164, 84, 0.5); }
+
+.Icon {
+  display: block;
+  width: 30px;
+  height: 30px; }
+
+.Icon-shape {
+  fill: #72D687; }
+
+.ProgressBar {
+  position: relative;
+  background: #eee;
+  border-radius: 4px; }
+  .ProgressBar-elapsed, .ProgressBar-value {
+    background: #878C88;
     border-radius: 4px; }
-    .Timeline .ProgressBar-elapsed, .Timeline .ProgressBar-value {
-      background: #878C88;
-      border-radius: 4px; }
-    .Timeline .ProgressBar-seek {
-      position: absolute;
-      cursor: pointer; }
-    .Timeline .ProgressBar-handle {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      background: #72D687;
-      border-radius: 100%;
-      transform: scale(0);
-      transition: transform 0.2s; }
-    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-handle, .Timeline .ProgressBar.isEnabled:hover .ProgressBar-handle {
-      transform: scale(1); }
-    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-intent, .Timeline .ProgressBar.isEnabled:hover .ProgressBar-intent {
-      position: absolute;
-      background: rgba(0, 0, 0, 0.05); }
-    .Timeline .ProgressBar.isSeekable .ProgressBar-elapsed, .Timeline .ProgressBar.isEnabled .ProgressBar-elapsed {
-      background: #72D687; }
-  .Timeline .ProgressBar {
-    height: 8px;
-    margin: 20px 0px 10px 60px; }
-    .Timeline .ProgressBar-elapsed {
-      height: 100%; }
-    .Timeline .ProgressBar-seek {
-      top: -6px;
-      right: 0;
-      bottom: -6px;
-      left: 0; }
-    .Timeline .ProgressBar-handle {
-      top: 0;
-      margin: -4px 0 0 -8px; }
-    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-handle {
-      transform: scale(1); }
-    .Timeline .ProgressBar.isSeekable:hover .ProgressBar-intent {
-      top: 0;
-      left: 0;
-      height: 100%; }
-    .Timeline .ProgressBar.isLoading {
-      opacity: 0.5;
-      background: #ccc;
-      animation: barLoading 2s infinite; }
+  .ProgressBar-seek {
+    position: absolute;
+    cursor: pointer; }
+  .ProgressBar-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #72D687;
+    border-radius: 100%;
+    transform: scale(0);
+    transition: transform 0.2s; }
+  .ProgressBar.isSeekable:hover .ProgressBar-handle, .ProgressBar.isEnabled:hover .ProgressBar-handle {
+    transform: scale(1); }
+  .ProgressBar.isSeekable:hover .ProgressBar-intent, .ProgressBar.isEnabled:hover .ProgressBar-intent {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.05); }
+  .ProgressBar.isSeekable .ProgressBar-elapsed, .ProgressBar.isEnabled .ProgressBar-elapsed {
+    background: #72D687; }
+
+.ProgressBar {
+  height: 8px;
+  margin: 20px 0px 10px 60px; }
+  .ProgressBar-elapsed {
+    height: 100%; }
+  .ProgressBar-seek {
+    top: -6px;
+    right: 0;
+    bottom: -6px;
+    left: 0; }
+  .ProgressBar-handle {
+    top: 0;
+    margin: -4px 0 0 -8px; }
+  .ProgressBar.isSeekable:hover .ProgressBar-handle {
+    transform: scale(1); }
+  .ProgressBar.isSeekable:hover .ProgressBar-intent {
+    top: 0;
+    left: 0;
+    height: 100%; }
+  .ProgressBar.isLoading {
+    opacity: 0.5;
+    background: #ccc;
+    animation: barLoading 2s infinite; }

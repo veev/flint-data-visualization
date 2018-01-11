@@ -22,8 +22,8 @@ export default class Timeline extends Component {
       totalTime: this.props.totalTime,
       currentTime: this.props.currentTime,
       isSeekable: true,
-      // lastSeekStart: 0,
-      // lastSeekEnd: 0,
+      lastSeekStart: this.props.currentTime,
+      lastSeekEnd: this.props.currentTime
     }
     // this.timer = null
   }
@@ -53,10 +53,9 @@ export default class Timeline extends Component {
           totalTime={totalTime}
           currentTime={currentTime}
           isSeekable={isSeekable}
-          onSeek={time => this.setState({currentTime: time })}
+          onSeek={this.props.handleSeek}
           onSeekStart={time => this.setState(() => ({ lastSeekStart: time }))}
           onSeekEnd={time => this.setState(() => ({ lastSeekEnd: time }))}
-          onIntent={time => this.setState(() => ({ lastIntent: time }))}
         />
       </div>
     )

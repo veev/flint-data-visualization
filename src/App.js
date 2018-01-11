@@ -12,12 +12,26 @@ import Board from './Board'
 import { map_range } from './utils'
 import incidents from './data/may5-12-incidents.json'
 
+// class Board extends React.Component {
+//     shouldComponentUpdate(nextProps, nextState) {
+
+//     }
+//   }
+// }
+
+// import BoardMaker from 'boardmaker'
+
+// const Board = BoardMaker(staticStuff)
+
+
+// <Board ts={...} />
+
 class App extends Component {
   constructor() {
     super(); // for correct context
     this.state = {
       isPlaying: false,
-      currentTime: 1493957314000
+      currentTime: 1493957
       //currentTime: 30
     }
 
@@ -26,9 +40,9 @@ class App extends Component {
   }
 
   static defaultProps = {
-    totalTime: 1494649957000,
-    startTS: 1493957314000,
-    endTS: 1494649957000,
+    totalTime: 1494649,
+    startTS: 1493957,
+    endTS: 1494649,
     // startTS: 30,
     // endTS: 90,
     // totalTime: 90
@@ -69,7 +83,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { currentTime: (this.state.currentTime + 10000000) % this.props.totalTime }
+          { currentTime: (this.state.currentTime + 10) % this.props.totalTime }
         ))
       }, 1000)
     } else {
@@ -77,11 +91,21 @@ class App extends Component {
     }
   }
 
+  handleSeekChange = (time) => {
+    const ts = this.unconvertTime(time)
+    this.setState({ currentTime: ts })
+  }
+
   convertTime = (value) => {
-    console.log(value)
+    //console.log(value)
+    // convert time so that start is 0 (what progress bar likes)
     let t = map_range(value, this.props.startTS, this.props.endTS, 0, (this.props.endTS - this.props.startTS))
-    console.log(t)
+    //console.log(t)
     return t
+  }
+
+  unconvertTime = (value) => {
+    return map_range(value, 0, (this.props.endTS - this.props.startTS), this.props.startTS, this.props.endTS)
   }
 
   // formatTime = (ts) => {
@@ -97,6 +121,9 @@ class App extends Component {
     const { totalTime, startTS, endTS } = this.props
     let formattedTime = new Date(currentTime).toString().substring(0, 24)
     //console.log(currentTime)
+
+    window.convertTime = this.convertTime;
+
     return (
       <div className="App">
         <Map sourceData={incidents} />
@@ -104,6 +131,7 @@ class App extends Component {
         <div className="timeOutput">{formattedTime}</div>
         <Timeline
           handlePlay={this.handlePlayState}
+          handleSeek={this.handleSeekChange}
           // setTime={this._updateTime}
           //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
           currentTime={this.convertTime(currentTime)}

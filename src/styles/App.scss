@@ -66,146 +66,146 @@ $color-active: fade-out($color-hover, 0.5);
   position: absolute;
   width: 100vw;
   bottom: 0;
+}
 
-  .PlaybackControls {
-    height: 6vh;
-    float: left;
-    width: 60px;
+.PlaybackControls {
+  height: 6vh;
+  float: left;
+  width: 60px;
+}
+
+.PlayButton,
+.PauseButton {
+  margin-right: 10px;
+  padding: 8px;
+  background: $white;
+  border: 2px solid $green;
+  border-radius: 100%;
+  outline: none;
+
+  &[disabled] {
+    opacity: 0.5;
   }
 
-  .PlayButton,
-  .PauseButton {
-    margin-right: 10px;
-    padding: 8px;
-    background: $white;
-    border: 2px solid $green;
-    border-radius: 100%;
-    outline: none;
+  &.isEnabled {
+    cursor: pointer;
 
-    &[disabled] {
-      opacity: 0.5;
-    }
+    &:hover {
+      border-color: $color-hover;
 
-    &.isEnabled {
-      cursor: pointer;
-
-      &:hover {
-        border-color: $color-hover;
-
-        .Icon-shape {
-          fill: $color-hover;
-        }
-      }
-
-      &:active {
-        border-color: $color-active;
-
-        .Icon-shape {
-          fill: $color-active;
-        }
+      .Icon-shape {
+        fill: $color-hover;
       }
     }
-  }
 
-  .Icon {
-    display: block;
-    width: 30px;
-    height: 30px;
-  }
+    &:active {
+      border-color: $color-active;
 
-  .Icon-shape {
-    fill: $green;
+      .Icon-shape {
+        fill: $color-active;
+      }
+    }
   }
+}
+
+.Icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.Icon-shape {
+  fill: $green;
+}
 
 
 //
 // Sliders
 //
 
-  .ProgressBar {
-    position: relative;
-    background: #eee;
+.ProgressBar {
+  position: relative;
+  background: #eee;
+  border-radius: 4px;
+
+  &-elapsed,
+  &-value {
+    background: $gray;
     border-radius: 4px;
+  }
 
-    &-elapsed,
-    &-value {
-      background: $gray;
-      border-radius: 4px;
-    }
+  &-seek {
+    position: absolute;
+    cursor: pointer;
+  }
 
-    &-seek {
-      position: absolute;
-      cursor: pointer;
-    }
+  &-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: $green;
+    border-radius: 100%;
+    transform: scale(0);
+    transition: transform 0.2s;
+  }
 
-    &-handle {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      background: $green;
-      border-radius: 100%;
-      transform: scale(0);
-      transition: transform 0.2s;
-    }
-
-    &.isSeekable,
-    &.isEnabled {
-      &:hover {
-        .ProgressBar-handle {
-          transform: scale(1);
-        }
-
-        .ProgressBar-intent {
-          position: absolute;
-          background: rgba(0,0,0,0.05);
-        }
+  &.isSeekable,
+  &.isEnabled {
+    &:hover {
+      .ProgressBar-handle {
+        transform: scale(1);
       }
 
-      .ProgressBar-elapsed {
-        background: $green;
+      .ProgressBar-intent {
+        position: absolute;
+        background: rgba(0,0,0,0.05);
+      }
+    }
+
+    .ProgressBar-elapsed {
+      background: $green;
+    }
+  }
+}
+
+.ProgressBar {
+  height: 8px;
+  margin: 20px 0px 10px 60px;
+
+  &-elapsed {
+    height: 100%;
+  }
+
+  &-seek {
+    top: -6px;
+    right: 0;
+    bottom: -6px;
+    left: 0;
+  }
+
+  &-handle {
+    top: 0;
+    margin: -4px 0 0 -8px;
+  }
+
+  &.isSeekable {
+    &:hover {
+      .ProgressBar-handle {
+        transform: scale(1);
+      }
+
+      .ProgressBar-intent {
+        top: 0;
+        left: 0;
+        height: 100%;
       }
     }
   }
 
-  .ProgressBar {
-    height: 8px;
-    margin: 20px 0px 10px 60px;
-
-    &-elapsed {
-      height: 100%;
-    }
-
-    &-seek {
-      top: -6px;
-      right: 0;
-      bottom: -6px;
-      left: 0;
-    }
-
-    &-handle {
-      top: 0;
-      margin: -4px 0 0 -8px;
-    }
-
-    &.isSeekable {
-      &:hover {
-        .ProgressBar-handle {
-          transform: scale(1);
-        }
-
-        .ProgressBar-intent {
-          top: 0;
-          left: 0;
-          height: 100%;
-        }
-      }
-    }
-
-    &.isLoading {
-      opacity: 0.5;
-      background: #ccc;
-      animation: barLoading 2s infinite;
-    }
+  &.isLoading {
+    opacity: 0.5;
+    background: #ccc;
+    animation: barLoading 2s infinite;
   }
 }
 
