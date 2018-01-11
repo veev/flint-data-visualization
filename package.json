@@ -20,10 +20,12 @@
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
-    "test": "react-scripts test --env=jsdom",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "babel-jest": "^22.0.4",
+    "jest": "^22.0.5",
     "prop-types": "^15.6.0"
   }
 }
