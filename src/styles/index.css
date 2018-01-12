@@ -28,7 +28,7 @@
 .Board {
   position: absolute;
   min-height: 100px;
-  height: 85vh;
+  min-width: 300px;
   overflow-y: scroll;
   top: 50px; }
 

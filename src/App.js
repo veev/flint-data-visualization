@@ -143,7 +143,7 @@ class App extends Component {
           totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}
           />
-        <Board staticData={data} />
+        <Board staticData={data} activeData={this.filterIncidents(currentTime)}/>
       </div>
     );
   }

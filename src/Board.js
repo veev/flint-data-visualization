@@ -10,18 +10,18 @@ export default class Board extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.sourceData)
+    //console.log(this.props.sourceData)
   }
 
   handleContextRef = contextRef => this.setState({ contextRef })
 
   render() {
-    const activeIncidents = this.props.staticData.features
+    const activeIncidents = this.props.activeData
     // const { contextRef } = this.state
 
     return(
       <div className="Board" ref={this.handleContextRef}>
-        <Table celled selectable collapsing compact>
+        <Table celled selectable compact>
           <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Type</Table.HeaderCell>
