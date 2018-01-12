@@ -84,11 +84,23 @@ export default class Map extends Component {
     // this._resize();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      nextProps.children !== this.props.children ||
-      nextState.map !== this.state.map
-    )
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log(nextProps, nextState)
+  //   return (
+  //     nextProps.children !== this.props.children ||
+  //     nextState.map !== this.state.map
+  //   )
+  //   //console.log(shouldUpdate)
+  // }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log(nextProps)
+    this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
+      nextProps.activeData.map( feature => {
+        //console.log(feature.properties.eventNumber);
+        return feature.properties.eventNumber;
+      })
+    ))
   }
 
   componentWillUnmount() {
