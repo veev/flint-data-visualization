@@ -10,7 +10,7 @@ import Board from './Board'
 // import Source from './Source'
 // import Layer from './Layer'
 import { map_range } from './utils'
-import incidents from './data/may5-12-incidents-timestamps.json'
+import incidents from './data/may5-12-incidents-timestamps2.json'
 
 // class Board extends React.Component {
 //     shouldComponentUpdate(nextProps, nextState) {
@@ -31,7 +31,7 @@ class App extends Component {
     super(); // for correct context
     this.state = {
       isPlaying: false,
-      currentTime: 1493957
+      currentTime: incidents['features'][0].properties.unix_timestamp
       //currentTime: 30
     }
 
@@ -40,9 +40,8 @@ class App extends Component {
   }
 
   static defaultProps = {
-    totalTime: 1494649,
-    startTS: 1493957,
-    endTS: 1494649,
+    startTS: incidents['features'][0].properties.unix_timestamp,
+    endTS: incidents['features'][incidents['features'].length - 1].properties.unix_end,
     // startTS: 30,
     // endTS: 90,
     // totalTime: 90
@@ -83,7 +82,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { currentTime: (this.state.currentTime + 10) % this.props.totalTime }
+          { currentTime: (this.state.currentTime + 1) % this.props.endTS }
         ))
       }, 1000)
     } else {
@@ -97,14 +96,13 @@ class App extends Component {
   }
 
   convertTime = (value) => {
-    //console.log(value)
     // convert time so that start is 0 (what progress bar likes)
-    let t = map_range(value, this.props.startTS, this.props.endTS, 0, (this.props.endTS - this.props.startTS))
-    //console.log(t)
-    return t
+    return map_range(value, this.props.startTS, this.props.endTS, 0, (this.props.endTS - this.props.startTS))
   }
 
   unconvertTime = (value) => {
+    // unconvert time so that user seeking will send the correct timestamp
+    // back to the main app from the Timeline
     return map_range(value, 0, (this.props.endTS - this.props.startTS), this.props.startTS, this.props.endTS)
   }
 
@@ -119,14 +117,14 @@ class App extends Component {
   render() {
     const { isPlaying, currentTime } = this.state
     const { totalTime, startTS, endTS } = this.props
-    let formattedTime = new Date(currentTime).toString().substring(0, 24)
+    let formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
     //console.log(currentTime)
 
     window.convertTime = this.convertTime;
 
     return (
       <div className="App">
-        <Map sourceData={incidents} />
+        <Map staticData={incidents} />
         <Title title="Flint Police Dispatches"/>
         <div className="timeOutput">{formattedTime}</div>
         <Timeline
@@ -135,10 +133,10 @@ class App extends Component {
           // setTime={this._updateTime}
           //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
           currentTime={this.convertTime(currentTime)}
-          totalTime={this.convertTime(totalTime)}
+          totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}
           />
-        <Board sourceData={incidents} />
+        <Board staticData={incidents} />
       </div>
     );
   }

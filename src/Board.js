@@ -16,7 +16,7 @@ export default class Board extends Component {
   handleContextRef = contextRef => this.setState({ contextRef })
 
   render() {
-    const activeIncidents = this.props.sourceData.features
+    const activeIncidents = this.props.staticData.features
     // const { contextRef } = this.state
 
     return(
@@ -33,7 +33,7 @@ export default class Board extends Component {
           { activeIncidents.map(activeIncident => {
             // <TableExampleSelectableInvertedRow key={activeIncident.id} incidentInfo={activeIncident}/>
             return(
-                <Table.Row key={activeIncident.id}>
+                <Table.Row key={activeIncident.properties.id}>
                   <Table.Cell>{activeIncident.properties.type}</Table.Cell>
                   <Table.Cell>{activeIncident.properties.priority}</Table.Cell>
                   <Table.Cell>{activeIncident.properties.time}</Table.Cell>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import { PropTypes } from 'prop-types'
+import { PropTypes } from 'prop-types'
 import MapboxGl from 'mapbox-gl'
 import { MAPBOX_TOKEN } from './constants/keys.js'
 
@@ -62,7 +62,7 @@ export default class Map extends Component {
         'type': 'circle',
         'source': {
           'type': 'geojson',
-          'data': this.props.sourceData
+          'data': this.props.staticData
         },
         'layout': {},
         'paint': {
