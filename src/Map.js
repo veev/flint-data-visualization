@@ -70,21 +70,29 @@ export default class Map extends Component {
         }
       });
 
+      // now try and filter?
+      this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
+        this.props.activeData.map( feature => {
+          //console.log(feature.properties.eventNumber);
+          return feature.properties.eventNumber;
+        })
+      ));
+
     });
 
-    window.addEventListener('resize', this._resize);
+    //window.addEventListener('resize', this._resize);
     // this._resize();
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return (
-  //     nextProps.children !== this.props.children ||
-  //     nextState.map !== this.state.map
-  //   )
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextProps.children !== this.props.children ||
+      nextState.map !== this.state.map
+    )
+  }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
+    //window.removeEventListener('resize', this._resize);
     this.map.remove();
   }
 
@@ -97,6 +105,23 @@ export default class Map extends Component {
       }
     });
   };
+
+  _getUniqueFeatures = (array, comparatorProperty) => {
+    let existingFeatureKeys = {};
+    // Because features come from tiled vector data, feature geometries may be split
+    // or duplicated across tile boundaries and, as a result, features may appear
+    // multiple times in query results.
+    const uniqueFeatures = array.filter(function(el) {
+      if (existingFeatureKeys[el.properties[comparatorProperty]]) {
+        return false;
+      } else {
+        existingFeatureKeys[el.properties[comparatorProperty]] = true;
+        return true;
+      }
+    })
+
+    return uniqueFeatures;
+  }
 
   render() {
     const { children } = this.props;

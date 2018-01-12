@@ -10,7 +10,7 @@ import Board from './Board'
 // import Source from './Source'
 // import Layer from './Layer'
 import { map_range } from './utils'
-import incidents from './data/may5-12-incidents-timestamps2.json'
+import data from './data/may5-12-incidents-timestamps2.json'
 
 // class Board extends React.Component {
 //     shouldComponentUpdate(nextProps, nextState) {
@@ -31,24 +31,21 @@ class App extends Component {
     super(); // for correct context
     this.state = {
       isPlaying: false,
-      currentTime: incidents['features'][0].properties.unix_timestamp
-      //currentTime: 30
+      currentTime: data['features'][0].properties.unix_timestamp
     }
 
     this.timer = null
-    // this.update.bind(this)
   }
 
   static defaultProps = {
-    startTS: incidents['features'][0].properties.unix_timestamp,
-    endTS: incidents['features'][incidents['features'].length - 1].properties.unix_end,
-    // startTS: 30,
-    // endTS: 90,
-    // totalTime: 90
+    incidents: data['features'],
+    startTS: data['features'][0].properties.unix_timestamp,
+    endTS: data['features'][data['features'].length - 1].properties.unix_end,
   }
 
   componentWillMount() {
     // no access yet to component in React DOM (has yet to render)
+    // do init stuff here to data?
     console.log('componentWillMount')
   }
 
@@ -56,19 +53,19 @@ class App extends Component {
     window.clearInterval(this.timer)
   }
 
-  _update = (e) => {
-    console.log(e.type)
-    this.setState({currentEvent: e.type})
-  }
+  // _update = (e) => {
+  //   console.log(e.type)
+  //   this.setState({currentEvent: e.type})
+  // }
 
-  _updateTime = (t) => { // writing an arrow function this way means you don't have to bind things
-    // filter incidents / make a copy, whatever
+  // _updateTime = (t) => { // writing an arrow function this way means you don't have to bind things
+  //   // filter incidents / make a copy, whatever
 
-    this.setState({
-      currentTime: t,
-      //activeIncidents: // TODO - filtered incidents
-    })
-  }
+  //   this.setState({
+  //     currentTime: t,
+  //     //activeIncidents: // TODO - filtered incidents
+  //   })
+  // }
 
   handlePlayState = (playState) => {
     // this is what toggles the play / pause button
@@ -110,13 +107,23 @@ class App extends Component {
 
   // }
   filterIncidents = (cTime) => {
+    let filteredPresent = this.props.incidents.filter( feature => {
+      let strt = feature.properties.unix_timestamp;
+      let end = feature.properties.unix_end;
 
+      //console.log("current time: ", formatTime(time), "start time: ", formatTime(strt), "end time: ", formatTime(end));
+      if (cTime >= strt && cTime <= end) {
+        //console.log(feature);
+        return feature.properties.eventNumber;
+      }
+    })
+    return filteredPresent
   }
 
 
   render() {
     const { isPlaying, currentTime } = this.state
-    const { totalTime, startTS, endTS } = this.props
+    const { startTS, endTS } = this.props
     let formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
     //console.log(currentTime)
 
@@ -124,7 +131,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Map staticData={incidents} />
+        <Map staticData={data} activeData={this.filterIncidents(currentTime)}/>
         <Title title="Flint Police Dispatches"/>
         <div className="timeOutput">{formattedTime}</div>
         <Timeline
@@ -136,7 +143,7 @@ class App extends Component {
           totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}
           />
-        <Board staticData={incidents} />
+        <Board staticData={data} />
       </div>
     );
   }
