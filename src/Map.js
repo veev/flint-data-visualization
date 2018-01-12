@@ -36,49 +36,12 @@ export default class Map extends Component {
       zoom: 12,
       pitch: 60,
       bearing: 0
-    });
+    })
 
     this.map.on('load', (...args) => {
       // this.setState({ this.getChildContext() })
-
-      // this layer is static and doesn't change - marks city boundaries
-      this.map.addLayer({
-        'id': 'boundsLayer',
-        'type': 'fill',
-        'source': {
-          'type': 'geojson',
-          'data': bounds
-        },
-        'layout': {},
-        'paint': {
-          'fill-color': '#fff',
-          'fill-opacity': 0.1
-        }
-      });
-
-      //incidents layer
-      this.map.addLayer({
-        'id': 'incidentsLayer',
-        'type': 'circle',
-        'source': {
-          'type': 'geojson',
-          'data': this.props.staticData
-        },
-        'layout': {},
-        'paint': {
-          'circle-color': 'red'
-        }
-      });
-
-      // now try and filter?
-      this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
-        this.props.activeData.map( feature => {
-          //console.log(feature.properties.eventNumber);
-          return feature.properties.eventNumber;
-        })
-      ));
-
-    });
+      this._initMap(this.map)
+    })
 
     //window.addEventListener('resize', this._resize);
     // this._resize();
@@ -115,8 +78,8 @@ export default class Map extends Component {
         width: this.props.width || window.innerWidth,
         height: this.props.height || window.innerHeight
       }
-    });
-  };
+    })
+  }
 
   _getUniqueFeatures = (array, comparatorProperty) => {
     let existingFeatureKeys = {};
@@ -132,8 +95,69 @@ export default class Map extends Component {
       }
     })
 
-    return uniqueFeatures;
+    return uniqueFeatures
   }
+
+  _initMap = (map) => {
+    // this layer is static and doesn't change - marks city boundaries
+    map.addLayer({
+      'id': 'boundsLayer',
+      'type': 'fill',
+      'source': {
+        'type': 'geojson',
+        'data': bounds
+      },
+      'layout': {},
+      'paint': {
+        'fill-color': '#fff',
+        'fill-opacity': 0.1
+      }
+    })
+
+    //incidents layer
+    map.addLayer({
+      'id': 'incidentsLayer',
+      'type': 'circle',
+      'source': {
+        'type': 'geojson',
+        'data': this.props.staticData
+      },
+      'layout': {},
+      'paint': {
+        'circle-color': 'red'
+      }
+    })
+
+    // now try and filter?
+    map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
+      this.props.activeData.map( feature => {
+        //console.log(feature.properties.eventNumber);
+        return feature.properties.eventNumber;
+      })
+    ))
+  }
+
+  // Create a popup, but don't add it to the map yet.
+  // let popup = new mapboxgl.Popup({
+  //     closeButton: false,
+  //     closeOnClick: false
+  // })
+
+  //   map.on('mouseenter', 'incidentsLayer', function(e) {
+  //       // Change the cursor style as a UI indicator.
+  //       map.getCanvas().style.cursor = 'pointer';
+
+  //       // Populate the popup and set its coordinates
+  //       // based on the feature found.
+  //       popup.setLngLat(e.features[0].geometry.coordinates)
+  //           .setHTML(e.features[0].properties.description)
+  //           .addTo(map);
+  //   })
+
+  //   map.on('mouseleave', 'incidentsLayer', function() {
+  //       map.getCanvas().style.cursor = '';
+  //       popup.remove();
+  //   })
 
   render() {
     const { children } = this.props;
