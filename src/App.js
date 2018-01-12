@@ -10,7 +10,7 @@ import Board from './Board'
 // import Source from './Source'
 // import Layer from './Layer'
 import { map_range } from './utils'
-import incidents from './data/may5-12-incidents.json'
+import incidents from './data/may5-12-incidents-timestamps.json'
 
 // class Board extends React.Component {
 //     shouldComponentUpdate(nextProps, nextState) {
