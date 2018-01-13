@@ -79,7 +79,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { currentTime: (this.state.currentTime + 1) % this.props.endTS }
+          { currentTime: (this.state.currentTime + 100) % this.props.endTS }
         ))
       }, 1000)
     } else {

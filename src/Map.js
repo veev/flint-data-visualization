@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import { PropTypes } from 'prop-types'
 import MapboxGl from 'mapbox-gl'
 import { MAPBOX_TOKEN } from './constants/keys.js'
 
+import Tooltip from './Tooltip.js'
 import bounds from './data/subunits-flint.json'
 
 export default class Map extends Component {
@@ -11,7 +13,12 @@ export default class Map extends Component {
     super(props)
     this.state = {
       map: null
-    };
+    }
+    // this.tooltipContainer;
+  }
+
+  static defaultProps = {
+    tooltipContainer: document.createElement('div')
   }
 	
   // static childContextTypes = {
@@ -26,8 +33,20 @@ export default class Map extends Component {
   //   map: this.state.map
   // });
 
+  //tooltipContainer;
+
+  // setTooltip = (feature) => {
+  //   ReactDOM.render(
+  //     React.createElement( Tooltip, { feature }),
+  //     this.props.tooltipContainer
+  //   )
+  // }
+
   componentDidMount() {
     MapboxGl.accessToken = MAPBOX_TOKEN
+
+    // Container to put React generated content in.
+    //this.tooltipContainer = document.createElement('div')
 
     this.map = new MapboxGl.Map({
       container: this.mapContainer,
@@ -38,10 +57,21 @@ export default class Map extends Component {
       bearing: 0
     })
 
+    const tooltip = new MapboxGl.Marker(this.props.tooltipContainer, {
+      offset: [-120, 0]
+    }).setLngLat([0,0]).addTo(this.map)
+
+    const popup = new MapboxGl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    })
+
     this.map.on('load', (...args) => {
       // this.setState({ this.getChildContext() })
-      this._initMap(this.map)
+      this._initMap()
+      this._addListeners()
     })
+
 
     //window.addEventListener('resize', this._resize);
     // this._resize();
@@ -98,9 +128,9 @@ export default class Map extends Component {
     return uniqueFeatures
   }
 
-  _initMap = (map) => {
+  _initMap = () => {
     // this layer is static and doesn't change - marks city boundaries
-    map.addLayer({
+    this.map.addLayer({
       'id': 'boundsLayer',
       'type': 'fill',
       'source': {
@@ -115,7 +145,7 @@ export default class Map extends Component {
     })
 
     //incidents layer
-    map.addLayer({
+    this.map.addLayer({
       'id': 'incidentsLayer',
       'type': 'circle',
       'source': {
@@ -129,7 +159,7 @@ export default class Map extends Component {
     })
 
     // now try and filter?
-    map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
+    this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
       this.props.activeData.map( feature => {
         //console.log(feature.properties.eventNumber);
         return feature.properties.eventNumber;
@@ -137,27 +167,30 @@ export default class Map extends Component {
     ))
   }
 
-  // Create a popup, but don't add it to the map yet.
-  // let popup = new mapboxgl.Popup({
-  //     closeButton: false,
-  //     closeOnClick: false
-  // })
+  _addListeners = () => {
+     // Create a popup, but don't add it to the map yet.
+    const popup = new MapboxGl.Popup({
+        closeButton: false,
+        closeOnClick: false
+    })
 
-  //   map.on('mouseenter', 'incidentsLayer', function(e) {
-  //       // Change the cursor style as a UI indicator.
-  //       map.getCanvas().style.cursor = 'pointer';
+    this.map.on('mouseenter', 'incidentsLayer', (e) => {
+      // Change the cursor style as a UI indicator.
+      this.map.getCanvas().style.cursor = 'pointer';
 
-  //       // Populate the popup and set its coordinates
-  //       // based on the feature found.
-  //       popup.setLngLat(e.features[0].geometry.coordinates)
-  //           .setHTML(e.features[0].properties.description)
-  //           .addTo(map);
-  //   })
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(e.features[0].geometry.coordinates)
+          .setHTML(e.features[0].properties.type)
+          .addTo(this.map);
+    })
 
-  //   map.on('mouseleave', 'incidentsLayer', function() {
-  //       map.getCanvas().style.cursor = '';
-  //       popup.remove();
-  //   })
+    this.map.on('mouseleave', 'incidentsLayer', (e) => {
+      this.map.getCanvas().style.cursor = '';
+      popup.remove();
+    })
+  }
+
 
   render() {
     const { children } = this.props;
