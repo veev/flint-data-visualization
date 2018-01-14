@@ -10,9 +10,7 @@
     "react-dom": "^16.2.0",
     "react-player-controls": "^0.5.17",
     "react-scripts": "1.0.17",
-    "react-table": "^6.7.6",
-    "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.77.1"
+    "react-table": "^6.7.6"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
