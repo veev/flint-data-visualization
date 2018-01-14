@@ -24,6 +24,19 @@ export default class Board extends Component {
 
   }
 
+  getActiveTime = (ts) => {
+    console.log(this.props.currentTime);
+    let t = this.props.currentTime;
+    // let strt = feature.properties.unix_timestamp;
+    if (t >= ts) {
+      return t - ts;
+    }
+  }
+
+  formatSeconds = (seconds) => {
+    return new Date(seconds * 1000).toISOString().substr(11, 8)
+  }
+
   render() {
     const activeIncidents = this.props.activeData
 
@@ -36,8 +49,9 @@ export default class Board extends Component {
       accessor: 'properties.priority',
       width: 70
     }, {
-      Header: 'Active Time',
-      accessor: 'properties.time'
+      Header: 'Time Active',
+      accessor: 'properties.unix_timestamp',
+      Cell: ({value}) => this.formatSeconds(this.getActiveTime(value))
     }]
 
     return(

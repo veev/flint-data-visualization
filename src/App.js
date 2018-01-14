@@ -158,6 +158,7 @@ class App extends Component {
           staticData={data}
           activeData={this.filterIncidents(currentTime)}
           handleHighlight={this.handleHighlightChange}
+          currentTime={currentTime}
           />
       </div>
     );
