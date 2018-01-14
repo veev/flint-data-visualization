@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-// import TableExampleSelectableInvertedRow from './TableExampleSelectableInvertedRow'
-import { Table } from 'semantic-ui-react'
+import ReactTable from 'react-table'
 
 export default class Board extends Component {
   constructor(props) {
@@ -9,40 +8,64 @@ export default class Board extends Component {
     this.state = {}
   }
 
-  componentWillMount() {
-    //console.log(this.props.sourceData)
+  static defaultProps = {
+    // need a fallback feature object for when no row is highlighted
+    // needs to have eventNumber property to work with map.setFilter
+    defaultFeature: {
+      type: 'Feature',
+      geometry: { },
+      properties: {
+        eventNumber: ''
+      }
+    }
   }
 
-  handleContextRef = contextRef => this.setState({ contextRef })
+  componentWillMount() {
+
+  }
 
   render() {
     const activeIncidents = this.props.activeData
-    // const { contextRef } = this.state
+
+    const columns = [{
+      Header: 'Type',
+      accessor: 'properties.type', // String-based value accessors!
+      width: 90
+    }, {
+      Header: 'Priority',
+      accessor: 'properties.priority',
+      width: 70
+    }, {
+      Header: 'Active Time',
+      accessor: 'properties.time'
+    }]
 
     return(
-      <div className="Board" ref={this.handleContextRef}>
-        <Table celled selectable compact>
-          <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Type</Table.HeaderCell>
-                <Table.HeaderCell>Priority</Table.HeaderCell>
-                <Table.HeaderCell>Active Time</Table.HeaderCell>
-              </Table.Row>
-          </Table.Header>
-          <Table.Body>
-          { activeIncidents.map(activeIncident => {
-            // <TableExampleSelectableInvertedRow key={activeIncident.id} incidentInfo={activeIncident}/>
-            return(
-                <Table.Row key={activeIncident.properties.id}>
-                  <Table.Cell>{activeIncident.properties.type}</Table.Cell>
-                  <Table.Cell>{activeIncident.properties.priority}</Table.Cell>
-                  <Table.Cell>{activeIncident.properties.time}</Table.Cell>
-                </Table.Row>
-              ) 
-            })
-          }
-          </Table.Body>
-        </Table>
+      <div className="Board">
+        <ReactTable
+          data={activeIncidents}
+          columns={columns}
+          className="-striped -highlight"
+          showPagination={false}
+          style={{
+            height: "500px" // This will force the table body to overflow and scroll, since there is not enough room
+          }}
+          getTrProps={(state, rowInfo, column) => {
+            return {
+              onMouseEnter: (e) => {
+                //console.log(handleHighlight)
+                //console.log('A Td Element was hovered!')
+                // console.log('it produced this event:', e)
+                //console.log('It was in this column:', column)
+                console.log('It was in this row:', rowInfo.original)
+                this.props.handleHighlight(rowInfo.original)
+              },
+              onMouseLeave: (e) => {
+                this.props.handleHighlight(this.props.defaultFeature)
+              }
+            }
+          }}
+        />
       </div>
     )
   }

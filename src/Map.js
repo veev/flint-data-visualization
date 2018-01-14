@@ -94,6 +94,10 @@ export default class Map extends Component {
         return feature.properties.eventNumber;
       })
     ))
+
+    this.map.setFilter('incidentsLayerHighlight', 
+      ['in', 'eventNumber', nextProps.highlightedFeature.properties.eventNumber]
+    )
   }
 
   componentWillUnmount() {
@@ -158,6 +162,21 @@ export default class Map extends Component {
       }
     })
 
+    //incidents highlight layer
+    this.map.addLayer({
+      'id': 'incidentsLayerHighlight',
+      'type': 'circle',
+      'source': {
+        'type': 'geojson',
+        'data': this.props.staticData
+      },
+      'layout': {},
+      'paint': {
+        'circle-color': 'white'
+      },
+      'filter': ["==", "id", 2000]
+    })
+
     // now try and filter?
     this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
       this.props.activeData.map( feature => {
@@ -165,6 +184,10 @@ export default class Map extends Component {
         return feature.properties.eventNumber;
       })
     ))
+
+    // this.map.setFilter('incidentsLayerHighlight', 
+    //   ['in', 'eventNumber', this.props.highlightedFeature.properties.eventNumber]
+    // )
   }
 
   _addListeners = () => {

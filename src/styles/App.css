@@ -28,8 +28,9 @@
 .Board {
   position: absolute;
   min-height: 100px;
-  min-width: 300px;
+  min-width: 330px;
   overflow-y: scroll;
+  background-color: rgba(247, 247, 247, 0.8);
   top: 50px; }
 
 .timeOutput {

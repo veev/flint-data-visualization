@@ -31,7 +31,8 @@ class App extends Component {
     super(); // for correct context
     this.state = {
       isPlaying: false,
-      currentTime: data['features'][0].properties.unix_timestamp
+      currentTime: data['features'][0].properties.unix_timestamp,
+      highlightedIncident: data['features'][0]
     }
 
     this.timer = null
@@ -103,6 +104,11 @@ class App extends Component {
     return map_range(value, 0, (this.props.endTS - this.props.startTS), this.props.startTS, this.props.endTS)
   }
 
+  handleHighlightChange = (feature) => {
+    console.log(feature)
+    this.setState({ highlightedIncident: feature })
+  }
+
   // formatTime = (ts) => {
 
   // }
@@ -122,7 +128,7 @@ class App extends Component {
 
 
   render() {
-    const { isPlaying, currentTime } = this.state
+    const { isPlaying, currentTime, highlightedIncident } = this.state
     const { startTS, endTS } = this.props
     let formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
     //console.log(currentTime)
@@ -131,19 +137,28 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Map staticData={data} activeData={this.filterIncidents(currentTime)}/>
+        <Map 
+          staticData={data}
+          activeData={this.filterIncidents(currentTime)}
+          highlightedFeature={highlightedIncident}
+          />
         <Title title="Flint Police Dispatches"/>
         <div className="timeOutput">{formattedTime}</div>
         <Timeline
           handlePlay={this.handlePlayState}
           handleSeek={this.handleSeekChange}
+
           // setTime={this._updateTime}
           //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
           currentTime={this.convertTime(currentTime)}
           totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}
           />
-        <Board staticData={data} activeData={this.filterIncidents(currentTime)}/>
+        <Board
+          staticData={data}
+          activeData={this.filterIncidents(currentTime)}
+          handleHighlight={this.handleHighlightChange}
+          />
       </div>
     );
   }

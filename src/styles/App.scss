@@ -52,8 +52,9 @@ $color-active: fade-out($color-hover, 0.5);
   // width: 40vw;
   min-height: 100px;
   // height: 85vh;
-  min-width: 300px;
+  min-width: 330px;
   overflow-y: scroll;
+  background-color: rgba(247, 247, 247, 0.8);
   top: 50px;
 }
 
