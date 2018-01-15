@@ -79,13 +79,21 @@ export default class Board extends Component {
       }
     }]
 
-    const postColumns = [{
-      accessor: 'message',
+    const postMessages = [{
       Cell: row => (
-                <div style={{ "white-space": "normal" }}>
+                <div style={{ "whiteSpace": "normal" }}>
                 {row.original.message}
                 </div>
             )
+    }]
+
+    const messageReplies = [{
+      Cell: row => (
+              <div style={{ "whiteSpace": "normal" }}>
+                {console.log(row)}
+                {row.original.message}
+              </div>
+        )
     }]
 
     return(
@@ -124,18 +132,26 @@ export default class Board extends Component {
             return (
               <div style={{ padding: "20px" }}>
                 {(post != undefined) ? post.message : ''}
-                <ReactTable
+                {(post != undefined && post.comments.data.length > 0) ?
+                  <ReactTable
                   data={post.comments.data}
-                  columns={postColumns}
+                  columns={postMessages}
                   showPagination={false}
                   SubComponent={row => {
+                    console.log(row.original)
                     return (
-                      <div style={{ padding: "10px" }}>
-                        Another Sub Component!
+                      <div>
+                        {(row.original.comment_count > 0) ? 
+                          row.original.replies.data.map( (item, i) => {
+                            console.log(item)
+                            return <li key={i}>{item.message}</li>
+                          }) :  ''
+                      }
                       </div>
                     );
                   }}
-                />
+                  /> : ''
+                }
               </div>
             );
           }}

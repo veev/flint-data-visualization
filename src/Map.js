@@ -78,16 +78,17 @@ export default class Map extends Component {
     // this._resize();
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(nextProps)
-  //   // return (
-  //   //   nextProps.children !== this.props.children ||
-  //   //   nextState.map !== this.state.map
-  //   // )
-  //   console.log(nextProps.children !== this.props.children)
-  //   return true
-  //   console.log('shouldUpdate')
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('shouldUpdate')
+    console.log(nextProps.activeData, this.props.activeData)
+    // return (
+    //   nextProps.children !== this.props.children ||
+    //   nextState.map !== this.state.map
+    // )
+    console.log(nextProps.activeData === this.props.activeData)
+    //console.log(nextProps.children !== this.props.children)
+    return nextProps.activeData !== this.props.activeData
+  }
 
   componentWillUpdate(nextProps, nextState) {
     console.log(nextProps.highlightedFeature.properties.eventNumber, this.props.highlightedFeature.properties.eventNumber)
