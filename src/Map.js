@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { PropTypes } from 'prop-types'
+// import ReactDOM from 'react-dom'
+// import { PropTypes } from 'prop-types'
 import MapboxGl from 'mapbox-gl'
 import { MAPBOX_TOKEN } from './constants/keys.js'
 
-import Tooltip from './Tooltip.js'
+// import Tooltip from './Tooltip.js'
 import bounds from './data/subunits-flint.json'
 
 export default class Map extends Component {
@@ -12,13 +12,14 @@ export default class Map extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      map: null
+      map: null,
+      popup: null
     }
     // this.tooltipContainer;
   }
 
   static defaultProps = {
-    tooltipContainer: document.createElement('div')
+
   }
 	
   // static childContextTypes = {
@@ -57,11 +58,11 @@ export default class Map extends Component {
       bearing: 0
     })
 
-    const tooltip = new MapboxGl.Marker(this.props.tooltipContainer, {
-      offset: [-120, 0]
-    }).setLngLat([0,0]).addTo(this.map)
+    // const tooltip = new MapboxGl.Marker(this.props.tooltipContainer, {
+    //   offset: [-120, 0]
+    // }).setLngLat([0,0]).addTo(this.map)
 
-    const popup = new MapboxGl.Popup({
+    this.popup = new MapboxGl.Popup({
       closeButton: false,
       closeOnClick: false
     })
@@ -78,16 +79,19 @@ export default class Map extends Component {
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(nextProps, nextState)
-  //   return (
-  //     nextProps.children !== this.props.children ||
-  //     nextState.map !== this.state.map
-  //   )
-  //   //console.log(shouldUpdate)
+  //   console.log(nextProps)
+  //   // return (
+  //   //   nextProps.children !== this.props.children ||
+  //   //   nextState.map !== this.state.map
+  //   // )
+  //   console.log(nextProps.children !== this.props.children)
+  //   return true
+  //   console.log('shouldUpdate')
   // }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps)
+    console.log(nextProps.highlightedFeature.properties.eventNumber, this.props.highlightedFeature.properties.eventNumber)
+    console.log(nextProps.highlightedFeature.properties.eventNumber === this.props.highlightedFeature.properties.eventNumber)
     this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
       nextProps.activeData.map( feature => {
         //console.log(feature.properties.eventNumber);
@@ -98,6 +102,26 @@ export default class Map extends Component {
     this.map.setFilter('incidentsLayerHighlight', 
       ['in', 'eventNumber', nextProps.highlightedFeature.properties.eventNumber]
     )
+
+    this.popup.remove()
+
+    this.popup = new MapboxGl.Popup({
+        closeButton: false,
+        closeOnClick: false
+    })
+
+    if (nextProps.highlightedFeature.geometry.coordinates) {
+      this.popup.setLngLat(nextProps.highlightedFeature.geometry.coordinates)
+          .setHTML(nextProps.highlightedFeature.properties.type)
+          .addTo(this.map);
+    } else {
+
+    }
+
+  }
+
+  componentDidUpdate() {
+    console.log('componentDidUpdate')
   }
 
   componentWillUnmount() {
@@ -184,10 +208,6 @@ export default class Map extends Component {
         return feature.properties.eventNumber;
       })
     ))
-
-    // this.map.setFilter('incidentsLayerHighlight', 
-    //   ['in', 'eventNumber', this.props.highlightedFeature.properties.eventNumber]
-    // )
   }
 
   _addListeners = () => {

@@ -10,7 +10,8 @@ import Board from './Board'
 // import Source from './Source'
 // import Layer from './Layer'
 import { map_range } from './utils'
-import data from './data/may5-12-incidents-timestamps2.json'
+import data from './data/may5-12-incidents-timestamps.json'
+import posts from './data/postsMay5_12-timezone.json'
 
 // class Board extends React.Component {
 //     shouldComponentUpdate(nextProps, nextState) {
@@ -48,6 +49,7 @@ class App extends Component {
     // no access yet to component in React DOM (has yet to render)
     // do init stuff here to data?
     console.log('componentWillMount')
+    console.log(posts)
   }
 
   componentWillUnmount() {
@@ -118,10 +120,11 @@ class App extends Component {
       let end = feature.properties.unix_end;
 
       //console.log("current time: ", formatTime(time), "start time: ", formatTime(strt), "end time: ", formatTime(end));
-      if (cTime >= strt && cTime <= end) {
+      //if (cTime >= strt && cTime <= end) {
         //console.log(feature);
-        return feature.properties.eventNumber;
-      }
+        //return feature.properties.eventNumber;
+      //}
+      return (cTime >= strt && cTime <= end)
     })
     return filteredPresent
   }
@@ -129,7 +132,7 @@ class App extends Component {
 
   render() {
     const { isPlaying, currentTime, highlightedIncident } = this.state
-    const { startTS, endTS } = this.props
+    const { endTS } = this.props
     let formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
     //console.log(currentTime)
 
@@ -159,6 +162,7 @@ class App extends Component {
           activeData={this.filterIncidents(currentTime)}
           handleHighlight={this.handleHighlightChange}
           currentTime={currentTime}
+          postData={posts}
           />
       </div>
     );
