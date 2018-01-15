@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
+import find from 'lodash.find';
 
 export default class Board extends Component {
   constructor(props) {
@@ -56,7 +57,8 @@ export default class Board extends Component {
       Cell: ({value}) => this.formatSeconds(this.getActiveTime(value))
     }, {
       Header: 'Posts',
-      accessor: 'properties.postId'
+      accessor: 'properties.postId',
+      width: 70
     }, {
       Header: 'Posts',
       expander: true,
@@ -78,7 +80,12 @@ export default class Board extends Component {
     }]
 
     const postColumns = [{
-      accessor: 'message'
+      accessor: 'message',
+      Cell: row => (
+                <div style={{ "white-space": "normal" }}>
+                {row.original.message}
+                </div>
+            )
     }]
 
     return(
@@ -110,12 +117,15 @@ export default class Board extends Component {
             }
           }}
           SubComponent={ (row) => {
-            console.log(row.original)
+            let post = find(postData, ['id', row.original.properties.postId]);
+            if (post != undefined) {
+              console.log(post)
+            }
             return (
-              <div style={{ padding: "10px" }}>
-
+              <div style={{ padding: "20px" }}>
+                {(post != undefined) ? post.message : ''}
                 <ReactTable
-                  data={activeData}
+                  data={post.comments.data}
                   columns={postColumns}
                   showPagination={false}
                   SubComponent={row => {
