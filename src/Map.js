@@ -19,7 +19,13 @@ export default class Map extends Component {
   }
 
   static defaultProps = {
-
+    defaultFeature: {
+      type: 'Feature',
+      geometry: { },
+      properties: {
+        eventNumber: ''
+      }
+    }
   }
 	
   // static childContextTypes = {
@@ -79,20 +85,20 @@ export default class Map extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldUpdate')
-    console.log(nextProps.activeData, this.props.activeData)
+    //console.log('shouldUpdate')
+    //console.log(nextProps.activeData, this.props.activeData)
     // return (
     //   nextProps.children !== this.props.children ||
     //   nextState.map !== this.state.map
     // )
-    console.log(nextProps.activeData === this.props.activeData)
+    //console.log(nextProps.activeData === this.props.activeData)
     //console.log(nextProps.children !== this.props.children)
     return nextProps.activeData !== this.props.activeData
   }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps.highlightedFeature.properties.eventNumber, this.props.highlightedFeature.properties.eventNumber)
-    console.log(nextProps.highlightedFeature.properties.eventNumber === this.props.highlightedFeature.properties.eventNumber)
+    console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
+    //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
     this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
       nextProps.activeData.map( feature => {
         //console.log(feature.properties.eventNumber);
@@ -101,7 +107,7 @@ export default class Map extends Component {
     ))
 
     this.map.setFilter('incidentsLayerHighlight', 
-      ['in', 'eventNumber', nextProps.highlightedFeature.properties.eventNumber]
+      ['in', 'eventNumber', nextProps.boardHighlightedFeature.properties.eventNumber]
     )
 
     this.popup.remove()
@@ -111,9 +117,9 @@ export default class Map extends Component {
         closeOnClick: false
     })
 
-    if (nextProps.highlightedFeature.geometry.coordinates) {
-      this.popup.setLngLat(nextProps.highlightedFeature.geometry.coordinates)
-          .setHTML(nextProps.highlightedFeature.properties.type)
+    if (nextProps.boardHighlightedFeature.geometry.coordinates) {
+      this.popup.setLngLat(nextProps.boardHighlightedFeature.geometry.coordinates)
+          .setHTML(nextProps.boardHighlightedFeature.properties.type)
           .addTo(this.map);
     } else {
 
@@ -122,7 +128,7 @@ export default class Map extends Component {
   }
 
   componentDidUpdate() {
-    console.log('componentDidUpdate')
+    //console.log('componentDidUpdate')
   }
 
   componentWillUnmount() {
@@ -221,7 +227,7 @@ export default class Map extends Component {
     this.map.on('mouseenter', 'incidentsLayer', (e) => {
       // Change the cursor style as a UI indicator.
       this.map.getCanvas().style.cursor = 'pointer';
-
+      this.props.handleHighlight(e.features[0])
       // Populate the popup and set its coordinates
       // based on the feature found.
       popup.setLngLat(e.features[0].geometry.coordinates)
@@ -231,6 +237,7 @@ export default class Map extends Component {
 
     this.map.on('mouseleave', 'incidentsLayer', (e) => {
       this.map.getCanvas().style.cursor = '';
+      this.props.handleHighlight(this.props.defaultFeature)
       popup.remove();
     })
   }

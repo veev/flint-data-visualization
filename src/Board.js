@@ -7,7 +7,7 @@ export default class Board extends Component {
     super(props)
 
     this.state = {
-      //selectedRow: 0
+      isSame: true
     }
   }
 
@@ -28,7 +28,7 @@ export default class Board extends Component {
   }
 
   getActiveTime = (ts) => {
-    console.log(this.props.currentTime);
+    //console.log(this.props.currentTime);
     let t = this.props.currentTime;
     // let strt = feature.properties.unix_timestamp;
     if (t >= ts) {
@@ -108,7 +108,28 @@ export default class Board extends Component {
           style={{
             height: "500px" // This will force the table body to overflow and scroll, since there is not enough room
           }}
-          getTrProps={(state, rowInfo, column) => {
+          getProps={(state, rowInfo, column, instance) => {
+            // console.log(state)
+            // console.log(rowInfo)
+            // console.log(column)
+            //console.log(instance)
+            return {}
+          }}
+          getTrProps={(state, rowInfo, column, instance) => {
+            //console.log(state)
+            // isSame = false
+            //console.log(this.props.mapHighlightedFeature.properties.eventNumber)
+            if (rowInfo) {
+              //console.log(rowInfo.original.properties.eventNumber)
+              if (this.props.mapHighlightedFeature.properties.eventNumber === rowInfo.original.properties.eventNumber) {
+                console.log("SAME PROPS")
+                //this.setState({ isSame: true })
+              } else {
+                console.log("PROPS DON'T MATCH")
+                //this.setState({ isSame: false })
+              }
+            }
+
             return {
               onMouseEnter: (e) => {
                 //console.log(handleHighlight)
@@ -121,18 +142,22 @@ export default class Board extends Component {
               },
               onMouseLeave: (e) => {
                 this.props.handleHighlight(this.props.defaultFeature)
-              }
+              },
+              // style: {
+              //   highlight: (this.props.mapHighlightedFeature.properties.eventNumber === rowInfo.original.properties.eventNumber) ? 'green' : 'red'
+              // },
+              className: (this.state.isSame) ? 'highlight' : ''
             }
           }}
           SubComponent={ (row) => {
             let post = find(postData, ['id', row.original.properties.postId]);
-            if (post != undefined) {
+            if (post !== undefined) {
               console.log(post)
             }
             return (
               <div style={{ padding: "20px" }}>
-                {(post != undefined) ? post.message : ''}
-                {(post != undefined && post.comments.data.length > 0) ?
+                {(post !== undefined) ? post.message : ''}
+                {(post !== undefined && post.comments.data.length > 0) ?
                   <ReactTable
                   data={post.comments.data}
                   columns={postMessages}

@@ -30,10 +30,24 @@ import posts from './data/postsMay5_12-timezone.json'
 class App extends Component {
   constructor() {
     super(); // for correct context
+
     this.state = {
       isPlaying: false,
       currentTime: data['features'][0].properties.unix_timestamp,
-      highlightedIncident: data['features'][0]
+      highlightedBoardIncident: {
+        type: 'Feature',
+        geometry: { },
+        properties: {
+          eventNumber: ''
+        }
+      },
+      highlightedMapIncident: {
+        type: 'Feature',
+        geometry: { },
+        properties: {
+          eventNumber: ''
+        }
+      }
     }
 
     this.timer = null
@@ -106,9 +120,14 @@ class App extends Component {
     return map_range(value, 0, (this.props.endTS - this.props.startTS), this.props.startTS, this.props.endTS)
   }
 
-  handleHighlightChange = (feature) => {
+  handleBoardHighlightChange = (feature) => {
     console.log(feature)
-    this.setState({ highlightedIncident: feature })
+    this.setState({ highlightedBoardIncident: feature })
+  }
+
+  handleMapRolloverChange = (feature) => {
+    console.log(feature)
+    this.setState({ highlightedMapIncident: feature })
   }
 
   // formatTime = (ts) => {
@@ -131,7 +150,7 @@ class App extends Component {
 
 
   render() {
-    const { isPlaying, currentTime, highlightedIncident } = this.state
+    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident } = this.state
     const { endTS } = this.props
     let formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
     //console.log(currentTime)
@@ -143,7 +162,8 @@ class App extends Component {
         <Map 
           staticData={data}
           activeData={this.filterIncidents(currentTime)}
-          highlightedFeature={highlightedIncident}
+          handleHighlight={this.handleMapRolloverChange}
+          boardHighlightedFeature={highlightedBoardIncident}
           />
         <Title title="Flint Police Dispatches"/>
         <div className="timeOutput">{formattedTime}</div>
@@ -160,7 +180,8 @@ class App extends Component {
         <Board
           staticData={data}
           activeData={this.filterIncidents(currentTime)}
-          handleHighlight={this.handleHighlightChange}
+          handleHighlight={this.handleBoardHighlightChange}
+          mapHighlightedFeature={highlightedMapIncident}
           currentTime={currentTime}
           postData={posts}
           />
