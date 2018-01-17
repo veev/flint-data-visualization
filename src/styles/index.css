@@ -22,13 +22,13 @@
   position: absolute;
   width: 100%;
   top: 0;
-  height: 94vh;
+  height: 90vh;
   /*  bottom: 0;*/ }
 
 .Board {
   position: absolute;
   min-height: 100px;
-  max-height: 82vh;
+  max-height: 73vh;
   min-width: 330px;
   width: 300px;
   overflow-y: scroll;
@@ -58,6 +58,9 @@
     padding: 10px;
     display: flex;
     width: 100%; }
+  .Board .highlight {
+    background: rgba(0, 0, 0, 0.05);
+    cursor: pointer; }
   .Board .boardWrapper:nth-child(even) {
     background: #ccc; }
   .Board .boardWrapper:nth-child(odd) {
@@ -86,12 +89,17 @@
     transition: height 0.2s; }
   .Board .boardRow-openIncident-open {
     /* need a height value for animation to happen 
-    for now, automatic sizing is more important
-    height: 70px;
-  */
+      for now, automatic sizing is more important
+      height: 70px;
+    */
     height: auto; }
   .Board .bogus-padding {
+    padding: 10px;
+    width: 100%; }
+  .Board .postCommentWrapper {
     padding: 10px; }
+  .Board .postComment {
+    padding-top: 5px; }
 
 .timeOutput {
   position: absolute;
@@ -106,7 +114,8 @@
 .PlaybackControls {
   height: 6vh;
   float: left;
-  width: 60px; }
+  width: 40px;
+  padding-left: 10px; }
 
 .PlayButton,
 .PauseButton {
@@ -137,8 +146,8 @@
 
 .Icon {
   display: block;
-  width: 30px;
-  height: 30px; }
+  width: 20px;
+  height: 20px; }
 
 .Icon-shape {
   fill: #72D687; }
@@ -171,7 +180,7 @@
 
 .ProgressBar {
   height: 8px;
-  margin: 20px 0px 10px 60px; }
+  margin: 20px 5px 10px 60px; }
   .ProgressBar-elapsed {
     height: 100%; }
   .ProgressBar-seek {

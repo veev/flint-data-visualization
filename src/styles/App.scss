@@ -4,7 +4,7 @@ $white: #fefefe;
 $blue: #0E52CE;
 $green: #72D687;
 
-$icon-size: 30px;
+$icon-size: 20px;
 
 // $color-hover: saturate(lighten($green, 10%), 20%);
 // $color-active: desaturate(darken($green, 20%), 20%);
@@ -48,7 +48,7 @@ $posts-col-width: 20%;
   position: absolute;
   width: 100%;
   top: 0;
-  height: 94vh;
+  height: 90vh;
 /*  bottom: 0;*/
 }
 
@@ -57,7 +57,7 @@ $posts-col-width: 20%;
   // width: 40vw;
   min-height: 100px;
   // height: 85vh;
-  max-height: 82vh;
+  max-height: 73vh;
   min-width: 330px;
   width: 300px;
   overflow-y: scroll;
@@ -68,97 +68,113 @@ $posts-col-width: 20%;
   width: 100%;
 }
 
-.boardContent {
-  width: 100%;
-}
-
-.boardHeader {
-  padding: 10px;
-  display: flex;
-  width: 100%;
-}
-
-.boardHeader-type {
-  width: $type-col-width;
-  display: flex;
-}
-
-.boardHeader-priority {
-  width: $priority-col-width;
-  display: flex;
-}
-
-.boardHeader-activeTime {
-  width: $active-col-width;
-  display: flex;
-}
-
-.boardHeader-expander {
-  width: $posts-col-width;
-  display: flex;
-}
-
-.boardRow {
-  padding: 10px;
-  display: flex;
-  width: 100%
-}
-
-.boardWrapper:nth-child(even) {
-  background: #ccc;
-}
-
-.boardWrapper:nth-child(odd) {
-  background: #fff;
-}
-
-.boardRow-type {
-  width: $type-col-width;
-  display: flex;
-}
-
-.boardRow-priority {
-  width: $priority-col-width;
-  display: flex;
-}
-
-.boardRow-activeTime {
-  width: $active-col-width;
-  display: flex;
-}
-
-.boardRow-expander {
-  width: $posts-col-width;
-  display: flex;
-
-  span {
-    width: 30px;
-    display: inline-block;
+  .boardContent {
+    width: 100%;
   }
-}
 
-.boardRow-openIncident {
-  box-sizing: border-box;
-  width: 100%;
-  height: 0px;
-  // color: red;
-  display: flex;
-  overflow: hidden;
-  transition: height 0.2s;
-}
+  .boardHeader {
+    padding: 10px;
+    display: flex;
+    width: 100%;
+  }
 
-.boardRow-openIncident-open {
-  /* need a height value for animation to happen 
-    for now, automatic sizing is more important
-    height: 70px;
-  */
+  .boardHeader-type {
+    width: $type-col-width;
+    display: flex;
+  }
 
-  height: auto;
-}
+  .boardHeader-priority {
+    width: $priority-col-width;
+    display: flex;
+  }
 
-.bogus-padding {
-  padding: 10px;
-}
+  .boardHeader-activeTime {
+    width: $active-col-width;
+    display: flex;
+  }
+
+  .boardHeader-expander {
+    width: $posts-col-width;
+    display: flex;
+  }
+
+  .boardRow {
+    padding: 10px;
+    display: flex;
+    width: 100%
+  }
+
+  .highlight {
+    background: rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+
+  .boardWrapper:nth-child(even) {
+    background: #ccc;
+  }
+
+  .boardWrapper:nth-child(odd) {
+    background: #fff;
+  }
+
+  .boardRow-type {
+    width: $type-col-width;
+    display: flex;
+  }
+
+  .boardRow-priority {
+    width: $priority-col-width;
+    display: flex;
+  }
+
+  .boardRow-activeTime {
+    width: $active-col-width;
+    display: flex;
+  }
+
+  .boardRow-expander {
+    width: $posts-col-width;
+    display: flex;
+
+    span {
+      width: 30px;
+      display: inline-block;
+    }
+  }
+
+  .boardRow-openIncident {
+    box-sizing: border-box;
+    width: 100%;
+    height: 0px;
+    // color: red;
+    display: flex;
+    overflow: hidden;
+    transition: height 0.2s;
+  }
+
+  .boardRow-openIncident-open {
+    /* need a height value for animation to happen 
+      for now, automatic sizing is more important
+      height: 70px;
+    */
+
+    height: auto;
+  }
+
+  .bogus-padding {
+    padding: 10px;
+    width: 100%;
+  }
+
+  .postCommentWrapper {
+    padding: 10px;
+  }
+
+  .postComment {
+    padding-top: 5px;
+  }
+
+
 }
 
 
@@ -178,7 +194,8 @@ $posts-col-width: 20%;
 .PlaybackControls {
   height: 6vh;
   float: left;
-  width: 60px;
+  width: $icon-size*2;
+  padding-left: 10px;
 }
 
 .PlayButton,
@@ -217,8 +234,8 @@ $posts-col-width: 20%;
 
 .Icon {
   display: block;
-  width: 30px;
-  height: 30px;
+  width: $icon-size;
+  height: $icon-size;
 }
 
 .Icon-shape {
@@ -277,7 +294,7 @@ $posts-col-width: 20%;
 
 .ProgressBar {
   height: 8px;
-  margin: 20px 0px 10px 60px;
+  margin: 20px 5px 10px 60px;
 
   &-elapsed {
     height: 100%;

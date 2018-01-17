@@ -5,7 +5,8 @@ export default class CallBoard extends Component {
 	constructor (props) {
 		super(props)
     this.state = {
-      openIncidents: []
+      openIncidents: [],
+      rowIsHighlighted: false
     }
 	}
 
@@ -33,18 +34,48 @@ export default class CallBoard extends Component {
     })
   }
 
+  getActiveTime = (ts) => {
+    console.log(this.props.currentTime, ts)
+    let t = this.props.currentTime
+    // let strt = feature.properties.unix_timestamp;
+    if (t >= ts) {
+      return t - ts
+    }
+  }
+
+  formatSeconds = (seconds) => {
+    // ok to do if elapsed seconds are under 24 hours
+    return new Date(seconds * 1000).toISOString().substr(11, 8)
+  }
+
+  // highlightOn = (row) => {
+  //   // this calls a function in the main App to update highlightedFeature
+  //   this.props.handleHighlight(row)
+  // }
+
+  // handleRowHighlight = (row) => {
+  //   const activeRow = (row.properties.id === this.props.mapHighlightedFeature.properties.id)
+  //   this.setState({ rowIsHighlighted: activeRow })
+  // }
+
+  // componentWillUpdate(nextProps, nextState) {
+  //   //console.log(nextProps, nextState)
+  // }
+
   makeRows = (data) => {
     return data.map( row => {
       const incidentIsOpen = this.state.openIncidents.includes(row.properties.id)
+      const rowIsHighlighted = (row.properties.id === this.props.mapHighlightedFeature.properties.id || row.properties.id === this.props.boardHighlightedFeature.properties.id)
+      //this.handleRowHighlight(row)
       return (
         <div className="boardWrapper" key={row.properties.id}>
-          <div className="boardRow"
+          <div className={"boardRow " + (rowIsHighlighted ? "highlight" : "")}
             onMouseEnter={() => this.props.handleHighlight(row)}
             onMouseLeave={() => this.props.handleHighlight(this.props.defaultFeature)}
           >
             <div className="boardRow-type">{row.properties.type}</div>
             <div className="boardRow-priority">{row.properties.priority}</div>
-            <div className="boardRow-activeTime">{row.properties.time}</div>
+            <div className="boardRow-activeTime">{this.formatSeconds(this.getActiveTime(row.properties.unix_timestamp))}</div>
             {row.properties.postId.length ?
             (<div 
               className="boardRow-expander" 
@@ -58,26 +89,54 @@ export default class CallBoard extends Component {
             null }
           </div>
           <div className={"boardRow-openIncident " + (incidentIsOpen ? "boardRow-openIncident-open" : "")} >
-            <div className="bogus-padding">{this.insertComments(row)}</div>
+            <div className="bogus-padding">{this.insertPost(row)}</div>
           </div>
         </div>
       )
     })
   }
 
-  insertComments = (row) => {
+  insertPost = (row) => {
     const post = find(this.props.postData, ['id', row.properties.postId]);
     if (post !== undefined) {
-      console.log(post.comments)
+      // console.log(row.properties.postId)
+      // console.log(post.comments.data)
       return (
         <div className="postMessageWrapper">
           <div className="postMessage">{post.message}</div>
-          {post.comments.data.length > 0 ? 
-          <div className="postCommentWrapper">{"test"}</div> : 
+          {post.comments ? 
+          <div className="postCommentWrapper">{this.insertComments(post.comments.data)}</div> : 
           null }
         </div>
       )
     }
+  }
+
+  insertComments = (comments) => {
+    //console.log(comments)
+    return comments.map( (comment, i) => {
+      console.log(comment)
+      return (
+        <div className="whyDoWeNeedThisDiv">
+        <div className="postComment" key={`${comment.id}-${i}`}>{comment.message}</div>
+        {(comment.comment_count > 0) ?
+        <ul className="commentReplyWrapper">{this.insertReplies(comment.replies.data)}</ul> :
+        null }
+        </div>
+      )
+    })
+  }
+
+  insertReplies = (replies) => {
+    return (
+      <ul>
+        {replies.map( reply => {
+          //console.log(reply)
+          return <li className="commentReply" key={reply.id}>{reply.message}</li>
+        })
+      }
+      </ul>
+    )
   }
 
 	render() {

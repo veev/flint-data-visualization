@@ -180,7 +180,10 @@ class App extends Component {
           />
         <CallBoard
           activeData={this.filterIncidents(currentTime)}
+          currentTime={currentTime}
           handleHighlight={this.handleBoardHighlightChange}
+          mapHighlightedFeature={highlightedMapIncident}
+          boardHighlightedFeature={highlightedBoardIncident}
           postData={posts}
            />
       </div>
