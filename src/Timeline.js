@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { PlaybackControls, ProgressBar } from 'react-player-controls'
 //import ProgressBar from './ProgressBar'
+import GraphArea from './GraphArea'
 import { PropTypes } from 'prop-types'
 
 export default class Timeline extends Component {
@@ -57,6 +58,7 @@ export default class Timeline extends Component {
           onSeekStart={time => this.setState(() => ({ lastSeekStart: time }))}
           onSeekEnd={time => this.setState(() => ({ lastSeekEnd: time }))}
         />
+        
       </div>
     )
   }

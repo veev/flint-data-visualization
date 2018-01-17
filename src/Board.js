@@ -61,7 +61,7 @@ export default class Board extends Component {
       width: 70
     }, {
       Header: 'Posts',
-      expander: true,
+      expander: true, // change to conditional true of false
       // Header: () => <strong>More</strong>,
       width: 65,
       Expander: ({ isExpanded, ...rest }) =>
@@ -70,6 +70,7 @@ export default class Board extends Component {
             ? <span>&#x2299;</span>
             : <span>&#x2295;</span>}
         </div>,
+      // expander: false,
       style: {
         cursor: "pointer",
         fontSize: 25,
@@ -150,6 +151,7 @@ export default class Board extends Component {
             }
           }}
           SubComponent={ (row) => {
+            // this uses lodash to find post from postData
             let post = find(postData, ['id', row.original.properties.postId]);
             if (post !== undefined) {
               console.log(post)
@@ -162,6 +164,7 @@ export default class Board extends Component {
                   data={post.comments.data}
                   columns={postMessages}
                   showPagination={false}
+                  freezeWhenExpanded={true}
                   SubComponent={row => {
                     console.log(row.original)
                     return (
@@ -181,8 +184,12 @@ export default class Board extends Component {
             );
           }}
           onExpandedChange={(e) => {
-            //console.log(e)
+            console.log(e)
           }}
+          onExpandSubComponent={(e) => {
+            console.log(e)
+          }}
+          
         />
       </div>
     )

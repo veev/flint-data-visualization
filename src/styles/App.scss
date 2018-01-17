@@ -12,6 +12,11 @@ $icon-size: 30px;
 $color-hover: desaturate(darken($green, 20%), 10%);
 $color-active: fade-out($color-hover, 0.5);
 
+$type-col-width: 30%;
+$priority-col-width: 20%;
+$active-col-width: 30%;
+$posts-col-width: 20%;
+
 .App {
 
 }
@@ -52,12 +57,106 @@ $color-active: fade-out($color-hover, 0.5);
   // width: 40vw;
   min-height: 100px;
   // height: 85vh;
+  max-height: 82vh;
   min-width: 330px;
-  width: 400px;
+  width: 300px;
   overflow-y: scroll;
   background-color: rgba(247, 247, 247, 0.8);
   top: 50px;
+
+  .boardHeader {
+  width: 100%;
 }
+
+.boardContent {
+  width: 100%;
+}
+
+.boardHeader {
+  padding: 10px;
+  display: flex;
+  width: 100%;
+}
+
+.boardHeader-type {
+  width: $type-col-width;
+  display: flex;
+}
+
+.boardHeader-priority {
+  width: $priority-col-width;
+  display: flex;
+}
+
+.boardHeader-activeTime {
+  width: $active-col-width;
+  display: flex;
+}
+
+.boardHeader-expander {
+  width: $posts-col-width;
+  display: flex;
+}
+
+.boardRow {
+  padding: 10px;
+  display: flex;
+  width: 100%
+}
+
+.boardWrapper:nth-child(even) {
+  background: #ccc;
+}
+
+.boardWrapper:nth-child(odd) {
+  background: #fff;
+}
+
+.boardRow-type {
+  width: $type-col-width;
+  display: flex;
+}
+
+.boardRow-priority {
+  width: $priority-col-width;
+  display: flex;
+}
+
+.boardRow-activeTime {
+  width: $active-col-width;
+  display: flex;
+}
+
+.boardRow-expander {
+  width: $posts-col-width;
+  display: flex;
+
+  span {
+    width: 30px;
+    display: inline-block;
+  }
+}
+
+.boardRow-openIncident {
+  box-sizing: border-box;
+  width: 100%;
+  height: 0px;
+  color: red;
+  display: flex;
+  overflow: hidden;
+  transition: height 0.2s;
+}
+
+.boardRow-openIncident-open {
+  height: 70px;
+}
+
+.bogus-padding {
+  padding: 10px;
+}
+}
+
+
 
 .timeOutput {
   position: absolute;

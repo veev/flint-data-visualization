@@ -28,11 +28,67 @@
 .Board {
   position: absolute;
   min-height: 100px;
+  max-height: 82vh;
   min-width: 330px;
-  width: 400px;
+  width: 300px;
   overflow-y: scroll;
   background-color: rgba(247, 247, 247, 0.8);
   top: 50px; }
+  .Board .boardHeader {
+    width: 100%; }
+  .Board .boardContent {
+    width: 100%; }
+  .Board .boardHeader {
+    padding: 10px;
+    display: flex;
+    width: 100%; }
+  .Board .boardHeader-type {
+    width: 30%;
+    display: flex; }
+  .Board .boardHeader-priority {
+    width: 20%;
+    display: flex; }
+  .Board .boardHeader-activeTime {
+    width: 30%;
+    display: flex; }
+  .Board .boardHeader-expander {
+    width: 20%;
+    display: flex; }
+  .Board .boardRow {
+    padding: 10px;
+    display: flex;
+    width: 100%; }
+  .Board .boardWrapper:nth-child(even) {
+    background: #ccc; }
+  .Board .boardWrapper:nth-child(odd) {
+    background: #fff; }
+  .Board .boardRow-type {
+    width: 30%;
+    display: flex; }
+  .Board .boardRow-priority {
+    width: 20%;
+    display: flex; }
+  .Board .boardRow-activeTime {
+    width: 30%;
+    display: flex; }
+  .Board .boardRow-expander {
+    width: 20%;
+    display: flex; }
+    .Board .boardRow-expander span {
+      width: 30px;
+      display: inline-block; }
+  .Board .boardRow-openIncident {
+    box-sizing: border-box;
+    width: 100%;
+    height: 0px;
+    color: red;
+    display: flex;
+    overflow: hidden;
+    transition: height 0.2s; }
+  .Board .boardRow-openIncident-open {
+    height: 70px; }
+  .Board .bogus-padding {
+    padding: 10px; }
 
 .timeOutput {
   position: absolute;

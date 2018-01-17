@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom'
 import Map from './Map'
 import Timeline from './Timeline'
 import Title from './Title'
-import Board from './Board'
+// import Board from './Board'
+import CallBoard from './CallBoard'
 
 // import './styles/App.css'
 // import Source from './Source'
@@ -121,12 +122,12 @@ class App extends Component {
   }
 
   handleBoardHighlightChange = (feature) => {
-    console.log(feature)
+    //console.log(feature)
     this.setState({ highlightedBoardIncident: feature })
   }
 
   handleMapRolloverChange = (feature) => {
-    console.log(feature)
+    //console.log(feature)
     this.setState({ highlightedMapIncident: feature })
   }
 
@@ -177,14 +178,11 @@ class App extends Component {
           totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}
           />
-        <Board
-          staticData={data}
+        <CallBoard
           activeData={this.filterIncidents(currentTime)}
           handleHighlight={this.handleBoardHighlightChange}
-          mapHighlightedFeature={highlightedMapIncident}
-          currentTime={currentTime}
           postData={posts}
-          />
+           />
       </div>
     );
   }
