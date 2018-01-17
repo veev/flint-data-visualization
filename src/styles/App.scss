@@ -141,14 +141,19 @@ $posts-col-width: 20%;
   box-sizing: border-box;
   width: 100%;
   height: 0px;
-  color: red;
+  // color: red;
   display: flex;
   overflow: hidden;
   transition: height 0.2s;
 }
 
 .boardRow-openIncident-open {
-  height: 70px;
+  /* need a height value for animation to happen 
+    for now, automatic sizing is more important
+    height: 70px;
+  */
+
+  height: auto;
 }
 
 .bogus-padding {

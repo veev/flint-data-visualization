@@ -67,9 +67,17 @@ export default class CallBoard extends Component {
 
   insertComments = (row) => {
     const post = find(this.props.postData, ['id', row.properties.postId]);
-      if (post !== undefined) {
-        return <div className="postMessage">{post.message}</div>
-      }
+    if (post !== undefined) {
+      console.log(post.comments)
+      return (
+        <div className="postMessageWrapper">
+          <div className="postMessage">{post.message}</div>
+          {post.comments.data.length > 0 ? 
+          <div className="postCommentWrapper">{"test"}</div> : 
+          null }
+        </div>
+      )
+    }
   }
 
 	render() {
