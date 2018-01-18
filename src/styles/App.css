@@ -30,10 +30,11 @@
   min-height: 100px;
   max-height: 73vh;
   min-width: 330px;
-  width: 300px;
+  width: 360px;
   overflow-y: scroll;
   background-color: rgba(247, 247, 247, 0.8);
-  top: 50px; }
+  top: 50px;
+  font-size: 0.8em; }
   .Board .boardHeader {
     width: 100%; }
   .Board .boardContent {
@@ -43,16 +44,19 @@
     display: flex;
     width: 100%; }
   .Board .boardHeader-type {
-    width: 30%;
+    width: 25%;
     display: flex; }
   .Board .boardHeader-priority {
-    width: 20%;
+    width: 15%;
     display: flex; }
   .Board .boardHeader-activeTime {
-    width: 30%;
+    width: 20%;
+    display: flex; }
+  .Board .boardHeader-status {
+    width: 25%;
     display: flex; }
   .Board .boardHeader-expander {
-    width: 20%;
+    width: 15%;
     display: flex; }
   .Board .boardRow {
     padding: 10px;
@@ -66,16 +70,19 @@
   .Board .boardWrapper:nth-child(odd) {
     background: #fff; }
   .Board .boardRow-type {
-    width: 30%;
+    width: 25%;
     display: flex; }
   .Board .boardRow-priority {
-    width: 20%;
+    width: 15%;
     display: flex; }
   .Board .boardRow-activeTime {
-    width: 30%;
+    width: 20%;
+    display: flex; }
+  .Board .boardRow-status {
+    width: 25%;
     display: flex; }
   .Board .boardRow-expander {
-    width: 20%;
+    width: 15%;
     display: flex; }
     .Board .boardRow-expander span {
       width: 30px;
@@ -94,8 +101,7 @@
     */
     height: auto; }
   .Board .bogus-padding {
-    padding: 10px;
-    width: 100%; }
+    padding: 10px; }
   .Board .postCommentWrapper {
     padding: 10px; }
   .Board .postComment {
@@ -112,8 +118,9 @@
   bottom: 0; }
 
 .PlaybackControls {
+  position: absolute;
+  bottom: -4px;
   height: 6vh;
-  float: left;
   width: 40px;
   padding-left: 10px; }
 
@@ -180,7 +187,7 @@
 
 .ProgressBar {
   height: 8px;
-  margin: 20px 5px 10px 60px; }
+  margin: 18px 5px 19px 60px; }
   .ProgressBar-elapsed {
     height: 100%; }
   .ProgressBar-seek {

@@ -65,6 +65,12 @@ class App extends Component {
     // do init stuff here to data?
     console.log('componentWillMount')
     console.log(posts)
+
+    data.features = data.features.map( incident => {
+      incident.properties.status = "preCall"
+      return incident
+    })
+    console.log(data.features)
   }
 
   componentWillUnmount() {
@@ -131,14 +137,12 @@ class App extends Component {
     this.setState({ highlightedMapIncident: feature })
   }
 
-  // formatTime = (ts) => {
-
-  // }
   filterIncidents = (cTime) => {
     let filteredPresent = this.props.incidents.filter( feature => {
-      let strt = feature.properties.unix_timestamp;
-      let end = feature.properties.unix_end;
-
+      feature = this.updateIncidentStatus(cTime, feature)
+      let strt = feature.properties.unix_timestamp
+      let end = feature.properties.unix_end
+      //this.updateIncidentStatus(cTime, feature)
       //console.log("current time: ", formatTime(time), "start time: ", formatTime(strt), "end time: ", formatTime(end));
       //if (cTime >= strt && cTime <= end) {
         //console.log(feature);
@@ -146,14 +150,47 @@ class App extends Component {
       //}
       return (cTime >= strt && cTime <= end)
     })
+    console.log(filteredPresent)
     return filteredPresent
   }
+
+  updateIncidentStatus = (time, feature) => {
+  // ['preCall', 'blue'],
+  // ['notAssigned', 'red'],
+  // ['waitingforUnit', 'orange'],
+  // ['onScene', 'green'],
+  // ['ended', 'gray']
+  
+    if (feature.properties.unix_onscene && feature.properties.unix_dispatch) {
+      const strt = feature.properties.unix_timestamp
+      const dispatchT = feature.properties.unix_dispatch;
+      const onSceneT = feature.properties.unix_onscene;
+      const end = feature.properties.unix_end;
+      //console.log(+time, dispatchT, onSceneT);
+
+      if (+time >= strt && +time <= dispatchT) {
+        feature.properties.status = "notAssigned";
+      } else if (+time >= dispatchT && +time <= onSceneT) {
+        feature.properties.status = "waitingforUnit";
+      } else if (+time >= onSceneT && +time <= end) {
+        feature.properties.status = "onScene";
+      } else if (+time >= end) {
+        feature.properties.status = "ended";
+      }
+    }
+
+    //console.log(feature)
+    return feature
+  
+  //console.log(answeredGeoJson.features);
+  //map.getSource('answeredIncidents').setData(answeredGeoJson);
+}
 
 
   render() {
     const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident } = this.state
     const { endTS } = this.props
-    let formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
+    const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
     //console.log(currentTime)
 
     window.convertTime = this.convertTime;
@@ -177,6 +214,7 @@ class App extends Component {
           currentTime={this.convertTime(currentTime)}
           totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}
+          staticData={data}
           />
         <CallBoard
           activeData={this.filterIncidents(currentTime)}

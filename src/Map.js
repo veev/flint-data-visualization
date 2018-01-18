@@ -79,7 +79,6 @@ export default class Map extends Component {
       this._addListeners()
     })
 
-
     //window.addEventListener('resize', this._resize);
     // this._resize();
   }
@@ -99,6 +98,9 @@ export default class Map extends Component {
   componentWillUpdate(nextProps, nextState) {
     console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
     //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
+
+    if (nextProps.activeData) this.map.getSource('incidentsLayer').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
+
     this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
       nextProps.activeData.map( feature => {
         //console.log(feature.properties.eventNumber);
@@ -121,10 +123,7 @@ export default class Map extends Component {
       this.popup.setLngLat(nextProps.boardHighlightedFeature.geometry.coordinates)
           .setHTML(nextProps.boardHighlightedFeature.properties.type)
           .addTo(this.map);
-    } else {
-
     }
-
   }
 
   componentDidUpdate() {
@@ -134,6 +133,13 @@ export default class Map extends Component {
   componentWillUnmount() {
     //window.removeEventListener('resize', this._resize);
     this.map.remove();
+  }
+
+  makeGeoJsonFromFeatures = (featuresArray) => {
+    let object = {};
+    object.type = "FeatureCollection";
+    object.features = featuresArray;
+    return object;
   }
 
   _resize = () => {
@@ -165,6 +171,14 @@ export default class Map extends Component {
 
   _initMap = () => {
     // this layer is static and doesn't change - marks city boundaries
+
+    // color variables
+    const preCall = 'blue';
+    const notAssigned = 'red';
+    const waitingforUnit = 'orange';
+    const onScene = 'green';
+    const ended = 'gray';
+
     this.map.addLayer({
       'id': 'boundsLayer',
       'type': 'fill',
@@ -189,7 +203,22 @@ export default class Map extends Component {
       },
       'layout': {},
       'paint': {
-        'circle-color': 'red'
+        'circle-color': 
+        {
+          property: 'status',
+          type: 'categorical',
+          stops: [
+            ['preCall', preCall],
+            ['notAssigned', notAssigned],
+            ['waitingforUnit', waitingforUnit],
+            ['onScene', onScene],
+            ['ended', ended]
+          ]
+        },
+        'circle-stroke-opacity': 1,
+        'circle-radius': {
+          stops: [[8, 1], [11, 3], [16, 10]]
+        },
       }
     })
 

@@ -12,10 +12,11 @@ $icon-size: 20px;
 $color-hover: desaturate(darken($green, 20%), 10%);
 $color-active: fade-out($color-hover, 0.5);
 
-$type-col-width: 30%;
-$priority-col-width: 20%;
-$active-col-width: 30%;
-$posts-col-width: 20%;
+$type-col-width: 25%;
+$priority-col-width: 15%;
+$active-col-width: 20%;
+$status-col-width: 25%;
+$posts-col-width: 15%;
 
 .App {
 
@@ -59,10 +60,11 @@ $posts-col-width: 20%;
   // height: 85vh;
   max-height: 73vh;
   min-width: 330px;
-  width: 300px;
+  width: 360px;
   overflow-y: scroll;
   background-color: rgba(247, 247, 247, 0.8);
   top: 50px;
+  font-size: 0.8em;
 
   .boardHeader {
   width: 100%;
@@ -90,6 +92,11 @@ $posts-col-width: 20%;
 
   .boardHeader-activeTime {
     width: $active-col-width;
+    display: flex;
+  }
+
+  .boardHeader-status {
+    width: $status-col-width;
     display: flex;
   }
 
@@ -132,6 +139,11 @@ $posts-col-width: 20%;
     display: flex;
   }
 
+  .boardRow-status {
+    width: $status-col-width;
+    display: flex;
+  }
+
   .boardRow-expander {
     width: $posts-col-width;
     display: flex;
@@ -163,7 +175,7 @@ $posts-col-width: 20%;
 
   .bogus-padding {
     padding: 10px;
-    width: 100%;
+    // width: 100%;
   }
 
   .postCommentWrapper {
@@ -192,8 +204,10 @@ $posts-col-width: 20%;
 }
 
 .PlaybackControls {
+  position: absolute;
+  bottom: -4px;
   height: 6vh;
-  float: left;
+  // float: left;
   width: $icon-size*2;
   padding-left: 10px;
 }
@@ -294,7 +308,7 @@ $posts-col-width: 20%;
 
 .ProgressBar {
   height: 8px;
-  margin: 20px 5px 10px 60px;
+  margin: 18px 5px 19px 60px;
 
   &-elapsed {
     height: 100%;

@@ -76,6 +76,7 @@ export default class CallBoard extends Component {
             <div className="boardRow-type">{row.properties.type}</div>
             <div className="boardRow-priority">{row.properties.priority}</div>
             <div className="boardRow-activeTime">{this.formatSeconds(this.getActiveTime(row.properties.unix_timestamp))}</div>
+            <div className="boardRow-status">{row.properties.status}</div>
             {row.properties.postId.length ?
             (<div 
               className="boardRow-expander" 
@@ -119,7 +120,7 @@ export default class CallBoard extends Component {
       return (
         <div className="whyDoWeNeedThisDiv">
         <div className="postComment" key={`${comment.id}-${i}`}>{comment.message}</div>
-        {(comment.comment_count > 0) ?
+        {(comment.replies) ?
         <ul className="commentReplyWrapper">{this.insertReplies(comment.replies.data)}</ul> :
         null }
         </div>
@@ -149,6 +150,7 @@ export default class CallBoard extends Component {
           <div className="boardHeader-type">Type</div>
           <div className="boardHeader-priority">Priority</div>
           <div className="boardHeader-activeTime">Time Active</div>
+          <div className="boardHeader-status">Status</div>
           <div className="boardHeader-posts">Posts</div>
         </div>
         <div className="boardContent">{this.makeRows(activeData)}</div>

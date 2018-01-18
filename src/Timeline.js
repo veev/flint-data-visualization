@@ -31,6 +31,12 @@ export default class Timeline extends Component {
 
   componentWillMount() {
     console.log(this.props.isPlaying)
+    this.mungeData(this.props.staticData)
+
+  }
+
+  mungeData = (data) => {
+    console.log(data.features)
   }
 
   componentWillUnmount() {
@@ -39,26 +45,32 @@ export default class Timeline extends Component {
 
   render() {
     const { isPlayable, showPrevious, showNext, isSeekable } = this.state
-    const { currentTime, totalTime, isPlaying } = this.props
+    const { currentTime, totalTime, isPlaying, staticData } = this.props
     //console.log(currentTime)
     return(
-      <div className='Timeline'>
-        <PlaybackControls
-          isPlayable={isPlayable}
-          isPlaying={isPlaying}
-          onPlaybackChange={this.props.handlePlay}
-          showPrevious={showPrevious}
-          showNext={showNext}
-          />
-        <ProgressBar
-          totalTime={totalTime}
-          currentTime={currentTime}
-          isSeekable={isSeekable}
-          onSeek={this.props.handleSeek}
-          onSeekStart={time => this.setState(() => ({ lastSeekStart: time }))}
-          onSeekEnd={time => this.setState(() => ({ lastSeekEnd: time }))}
+      <div className="Timeline">
+        <GraphArea
+          data={staticData}
+          size={[900, 60]}
+          height={100}
         />
-        
+        <div className="ControlArea">
+          <PlaybackControls
+            isPlayable={isPlayable}
+            isPlaying={isPlaying}
+            onPlaybackChange={this.props.handlePlay}
+            showPrevious={showPrevious}
+            showNext={showNext}
+            />
+          <ProgressBar
+            totalTime={totalTime}
+            currentTime={currentTime}
+            isSeekable={isSeekable}
+            onSeek={this.props.handleSeek}
+            onSeekStart={time => this.setState(() => ({ lastSeekStart: time }))}
+            onSeekEnd={time => this.setState(() => ({ lastSeekEnd: time }))}
+          />
+        </div>
       </div>
     )
   }

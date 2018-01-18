@@ -5,7 +5,10 @@
   "dependencies": {
     "d3-array": "^1.2.1",
     "d3-format": "^1.2.2",
+    "d3-interpolate": "^1.1.6",
     "d3-scale": "^1.0.7",
+    "d3-selection": "^1.2.0",
+    "d3-time": "^1.0.8",
     "lodash.find": "^4.6.0",
     "mapbox-gl": "^0.43.0",
     "node-sass-chokidar": "^0.0.3",
