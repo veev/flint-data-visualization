@@ -1,18 +1,25 @@
 .App-header {
   background-color: #222;
-  height: 50px;
-  padding: 20px;
+  height: 6vh;
+  margin: 10px;
   color: white; }
+  .App-header .Nav {
+    float: right;
+    width: 30vw;
+    margin: 5px; }
+    .App-header .Nav a {
+      color: #fefefe;
+      padding-right: 10px; }
 
 .App-title {
   font-size: 1.5em;
   font-family: "fgcm", "Helvetica", sans-serif;
   /*color: #fb3f48;*/
-  color: white;
+  color: #fefefe;
   font-size: 2rem;
   position: absolute;
   text-transform: uppercase;
-  top: 15px;
+  top: 7px;
   left: 20px; }
 
 .App-intro {
@@ -21,8 +28,8 @@
 .Map {
   position: absolute;
   width: 100%;
-  top: 0;
-  height: 85vh;
+  top: 6vh;
+  height: 80vh;
   /*  bottom: 0;*/ }
 
 .Board {

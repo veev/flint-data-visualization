@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import Map from './Map'
 import Timeline from './Timeline'
-import Title from './Title'
+import Header from './Header'
 // import Board from './Board'
 import CallBoard from './CallBoard'
 
@@ -48,7 +48,8 @@ class App extends Component {
         properties: {
           eventNumber: ''
         }
-      }
+      },
+      navState = 'Incidents'
     }
 
     this.timer = null
@@ -197,13 +198,13 @@ class App extends Component {
 
     return (
       <div className="App">
+        <Header />
         <Map 
           staticData={data}
           activeData={this.filterIncidents(currentTime)}
           handleHighlight={this.handleMapRolloverChange}
           boardHighlightedFeature={highlightedBoardIncident}
           />
-        <Title title="Flint Police Dispatches"/>
         <Timeline
           handlePlay={this.handlePlayState}
           handleSeek={this.handleSeekChange}
