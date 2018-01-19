@@ -3,14 +3,15 @@ $gray: #878C88;
 $white: #fefefe;
 $blue: #0E52CE;
 $green: #72D687;
+$flintRed: #FB3F48;
 
 $icon-size: 20px;
 
-// $color-hover: saturate(lighten($green, 10%), 20%);
-// $color-active: desaturate(darken($green, 20%), 20%);
+$color-hover: saturate(lighten($flintRed, 10%), 20%);
+$color-active: desaturate(darken($flintRed, 20%), 20%);
 
-$color-hover: desaturate(darken($green, 20%), 10%);
-$color-active: fade-out($color-hover, 0.5);
+// $color-hover: desaturate(darken($flintRed, 20%), 10%);
+// $color-active: fade-out($color-hover, 0.5);
 
 $type-col-width: 25%;
 $priority-col-width: 15%;
@@ -49,7 +50,7 @@ $posts-col-width: 15%;
   position: absolute;
   width: 100%;
   top: 0;
-  height: 90vh;
+  height: 85vh;
 /*  bottom: 0;*/
 }
 
@@ -189,12 +190,18 @@ $posts-col-width: 15%;
 
 }
 
-
+////////////////////////////////
+////////// TIMELINE ////////////
+////////////////////////////////
 
 .timeOutput {
+  padding: 5px;
+  color: $white;
+  font-size: 1em;
+  font-family: courier, monospace;
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
 }
 
 .Timeline {
@@ -217,7 +224,7 @@ $posts-col-width: 15%;
   margin-right: 10px;
   padding: 8px;
   background: $white;
-  border: 2px solid $green;
+  border: 2px solid $flintRed;
   border-radius: 100%;
   outline: none;
 
@@ -253,7 +260,7 @@ $posts-col-width: 15%;
 }
 
 .Icon-shape {
-  fill: $green;
+  fill: $flintRed;
 }
 
 
@@ -281,7 +288,7 @@ $posts-col-width: 15%;
     position: absolute;
     width: 16px;
     height: 16px;
-    background: $green;
+    background: $flintRed;
     border-radius: 100%;
     transform: scale(0);
     transition: transform 0.2s;
@@ -301,7 +308,7 @@ $posts-col-width: 15%;
     }
 
     .ProgressBar-elapsed {
-      background: $green;
+      background: $flintRed;
     }
   }
 }
@@ -347,3 +354,13 @@ $posts-col-width: 15%;
   }
 }
 
+////////// GRAPH AREA //////////////
+
+.GraphArea {
+  margin: 20px 5px -15px 60px;
+  height: 8vh;
+
+  .bar {
+    fill: $flintRed;
+  }
+}

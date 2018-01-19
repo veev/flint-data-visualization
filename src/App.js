@@ -204,13 +204,13 @@ class App extends Component {
           boardHighlightedFeature={highlightedBoardIncident}
           />
         <Title title="Flint Police Dispatches"/>
-        <div className="timeOutput">{formattedTime}</div>
         <Timeline
           handlePlay={this.handlePlayState}
           handleSeek={this.handleSeekChange}
 
           // setTime={this._updateTime}
           //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
+          formattedTime={formattedTime}
           currentTime={this.convertTime(currentTime)}
           totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}

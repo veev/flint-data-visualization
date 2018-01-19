@@ -24,7 +24,10 @@ export default class Timeline extends Component {
       currentTime: this.props.currentTime,
       isSeekable: true,
       lastSeekStart: this.props.currentTime,
-      lastSeekEnd: this.props.currentTime
+      lastSeekEnd: this.props.currentTime,
+
+      graphWidth: 0,
+      graphHeight: 0
     }
     // this.timer = null
   }
@@ -39,21 +42,31 @@ export default class Timeline extends Component {
     console.log(data.features)
   }
 
+  componentDidMount() {
+    const width = this.graphAreaDiv.clientWidth
+    const height = this.graphAreaDiv.clientHeight
+    this.setState({ graphWidth: width, graphHeight: height })
+  }
+
   componentWillUnmount() {
     // window.clearInterval(this.timer)
   }
 
   render() {
-    const { isPlayable, showPrevious, showNext, isSeekable } = this.state
-    const { currentTime, totalTime, isPlaying, staticData } = this.props
+    const { isPlayable, showPrevious, showNext, isSeekable, graphWidth, graphHeight } = this.state
+    const { currentTime, totalTime, isPlaying, staticData, formattedTime } = this.props
     //console.log(currentTime)
     return(
       <div className="Timeline">
-        <GraphArea
-          data={staticData}
-          size={[900, 60]}
-          height={100}
-        />
+        <div className="timeOutput">{formattedTime}</div>
+        <div className="GraphArea"
+          ref={(graphAreaDiv) => this.graphAreaDiv = graphAreaDiv} >
+          <GraphArea
+            data={staticData}
+            size={[graphWidth, graphHeight]}
+            height={100}
+          />
+        </div>
         <div className="ControlArea">
           <PlaybackControls
             isPlayable={isPlayable}
