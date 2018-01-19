@@ -13,6 +13,7 @@ import CallBoard from './CallBoard'
 import { map_range } from './utils'
 import data from './data/may5-12-incidents-timestamps.json'
 import posts from './data/postsMay5_12-timezone.json'
+import photos from './data/photos-grouped.json'
 
 // class Board extends React.Component {
 //     shouldComponentUpdate(nextProps, nextState) {
@@ -49,7 +50,7 @@ class App extends Component {
           eventNumber: ''
         }
       },
-      navState = 'Incidents'
+      // navState = 'Incidents'
     }
 
     this.timer = null
@@ -204,6 +205,7 @@ class App extends Component {
           activeData={this.filterIncidents(currentTime)}
           handleHighlight={this.handleMapRolloverChange}
           boardHighlightedFeature={highlightedBoardIncident}
+          photoData={photos}
           />
         <Timeline
           handlePlay={this.handlePlayState}

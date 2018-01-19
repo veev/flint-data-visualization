@@ -244,6 +244,23 @@ export default class Map extends Component {
         return feature.properties.eventNumber;
       })
     ))
+
+    // add photo markers to map
+
+    this.map.addSource('photos', {
+      'type': 'geojson',
+      'data': this.props.photoData
+    })
+
+    this.map.addLayer({
+      'id': 'photoMarkers',
+      'type': 'symbol',
+      'source': 'photos',
+      'layout': {
+        'icon-image': 'attraction-15',
+        'icon-allow-overlap': true
+      }
+    })
   }
 
   _addListeners = () => {
@@ -268,6 +285,25 @@ export default class Map extends Component {
       this.map.getCanvas().style.cursor = '';
       this.props.handleHighlight(this.props.defaultFeature)
       popup.remove();
+    })
+
+    // Attach listeners to photoMarkers layer
+    // Change the cursor to a pointer when the mouse is over the photoMarkers layer.
+    this.map.on('mouseenter', 'photoMarkers', (e) => {
+      if (this.map.getSource('photos') && this.map.isSourceLoaded('photos')) {
+        this.map.getCanvas().style.cursor = 'pointer';
+      }
+    })
+
+    // Change it back to a pointer when it leaves.
+    this.map.on('mouseleave', 'photoMarkers', (e) => {
+      if (this.map.getSource('photos') && this.map.isSourceLoaded('photos')) {
+        this.map.getCanvas().style.cursor = '';
+      }
+    })
+
+    this.map.on('click', 'photoMarkers', (e) => {
+      console.log(e.features[0].properties.photos)
     })
   }
 

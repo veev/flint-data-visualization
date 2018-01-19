@@ -8,14 +8,14 @@
     width: 30vw;
     margin: 5px; }
     .App-header .Nav a {
-      color: #fefefe;
+      color: #7d7b7b;
       padding-right: 10px; }
 
 .App-title {
   font-size: 1.5em;
   font-family: "fgcm", "Helvetica", sans-serif;
   /*color: #fb3f48;*/
-  color: #fefefe;
+  color: #7d7b7b;
   font-size: 2rem;
   position: absolute;
   text-transform: uppercase;
@@ -116,7 +116,7 @@
 
 .timeOutput {
   padding: 5px;
-  color: #fefefe;
+  color: #7d7b7b;
   font-size: 1em;
   font-family: courier, monospace;
   position: absolute;
@@ -139,7 +139,7 @@
 .PauseButton {
   margin-right: 10px;
   padding: 8px;
-  background: #fefefe;
+  background: #7d7b7b;
   border: 2px solid #FB3F48;
   border-radius: 100%;
   outline: none; }
