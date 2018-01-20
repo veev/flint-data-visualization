@@ -172,7 +172,7 @@
 
 .ProgressBar {
   position: relative;
-  background: #eee;
+  background: #7d7b7b;
   border-radius: 4px; }
   .ProgressBar-elapsed, .ProgressBar-value {
     background: #878C88;
@@ -225,6 +225,19 @@
   height: 8vh; }
   .GraphArea .bar {
     fill: #FB3F48; }
+
+.lightBox-wrapper {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2147483647;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.8); }
 
 @font-face {
   font-family: "AGaramondPro-Regular";

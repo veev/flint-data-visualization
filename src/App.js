@@ -50,6 +50,7 @@ class App extends Component {
           eventNumber: ''
         }
       },
+      showLightbox: false
       // navState = 'Incidents'
     }
 
@@ -92,6 +93,17 @@ class App extends Component {
   //     //activeIncidents: // TODO - filtered incidents
   //   })
   // }
+
+  handlePhotoMarkerClick = (marker) => {
+    if (marker.properties.photos.length > 0) {
+      //console.log(marker)
+      this.setState({ showLightbox: true })
+    }
+  }
+
+  makePhotoMarkerLightbox = (marker) => {
+
+  }
 
   handlePlayState = (playState) => {
     // this is what toggles the play / pause button
@@ -156,13 +168,7 @@ class App extends Component {
     return filteredPresent
   }
 
-  updateIncidentStatus = (time, feature) => {
-  // ['preCall', 'blue'],
-  // ['notAssigned', 'red'],
-  // ['waitingforUnit', 'orange'],
-  // ['onScene', 'green'],
-  // ['ended', 'gray']
-  
+  updateIncidentStatus = (time, feature) => {  
     if (feature.properties.unix_onscene && feature.properties.unix_dispatch) {
       const strt = feature.properties.unix_timestamp
       const dispatchT = feature.properties.unix_dispatch;
@@ -190,7 +196,7 @@ class App extends Component {
 
 
   render() {
-    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident } = this.state
+    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident, showLightbox } = this.state
     const { endTS } = this.props
     const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
     //console.log(currentTime)
@@ -206,6 +212,7 @@ class App extends Component {
           handleHighlight={this.handleMapRolloverChange}
           boardHighlightedFeature={highlightedBoardIncident}
           photoData={photos}
+          handlePhotos={this.handlePhotoMarkerClick}
           />
         <Timeline
           handlePlay={this.handlePlayState}
@@ -227,6 +234,10 @@ class App extends Component {
           boardHighlightedFeature={highlightedBoardIncident}
           postData={posts}
            />
+        { showLightbox ?
+          <div className="lightBox-wrapper"
+          onClick={() => this.setState({ showLightbox: !showLightbox }) }></div> :
+          null }
       </div>
     );
   }

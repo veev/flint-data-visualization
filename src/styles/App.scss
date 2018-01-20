@@ -281,7 +281,7 @@ $posts-col-width: 15%;
 
 .ProgressBar {
   position: relative;
-  background: #eee;
+  background: $white;
   border-radius: 4px;
 
   &-elapsed,
@@ -365,7 +365,7 @@ $posts-col-width: 15%;
   }
 }
 
-////////// GRAPH AREA //////////////
+///////////// GRAPH AREA //////////////
 
 .GraphArea {
   margin: 20px 5px -15px 60px;
@@ -374,4 +374,20 @@ $posts-col-width: 15%;
   .bar {
     fill: $flintRed;
   }
+}
+
+///////////// LIGHT BOX //////////////
+
+.lightBox-wrapper {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2147483647;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  background: rgba(0,0,0,.8);
 }

@@ -303,7 +303,9 @@ export default class Map extends Component {
     })
 
     this.map.on('click', 'photoMarkers', (e) => {
-      console.log(e.features[0].properties.photos)
+      //console.log(e.features[0].properties.photos)
+      // call function in App to generate Modal sliders?
+      this.props.handlePhotos(e.features[0])
     })
   }
 
