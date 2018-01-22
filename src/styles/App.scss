@@ -117,26 +117,31 @@ $posts-col-width: 12%;
   .boardColumn-type {
     width: $type-col-width;
     display: flex;
+    // flex: 100 0 auto;
   }
 
   .boardColumn-priority {
     width: $priority-col-width;
     display: flex;
+    // flex: 100 0 auto;
   }
 
   .boardColumn-activeTime {
     width: $active-col-width;
     display: flex;
+    // flex: 100 0 auto;
   }
 
   .boardColumn-status {
     width: $status-col-width;
     display: flex;
+    // flex: 100 0 auto;
   }
 
   .boardColumn-expander {
     width: $posts-col-width;
     display: flex;
+    // flex: 100 0 auto;
   }
 
   .boardRow {

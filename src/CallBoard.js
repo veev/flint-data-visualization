@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import find from 'lodash.find'
+import { map_range } from './utils'
 
 export default class CallBoard extends Component {
 	constructor (props) {
@@ -35,12 +36,21 @@ export default class CallBoard extends Component {
   }
 
   getActiveTime = (ts) => {
-    console.log(this.props.currentTime, ts)
-    let t = this.props.currentTime
+    //console.log(this.props.currentTime, ts)
+    const t = this.props.currentTime
     // let strt = feature.properties.unix_timestamp;
     if (t >= ts) {
+      //console.log(t - ts)
       return t - ts
     }
+  }
+
+  getStatusBar = (ts) => {
+    //get width of elapsed time, up to an hour (60 sec * 60 min)
+    const elapsedTime = this.getActiveTime(ts)
+    let barWidth = map_range(elapsedTime, 0, 3600, 0, 100)
+    if (barWidth > 100) barWidth = 100
+    return barWidth
   }
 
   formatSeconds = (seconds) => {
@@ -76,7 +86,28 @@ export default class CallBoard extends Component {
             <div className="boardColumn boardColumn-type">{row.properties.type}</div>
             <div className="boardColumn boardColumn-priority">{row.properties.priority}</div>
             <div className="boardColumn boardColumn-activeTime">{this.formatSeconds(this.getActiveTime(row.properties.unix_timestamp))}</div>
-            <div className="boardColumn boardColumn-status">{row.properties.status}</div>
+            <div className="boardColumn boardColumn-status">
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#dadada',
+                  borderRadius: '2px'
+                }}
+              >
+                <div
+                  style={{
+                    width: `${this.getStatusBar(row.properties.unix_timestamp)}%`,
+                    height: '100%',
+                    backgroundColor: row.properties.status === 'notAssigned' || row.properties.status === 'waitingforUnit' ? '#FB3F48'
+                      : row.properties.status === 'onScene' ? '#72D687'
+                      : '#ff2e00',
+                    borderRadius: '2px',
+                    transition: 'all .2s ease-out'
+                  }}
+                />
+              </div>
+            </div>
             {row.properties.postId.length ?
             (<div 
               className="boardColumn boardRow-expander" 
