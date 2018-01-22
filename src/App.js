@@ -6,14 +6,14 @@ import Timeline from './Timeline'
 import Header from './Header'
 // import Board from './Board'
 import CallBoard from './CallBoard'
-
+import Gallery from './Gallery'
 // import './styles/App.css'
 // import Source from './Source'
 // import Layer from './Layer'
 import { map_range } from './utils'
 import data from './data/may5-12-incidents-timestamps.json'
 import posts from './data/postsMay5_12-timezone.json'
-import photos from './data/photos-grouped.json'
+import photos from './data/photos-grouped2.json'
 
 // class Board extends React.Component {
 //     shouldComponentUpdate(nextProps, nextState) {
@@ -50,7 +50,9 @@ class App extends Component {
           eventNumber: ''
         }
       },
-      showLightbox: false
+      showLightbox: false,
+      contentArray: [
+      ]
       // navState = 'Incidents'
     }
 
@@ -74,6 +76,7 @@ class App extends Component {
       return incident
     })
     console.log(data.features)
+    console.log(photos)
   }
 
   componentWillUnmount() {
@@ -95,14 +98,35 @@ class App extends Component {
   // }
 
   handlePhotoMarkerClick = (marker) => {
-    if (marker.properties.photos.length > 0) {
-      //console.log(marker)
-      this.setState({ showLightbox: true })
+    if (marker.properties.items.length > 0) {
+      console.log(marker)
+      // this.makePhotoGallery(marker)
+      this.setState({ showLightbox: true, contentArray: this.makePhotoGallery(marker) })
     }
   }
 
-  makePhotoMarkerLightbox = (marker) => {
+  makePhotoGallery = (marker) => {
+    const arr = JSON.parse(marker.properties.items)
+    console.log(arr)
+    return arr
+  }
 
+  handleImageClick = (event) => {
+    console.debug('clicked on image', event.target, 'at index', this._imageGallery.getCurrentIndex());
+  }
+
+  handleImageLoad = (event) => {
+    console.debug('loaded image', event.target.src);
+  }
+
+  onSlide = (index) => {
+    console.debug('slid to index', index);
+  }
+
+  handleGalleryClose = (event) => {
+    console.log('close gallery')
+    this.setState({ showLightbox: false })
+    console.log(this.state.showLightbox)
   }
 
   handlePlayState = (playState) => {
@@ -236,8 +260,20 @@ class App extends Component {
            />
         { showLightbox ?
           <div className="lightBox-wrapper"
-          onClick={() => this.setState({ showLightbox: !showLightbox }) }></div> :
-          null }
+            >
+              <Gallery
+                ref={i => this._imageGallery = i}
+                items={this.state.contentArray}
+                onClick={this.handleImageClick}
+                onImageLoad={this.handleImageLoad}
+                onSlide={this.onSlide}
+                additionalClass="app-image-gallery"
+                closeGallery={this.handleGalleryClose}
+                infinite={true}
+              />
+          </div> :
+          null
+        }
       </div>
     );
   }

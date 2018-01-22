@@ -5,6 +5,10 @@ $white: #7d7b7b;
 $green: #72D687;
 $flintRed: #FB3F48;
 
+$ig-black: #000 !default;
+$ig-white: #fff !default;
+$ig-background-black: rgba(0, 0, 0, .8) !default;
+
 $icon-size: 20px;
 
 $color-hover: saturate(lighten($flintRed, 10%), 20%);
@@ -389,5 +393,207 @@ $posts-col-width: 15%;
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
-  background: rgba(0,0,0,.8);
+  background: $ig-background-black;
+
+}
+
+.Gallery {
+
+}
+.image-gallery {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.image-gallery-content {
+  position: relative;
+  text-align: left;
+  vertical-align: middle;
+  display: inline-block;
+  overflow: auto;
+  padding: 25px 25px 0;
+  border-bottom: 25px solid transparent;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  max-height: 95vh;
+  height: 95vh;
+  width: 90vw;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  cursor: auto;
+  white-space: normal;
+}
+
+.image-gallery-slide {
+  background: $ig-black;
+}
+
+.image-gallery-slide-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.image-gallery-left-nav,
+.image-gallery-right-nav {
+  // appearance: none;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  z-index: 4;
+  color: $ig-white;
+  font-size: 5em;
+  padding: 50px 15px;
+  top: 50%;
+  // transform: translateY(-50%);
+
+ // display: none;
+    position: absolute;
+    // top: 50%;
+    // left: 5%;
+    // width: 82%;
+    text-align: center;
+    // font-size: 80px;
+    // line-height: 80px;
+    // margin-top: -40px;
+    // text-shadow: 0 0 5px #fff;
+    // color: #fff;
+    // font-style: normal;
+    // font-weight: 400;
+
+  &[disabled] {
+    cursor: disabled;
+    opacity: .6;
+    pointer-events: none;
+  }
+}
+
+.image-gallery-left-nav {
+  left: 0;
+}
+
+.image-gallery-right-nav {
+  right: 0;
+}
+
+.image-gallery-close {
+  font-size: 3rem;
+  background: rgba(0,0,0,0.1);
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 60px;
+  width: 60px;
+  position: absolute;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  text-align: center;
+  font-family: Arial,sans-serif;
+  border: 0;
+  padding: 0;
+
+  &:hover {
+    background: rgba(0,0,0,0.2);
+  }
+}
+
+.image-gallery-slides {
+  line-height: 0;
+  // overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.image-gallery-slide {
+  background: $ig-background-black;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  .image-gallery-item {
+    display: grid;
+
+    .image-wrapper {
+      background: $ig-background-black;
+      position: relative;
+      text-align: left;
+      vertical-align: middle;
+      display: inline-block;
+      overflow: auto;
+      // padding: 25px 25px 0;
+      // border-bottom: 25px solid transparent;
+      // margin-left: 5vw;
+      // margin-right: 5vw;
+      // max-height: 95vh;
+      // height: 95vh;
+      // width: 90vw;
+      // background: #fff;
+      cursor: auto;
+      white-space: normal;
+      object-fit: contain;
+
+      &.center {
+        position: relative;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .text-wrapper {
+      height: 90vh;
+
+      .image-gallery-description {
+        background: $ig-background-black;
+        bottom: auto;
+        top: 25vh;
+        position: relative;
+        width: 55vw;
+        margin: 0 auto;
+        color: $ig-white;
+        left: 0;
+        line-height: 2;
+        padding: 10px 20px;
+        // position: absolute;
+        white-space: normal;
+        font-family: AGaramondPro-Regular;
+        font-size: 1.8rem;
+
+
+        // @media (max-width: $ig-screen-sm-min) {
+        //   bottom: 45px;
+        //   font-size: .8em;
+        //   padding: 8px 15px;
+        // }
+      }
+    }
+
+    .link-wrapper {
+      // height: 90vh;
+      background: $ig-background-black;
+        bottom: auto;
+        top: 25vh;
+        position: relative;
+        width: 55vw;
+        margin: 0 auto;
+        
+        left: 0;
+        line-height: 2;
+        padding: 10px 20px;
+        // position: absolute;
+        white-space: normal;
+        font-family: fgcl;
+        font-size: 1.8rem;
+
+        a {
+          color: $ig-white;
+        }
+    }
+  }
+
 }

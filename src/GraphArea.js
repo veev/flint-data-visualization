@@ -20,7 +20,7 @@ export default class GraphArea extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.data)
+    //console.log(this.props.data)
     this.makeHistogramData(this.props.data.features)
   }
 
@@ -61,15 +61,15 @@ export default class GraphArea extends Component {
       combinedData.push(dataObj)
     }
 
-    console.log(combinedData)
+    //console.log(combinedData)
     const barWidth = this.props.size[0] / combinedData.length
-    console.log("barWidth", barWidth)
+    //console.log("barWidth", barWidth)
     const xScale = scaleTime().range([0, this.props.size[0]])
                               .domain(extent(combinedData, d => {
                                 return +d.time.getTime()
                               }))
     const maxVal = max(combinedData, d => { return d.count })
-    console.log(maxVal)
+    //console.log(maxVal)
 
     const yScale = linear().range([this.props.size[1], 0])
                            .domain([0, maxVal])
