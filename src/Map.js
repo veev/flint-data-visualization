@@ -173,10 +173,10 @@ export default class Map extends Component {
     // this layer is static and doesn't change - marks city boundaries
 
     // color variables
-    const preCall = 'blue';
-    const notAssigned = 'red';
-    const waitingforUnit = 'orange';
-    const onScene = 'green';
+    const preCall = '#FB3F48';
+    const notAssigned = '#FB3F48';
+    const waitingforUnit = '#FB3F48';
+    const onScene = '#31ce75'; //'#66ec7b';
     const ended = 'gray';
 
     this.map.addLayer({
@@ -285,6 +285,12 @@ export default class Map extends Component {
       this.map.getCanvas().style.cursor = '';
       this.props.handleHighlight(this.props.defaultFeature)
       popup.remove();
+    })
+
+    // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
+    this.map.on('click', 'incidentsLayer', (e) => {
+      console.log(e.features[0].geometry.coordinates)
+      this.map.flyTo({center: e.features[0].geometry.coordinates});
     })
 
     // Attach listeners to photoMarkers layer

@@ -28,11 +28,15 @@
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "babel-jest": "^22.0.4",
+    "gh-pages": "^1.1.0",
     "jest": "^22.0.5",
     "prop-types": "^15.6.0"
-  }
+  },
+  "homepage": "https://veev.github.io/flint-data-visualization"
 }

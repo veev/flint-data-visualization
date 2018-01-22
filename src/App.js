@@ -192,12 +192,13 @@ class App extends Component {
     return filteredPresent
   }
 
-  updateIncidentStatus = (time, feature) => {  
+  updateIncidentStatus = (time, feature) => {
+    const strt = feature.properties.unix_timestamp;
+    const end = feature.properties.unix_end;
+    
     if (feature.properties.unix_onscene && feature.properties.unix_dispatch) {
-      const strt = feature.properties.unix_timestamp
       const dispatchT = feature.properties.unix_dispatch;
       const onSceneT = feature.properties.unix_onscene;
-      const end = feature.properties.unix_end;
       //console.log(+time, dispatchT, onSceneT);
 
       if (+time >= strt && +time <= dispatchT) {
@@ -206,6 +207,13 @@ class App extends Component {
         feature.properties.status = "waitingforUnit";
       } else if (+time >= onSceneT && +time <= end) {
         feature.properties.status = "onScene";
+      } else if (+time >= end) {
+        feature.properties.status = "ended";
+      }
+    } else {
+      // console.log(feature)
+      if (+time >= strt && +time <= end) {
+        feature.properties.status = "notAssigned";
       } else if (+time >= end) {
         feature.properties.status = "ended";
       }
