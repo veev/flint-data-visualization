@@ -20,8 +20,8 @@ $color-active: desaturate(darken($flintRed, 20%), 20%);
 $type-col-width: 25%;
 $priority-col-width: 15%;
 $active-col-width: 20%;
-$status-col-width: 25%;
-$posts-col-width: 15%;
+$status-col-width: 28%;
+$posts-col-width: 12%;
 
 .App {
 
@@ -30,13 +30,13 @@ $posts-col-width: 15%;
 .App-header {
   background-color: #222;
   height: 6vh;
-  margin: 10px;
+  // margin: 10px;
   color: white;
 
   .Nav {
     float: right;
     width: 30vw;
-    margin: 5px;
+    margin: 10px;
 
     a {
       color: $white;
@@ -69,62 +69,81 @@ $posts-col-width: 15%;
 /*  bottom: 0;*/
 }
 
+.mapboxgl-ctrl-bottom-left {
+  display: none;
+}
+
 .Board {
-  position: absolute;
-  // width: 40vw;
-  min-height: 100px;
-  // height: 85vh;
-  max-height: 73vh;
+  position: relative;
+  height: 80vh;
   min-width: 330px;
   width: 360px;
   overflow-y: scroll;
-  background-color: rgba(247, 247, 247, 0.8);
-  top: 50px;
+  background-color: rgba(24, 24, 24, 0.8);
+  color: $ig-white;
+  /* top: 50px; */
   font-size: 0.8em;
+  display: flex; 
+  // height: 100%;
+  flex-direction: column;
 
-  .boardHeader {
-  width: 100%;
-}
+  .boardDescription {
+    background: rgba(0, 0, 0, 0.8);
+    color: $ig-white;
+    padding: 10px;
+    font-family: fgcl;
+    font-size: 1rem;
+  }
 
   .boardContent {
     width: 100%;
+    flex: 1;
+    overflow: auto
+  }
+
+  .boardColumn {
+    padding: 0px 10px;
   }
 
   .boardHeader {
-    padding: 10px;
+    padding: 5px 0px;
+    font-weight: bold;
     display: flex;
     width: 100%;
+    align-items: center;
+    background-color: rgba(24, 24, 24, 1.0);
   }
 
-  .boardHeader-type {
+  .boardColumn-type {
     width: $type-col-width;
     display: flex;
   }
 
-  .boardHeader-priority {
+  .boardColumn-priority {
     width: $priority-col-width;
     display: flex;
   }
 
-  .boardHeader-activeTime {
+  .boardColumn-activeTime {
     width: $active-col-width;
     display: flex;
   }
 
-  .boardHeader-status {
+  .boardColumn-status {
     width: $status-col-width;
     display: flex;
   }
 
-  .boardHeader-expander {
+  .boardColumn-expander {
     width: $posts-col-width;
     display: flex;
   }
 
   .boardRow {
-    padding: 10px;
+    padding: 10px 0px 10px 0px;
     display: flex;
-    width: 100%
+    width: 100%;
+    // align-items: center;
   }
 
   .highlight {
@@ -133,11 +152,11 @@ $posts-col-width: 15%;
   }
 
   .boardWrapper:nth-child(even) {
-    background: #ccc;
+    background: #616161;//#ccc;
   }
 
   .boardWrapper:nth-child(odd) {
-    background: #fff;
+    background: #444; //#fff;
   }
 
   .boardRow-type {

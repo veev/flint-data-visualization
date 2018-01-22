@@ -73,13 +73,13 @@ export default class CallBoard extends Component {
             onMouseEnter={() => this.props.handleHighlight(row)}
             onMouseLeave={() => this.props.handleHighlight(this.props.defaultFeature)}
           >
-            <div className="boardRow-type">{row.properties.type}</div>
-            <div className="boardRow-priority">{row.properties.priority}</div>
-            <div className="boardRow-activeTime">{this.formatSeconds(this.getActiveTime(row.properties.unix_timestamp))}</div>
-            <div className="boardRow-status">{row.properties.status}</div>
+            <div className="boardColumn boardColumn-type">{row.properties.type}</div>
+            <div className="boardColumn boardColumn-priority">{row.properties.priority}</div>
+            <div className="boardColumn boardColumn-activeTime">{this.formatSeconds(this.getActiveTime(row.properties.unix_timestamp))}</div>
+            <div className="boardColumn boardColumn-status">{row.properties.status}</div>
             {row.properties.postId.length ?
             (<div 
-              className="boardRow-expander" 
+              className="boardColumn boardRow-expander" 
               onClick={() => this.toggleOpenIncident(row.properties.id)}>
                 <div>
                   {incidentIsOpen
@@ -87,9 +87,9 @@ export default class CallBoard extends Component {
                     : <span>&#x2295;</span>}
                 </div>
               </div>) :
-            null }
+            <div className="boardColumn boardRow-expander"></div>}
           </div>
-          <div className={"boardRow-openIncident " + (incidentIsOpen ? "boardRow-openIncident-open" : "")} >
+          <div className={"boardColumn boardRow-openIncident " + (incidentIsOpen ? "boardColumn boardRow-openIncident-open" : "")} >
             <div className="bogus-padding">{this.insertPost(row)}</div>
           </div>
         </div>
@@ -145,13 +145,16 @@ export default class CallBoard extends Component {
     const { activeData, postData } = this.props
 
 		return (
-      <div className="Board" >
+      <div className="Board">
+        <div className="boardDescription">
+        The amount of active incidents at a given moment. Some incidents have been waiting for officers to appear for over an hour.
+        </div>
         <div className="boardHeader">
-          <div className="boardHeader-type">Type</div>
-          <div className="boardHeader-priority">Priority</div>
-          <div className="boardHeader-activeTime">Time Active</div>
-          <div className="boardHeader-status">Status</div>
-          <div className="boardHeader-posts">Posts</div>
+          <div className="boardColumn boardColumn-type">Type</div>
+          <div className="boardColumn boardColumn-priority">Priority</div>
+          <div className="boardColumn boardColumn-activeTime">Elapsed Time</div>
+          <div className="boardColumn boardColumn-status">Status</div>
+          <div className="boardColumn boardColumn-expander">Posts</div>
         </div>
         <div className="boardContent">{this.makeRows(activeData)}</div>
       </div>

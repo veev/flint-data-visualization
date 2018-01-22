@@ -1,12 +1,11 @@
 .App-header {
   background-color: #222;
   height: 6vh;
-  margin: 10px;
   color: white; }
   .App-header .Nav {
     float: right;
     width: 30vw;
-    margin: 5px; }
+    margin: 10px; }
     .App-header .Nav a {
       color: #7d7b7b;
       padding-right: 10px; }
@@ -32,50 +31,66 @@
   height: 80vh;
   /*  bottom: 0;*/ }
 
+.mapboxgl-ctrl-bottom-left {
+  display: none; }
+
 .Board {
-  position: absolute;
-  min-height: 100px;
-  max-height: 73vh;
+  position: relative;
+  height: 80vh;
   min-width: 330px;
   width: 360px;
   overflow-y: scroll;
-  background-color: rgba(247, 247, 247, 0.8);
-  top: 50px;
-  font-size: 0.8em; }
-  .Board .boardHeader {
-    width: 100%; }
-  .Board .boardContent {
-    width: 100%; }
-  .Board .boardHeader {
+  background-color: rgba(24, 24, 24, 0.8);
+  color: #fff;
+  /* top: 50px; */
+  font-size: 0.8em;
+  display: flex;
+  flex-direction: column; }
+  .Board .boardDescription {
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
     padding: 10px;
+    font-family: fgcl;
+    font-size: 1rem; }
+  .Board .boardContent {
+    width: 100%;
+    flex: 1;
+    overflow: auto; }
+  .Board .boardColumn {
+    padding: 0px 10px; }
+  .Board .boardHeader {
+    padding: 5px 0px;
+    font-weight: bold;
     display: flex;
-    width: 100%; }
-  .Board .boardHeader-type {
+    width: 100%;
+    align-items: center;
+    background-color: #181818; }
+  .Board .boardColumn-type {
     width: 25%;
     display: flex; }
-  .Board .boardHeader-priority {
+  .Board .boardColumn-priority {
     width: 15%;
     display: flex; }
-  .Board .boardHeader-activeTime {
+  .Board .boardColumn-activeTime {
     width: 20%;
     display: flex; }
-  .Board .boardHeader-status {
-    width: 25%;
+  .Board .boardColumn-status {
+    width: 28%;
     display: flex; }
-  .Board .boardHeader-expander {
-    width: 15%;
+  .Board .boardColumn-expander {
+    width: 12%;
     display: flex; }
   .Board .boardRow {
-    padding: 10px;
+    padding: 10px 0px 10px 0px;
     display: flex;
     width: 100%; }
   .Board .highlight {
     background: rgba(0, 0, 0, 0.05);
     cursor: pointer; }
   .Board .boardWrapper:nth-child(even) {
-    background: #ccc; }
+    background: #616161; }
   .Board .boardWrapper:nth-child(odd) {
-    background: #fff; }
+    background: #444; }
   .Board .boardRow-type {
     width: 25%;
     display: flex; }
@@ -86,10 +101,10 @@
     width: 20%;
     display: flex; }
   .Board .boardRow-status {
-    width: 25%;
+    width: 28%;
     display: flex; }
   .Board .boardRow-expander {
-    width: 15%;
+    width: 12%;
     display: flex; }
     .Board .boardRow-expander span {
       width: 30px;
