@@ -39,7 +39,6 @@ export default class ControlPanel extends Component {
           options={viewOptions}
           selectedOption={viewMode}
           onSelectOption={this.props.handleToggle}
-          label="Viewing Mode"
         />
       </div>
     )

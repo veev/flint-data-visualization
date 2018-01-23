@@ -392,8 +392,7 @@
   width: 30vw;
   min-height: 100px;
   position: relative;
-  float: right;
-  background-color: gray; }
+  float: right; }
   .ControlPanel .toggle-wrapper {
     margin: 0.5em auto; }
   .ControlPanel .toggle-wrapper label {
