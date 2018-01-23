@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import MultiToggle from './MultiToggle'
-import ToggleButton from 'react-toggle-button'
 
 const viewOptions = [
   {
