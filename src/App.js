@@ -99,10 +99,9 @@ class App extends Component {
   //   })
   // }
 
-  handleVisMode = (event) => {
-    this.setState(prevState => ({
-      incidentMode: !prevState.incidentMode
-    }))
+  handleVisMode = (value) => {
+    console.log('value', value)
+    this.setState({ incidentMode: value })
   }
 
   handlePhotoMarkerClick = (marker) => {
@@ -236,11 +235,10 @@ class App extends Component {
 
 
   render() {
-    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident, showLightbox } = this.state
+    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident, showLightbox, incidentMode } = this.state
     const { endTS } = this.props
     const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
-    //console.log(currentTime)
-
+   
     window.convertTime = this.convertTime;
 
     return (
@@ -253,30 +251,35 @@ class App extends Component {
           boardHighlightedFeature={highlightedBoardIncident}
           photoData={photos}
           handlePhotos={this.handlePhotoMarkerClick}
+          viewMode={incidentMode}
         />
         <ControlPanel 
           handleToggle={this.handleVisMode}
+          viewMode={incidentMode}
         />
-        <Timeline
-          handlePlay={this.handlePlayState}
-          handleSeek={this.handleSeekChange}
+        { incidentMode ?
+          <div>
+          <Timeline
+            handlePlay={this.handlePlayState}
+            handleSeek={this.handleSeekChange}
 
-          // setTime={this._updateTime}
-          //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
-          formattedTime={formattedTime}
-          currentTime={this.convertTime(currentTime)}
-          totalTime={this.convertTime(endTS)}
-          isPlaying={isPlaying}
-          staticData={data}
-        />
-        <CallBoard
-          activeData={this.filterIncidents(currentTime)}
-          currentTime={currentTime}
-          handleHighlight={this.handleBoardHighlightChange}
-          mapHighlightedFeature={highlightedMapIncident}
-          boardHighlightedFeature={highlightedBoardIncident}
-          postData={posts}
-        />
+            // setTime={this._updateTime}
+            //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
+            formattedTime={formattedTime}
+            currentTime={this.convertTime(currentTime)}
+            totalTime={this.convertTime(endTS)}
+            isPlaying={isPlaying}
+            staticData={data}
+          />
+          <CallBoard
+            activeData={this.filterIncidents(currentTime)}
+            currentTime={currentTime}
+            handleHighlight={this.handleBoardHighlightChange}
+            mapHighlightedFeature={highlightedMapIncident}
+            boardHighlightedFeature={highlightedBoardIncident}
+            postData={posts}
+          /></div> : null
+        }
         { showLightbox ?
           <div className="lightBox-wrapper">
               <Gallery

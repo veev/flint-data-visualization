@@ -124,6 +124,18 @@ export default class Map extends Component {
           .setHTML(nextProps.boardHighlightedFeature.properties.type)
           .addTo(this.map);
     }
+
+    console.log(nextProps.viewMode)
+    if (nextProps.viewMode) {
+    // show incidents if viewMode is true
+    this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
+    this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
+
+    } else {
+    // show photos if viewMode is false
+    this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
+    this.map.setLayoutProperty('photoMarkers', 'visibility', 'visible')
+    }
   }
 
   componentDidUpdate() {
@@ -261,6 +273,10 @@ export default class Map extends Component {
         'icon-allow-overlap': true
       }
     })
+
+    // turn off photos for now
+    // this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
+    this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
   }
 
   _addListeners = () => {
