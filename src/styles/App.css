@@ -387,3 +387,60 @@
       font-size: 1.8rem; }
       .image-gallery-slide .image-gallery-item .link-wrapper a {
         color: #fff; }
+
+.ControlPanel {
+  width: 30vw;
+  min-height: 100px;
+  position: relative;
+  float: right;
+  background-color: gray; }
+  .ControlPanel .incident-photo-toggle-container {
+    min-width: 150px;
+    width: 20vw;
+    max-width: 200px;
+    height: 50px;
+    line-height: 50px;
+    background-color: #ddd;
+    position: absolute;
+    top: 0%;
+    transform: translate(0%, 0%);
+    left: 0%;
+    background-color: #e8e8e8;
+    overflow: hidden;
+    border-radius: 30px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1) inset; }
+    .ControlPanel .incident-photo-toggle-container label {
+      width: 50%;
+      float: left;
+      background-color: transparent;
+      color: #333;
+      z-index: 2;
+      cursor: pointer; }
+    .ControlPanel .incident-photo-toggle-container input[type="radio"] {
+      display: none; }
+    .ControlPanel .incident-photo-toggle-container .button-slider {
+      position: absolute;
+      left: 0%;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      animation-timing-function: ease-in-out;
+      animation-duration: .3s;
+      animation-fill-mode: forwards;
+      transition: 0.2s left .05s ease-in-out;
+      z-index: -1; }
+    .ControlPanel .incident-photo-toggle-container .left-button:checked ~ .button-slider {
+      left: 0;
+      background-color: #FB3F48;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
+    .ControlPanel .incident-photo-toggle-container .right-button:checked ~ .button-slider {
+      left: 50%;
+      background-color: #FB3F48;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
+    .ControlPanel .incident-photo-toggle-container .left-button:checked ~ label,
+    .ControlPanel .incident-photo-toggle-container .right-button:checked ~ label {
+      font-weight: 700;
+      color: #fff; }
+    .ControlPanel .incident-photo-toggle-container .right-button:not(:checked) ~ label {
+      color: #333;
+      font-weight: 400; }

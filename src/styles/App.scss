@@ -73,6 +73,10 @@ $posts-col-width: 12%;
   display: none;
 }
 
+////////////////////////////////
+//////// CONTROL BOARD /////////
+////////////////////////////////
+
 .Board {
   position: relative;
   height: 80vh;
@@ -303,9 +307,9 @@ $posts-col-width: 12%;
 }
 
 
-//
-// Sliders
-//
+///////////////////////////////////////
+//////////////// SLIDERS //////////////
+///////////////////////////////////////
 
 .ProgressBar {
   position: relative;
@@ -393,7 +397,9 @@ $posts-col-width: 12%;
   }
 }
 
+///////////////////////////////////////
 ///////////// GRAPH AREA //////////////
+///////////////////////////////////////
 
 .GraphArea {
   margin: 20px 5px -15px 60px;
@@ -404,7 +410,9 @@ $posts-col-width: 12%;
   }
 }
 
-///////////// LIGHT BOX //////////////
+///////////////////////////////////////
+///////////// LIGHT BOX ///////////////
+///////////////////////////////////////
 
 .lightBox-wrapper {
   display: block;
@@ -588,7 +596,6 @@ $posts-col-width: 12%;
         font-family: AGaramondPro-Regular;
         font-size: 1.8rem;
 
-
         // @media (max-width: $ig-screen-sm-min) {
         //   bottom: 45px;
         //   font-size: .8em;
@@ -619,5 +626,82 @@ $posts-col-width: 12%;
         }
     }
   }
+}
 
+///////////////////////////////////////
+//////////// CONTROL PANEL ////////////
+///////////////////////////////////////
+
+.ControlPanel {
+  width: 30vw;
+  min-height: 100px;
+  position: relative;
+  float: right;
+  background-color: gray;
+
+  .incident-photo-toggle-container {
+    min-width: 150px;
+    width: 20vw;
+    max-width: 200px;
+    height: 50px;
+    line-height: 50px;
+    background-color: #ddd;
+    position: absolute;
+    top: 0%;
+    transform: translate(0%, 0%);
+    left: 0%;
+    background-color: #e8e8e8;
+    // border:1px solid #ccc;
+    overflow: hidden;
+    border-radius: 30px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1) inset;
+
+    & label {
+      width: 50%;
+      float: left;
+      background-color: transparent;
+      color: #333;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    & input[type="radio"] {
+      display: none;
+    }
+
+    .button-slider {
+      position:absolute;
+      left: 0%; 
+      top:0;
+      width:50%; 
+      height: 100%;
+      animation-timing-function: ease-in-out;
+      animation-duration:.3s;
+      animation-fill-mode: forwards;
+      transition: 0.2s left .05s ease-in-out;
+      z-index: -1;
+    }
+
+    .left-button:checked  ~ .button-slider { 
+      left:0;
+      background-color:#FB3F48;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .right-button:checked  ~ .button-slider {
+      left:50%;
+      background-color: #FB3F48;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .left-button:checked ~ label, 
+    .right-button:checked ~ label {
+      font-weight: 700;
+      color: #fff;
+    }
+    .right-button:not(:checked) ~ label {
+      color: #333;
+      font-weight: 400
+    }
+  }
 }

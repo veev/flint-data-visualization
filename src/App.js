@@ -7,6 +7,7 @@ import Header from './Header'
 // import Board from './Board'
 import CallBoard from './CallBoard'
 import Gallery from './Gallery'
+import ControlPanel from './ControlPanel'
 // import './styles/App.css'
 // import Source from './Source'
 // import Layer from './Layer'
@@ -50,6 +51,7 @@ class App extends Component {
           eventNumber: ''
         }
       },
+      incidentMode: true,
       showLightbox: false,
       contentArray: [
       ]
@@ -97,6 +99,12 @@ class App extends Component {
   //   })
   // }
 
+  handleVisMode = (event) => {
+    this.setState(prevState => ({
+      incidentMode: !prevState.incidentMode
+    }))
+  }
+
   handlePhotoMarkerClick = (marker) => {
     if (marker.properties.items.length > 0) {
       console.log(marker)
@@ -119,9 +127,9 @@ class App extends Component {
     console.debug('loaded image', event.target.src);
   }
 
-  onSlide = (index) => {
-    console.debug('slid to index', index);
-  }
+  // onSlide = (index) => {
+  //   console.debug('slid to index', index);
+  // }
 
   handleGalleryClose = (event) => {
     console.log('close gallery')
@@ -245,7 +253,10 @@ class App extends Component {
           boardHighlightedFeature={highlightedBoardIncident}
           photoData={photos}
           handlePhotos={this.handlePhotoMarkerClick}
-          />
+        />
+        <ControlPanel 
+          handleToggle={this.handleVisMode}
+        />
         <Timeline
           handlePlay={this.handlePlayState}
           handleSeek={this.handleSeekChange}
@@ -257,7 +268,7 @@ class App extends Component {
           totalTime={this.convertTime(endTS)}
           isPlaying={isPlaying}
           staticData={data}
-          />
+        />
         <CallBoard
           activeData={this.filterIncidents(currentTime)}
           currentTime={currentTime}
@@ -265,10 +276,9 @@ class App extends Component {
           mapHighlightedFeature={highlightedMapIncident}
           boardHighlightedFeature={highlightedBoardIncident}
           postData={posts}
-           />
+        />
         { showLightbox ?
-          <div className="lightBox-wrapper"
-            >
+          <div className="lightBox-wrapper">
               <Gallery
                 ref={i => this._imageGallery = i}
                 items={this.state.contentArray}
