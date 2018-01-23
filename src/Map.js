@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 // import { PropTypes } from 'prop-types'
 import MapboxGl from 'mapbox-gl'
 import { MAPBOX_TOKEN } from './constants/keys.js'
-
 // import Tooltip from './Tooltip.js'
 import bounds from './data/subunits-flint.json'
+import descriptionLookup from './data/descriptionMap.json'
 
 export default class Map extends Component {
 
@@ -121,11 +121,12 @@ export default class Map extends Component {
 
     if (nextProps.boardHighlightedFeature.geometry.coordinates) {
       this.popup.setLngLat(nextProps.boardHighlightedFeature.geometry.coordinates)
-          .setHTML(nextProps.boardHighlightedFeature.properties.type)
-          .addTo(this.map);
+      // console.log(descriptionLookup[nextProps.boardHighlightedFeature.properties.type])
+      this.setPopupHtml(this.popup, nextProps.boardHighlightedFeature)
+      this.popup.addTo(this.map)
     }
 
-    console.log(nextProps.viewMode)
+    //console.log(nextProps.viewMode)
     if (nextProps.viewMode) {
     // show incidents if viewMode is true
     this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
@@ -145,6 +146,15 @@ export default class Map extends Component {
   componentWillUnmount() {
     //window.removeEventListener('resize', this._resize);
     this.map.remove();
+  }
+
+  setPopupHtml = (popup, feature) => {
+    if (descriptionLookup[feature.properties.type]) {
+      popup.setHTML(descriptionLookup[feature.properties.type])
+    } else {
+      console.log("undefined popup description: ", feature.properties.type)
+      popup.setHTML(feature.properties.type)
+    }
   }
 
   makeGeoJsonFromFeatures = (featuresArray) => {
@@ -293,20 +303,20 @@ export default class Map extends Component {
       // Populate the popup and set its coordinates
       // based on the feature found.
       popup.setLngLat(e.features[0].geometry.coordinates)
-          .setHTML(e.features[0].properties.type)
-          .addTo(this.map);
+      this.setPopupHtml(popup, e.features[0])
+      popup.addTo(this.map)
     })
 
     this.map.on('mouseleave', 'incidentsLayer', (e) => {
       this.map.getCanvas().style.cursor = '';
       this.props.handleHighlight(this.props.defaultFeature)
-      popup.remove();
+      popup.remove()
     })
 
     // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
     this.map.on('click', 'incidentsLayer', (e) => {
       console.log(e.features[0].geometry.coordinates)
-      this.map.flyTo({center: e.features[0].geometry.coordinates});
+      this.map.flyTo({center: e.features[0].geometry.coordinates})
     })
 
     // Attach listeners to photoMarkers layer
