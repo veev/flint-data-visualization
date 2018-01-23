@@ -9,8 +9,6 @@ export default class Header extends Component {
           title="Flint Police Dispatches"
         />
         <div className="Nav">
-          <a href={'#'}>Incidents</a>
-          <a href={'#'}>Photos</a>
           <a href={'#'}>About</a>
           <a href={'#'}>Credits</a>
         </div>

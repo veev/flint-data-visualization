@@ -5,7 +5,8 @@
   .App-header .Nav {
     float: right;
     width: 30vw;
-    margin: 10px; }
+    margin: 10px;
+    text-align: right; }
     .App-header .Nav a {
       color: #7d7b7b;
       padding-right: 10px; }
