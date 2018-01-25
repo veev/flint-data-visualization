@@ -84,7 +84,8 @@ export default class Map extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    //console.log('shouldUpdate')
+    console.log('shouldUpdate')
+    console.log(this.map.getLayer('totalTimeHeatmap'))
     //console.log(nextProps.activeData, this.props.activeData)
     // return (
     //   nextProps.children !== this.props.children ||
@@ -97,8 +98,10 @@ export default class Map extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
-    //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
 
+
+    //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
+/*
     if (nextProps.activeData) this.map.getSource('incidentsLayer').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
 
     this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
@@ -137,6 +140,7 @@ export default class Map extends Component {
     this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
     this.map.setLayoutProperty('photoMarkers', 'visibility', 'visible')
     }
+    */
   }
 
   componentDidUpdate() {
@@ -201,6 +205,8 @@ export default class Map extends Component {
     const onScene = '#31ce75'; //'#66ec7b';
     const ended = 'gray';
 
+    console.log(this.props.staticData)
+
     this.map.addLayer({
       'id': 'boundsLayer',
       'type': 'fill',
@@ -215,6 +221,66 @@ export default class Map extends Component {
       }
     })
 
+    this.map.addLayer({
+      'id': 'totalTimeHeatmap',
+      'type': 'heatmap',
+      'source': {
+        'type': 'geojson',
+        'data': this.props.staticData
+      },
+      'maxzoom': 18,
+      'paint': {
+          // Increase the heatmap weight based on frequency and property magnitude
+          'heatmap-weight': [
+              'interpolate',
+              ['linear'],
+              ['get', 'len_time_delta'],
+              0, 0,
+              5000, 1
+          ],
+          // Increase the heatmap color weight weight by zoom level
+          // heatmap-intensity is a multiplier on top of heatmap-weight
+          'heatmap-intensity': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              9, 1,
+              18, 3
+          ],
+          // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+          // Begin color ramp at 0-stop with a 0-transparancy color
+          // to create a blur-like effect.
+          'heatmap-color': [
+              'interpolate',
+              ['linear'],
+              ['heatmap-density'],
+              0, 'rgba(33,102,172,0)',
+              0.2, 'rgb(103,169,207)',
+              0.4, 'rgb(209,229,240)',
+              0.6, 'rgb(253,219,199)',
+              0.8, 'rgb(239,138,98)',
+              1, 'rgb(178,24,43)'
+          ],
+          // Adjust the heatmap radius by zoom level
+          'heatmap-radius': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              8, 2,
+              14, 40
+          ],
+          // Transition from heatmap to circle layer by zoom level
+          'heatmap-opacity': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              9, 1,
+              18, 0
+          ],
+      }
+    }, 'waterway-label')
+
+/*
     //incidents layer
     this.map.addLayer({
       'id': 'incidentsLayer',
@@ -287,6 +353,7 @@ export default class Map extends Component {
     // turn off photos for now
     // this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
     this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
+    */
   }
 
   _addListeners = () => {
