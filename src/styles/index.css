@@ -440,11 +440,8 @@
 .react-toggle--checked .react-toggle-track {
   background-color: #FB3F48; }
 
-.react-toggle--checked .react-toggle-track:hover {
-  background-color: #FB3F48; }
-
 .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
-  background-color: #ce2f37; }
+  background-color: #CE2F37; }
 
 @font-face {
   font-family: "AGaramondPro-Regular";
