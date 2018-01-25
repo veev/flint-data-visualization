@@ -131,6 +131,8 @@ export default class GraphArea extends Component {
         .attr("y", d => { return yScale(d[1]) })
         .attr("height", d => { return yScale(d[0]) - yScale(d[1]) })
         .attr("width", barWidth)
+          .style("stroke", "black")
+          .style("stroke-opacity", 0.05)
 
 
     //   .selectAll("rect")
