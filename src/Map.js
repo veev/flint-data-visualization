@@ -101,7 +101,7 @@ export default class Map extends Component {
 
 
     //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
-/*
+
     if (nextProps.activeData) this.map.getSource('incidentsLayer').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
 
     this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
@@ -140,7 +140,12 @@ export default class Map extends Component {
     this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
     this.map.setLayoutProperty('photoMarkers', 'visibility', 'visible')
     }
-    */
+
+    if (nextProps.showHeatmap) {
+      this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'visible')
+    } else {
+      this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
+    }
   }
 
   componentDidUpdate() {
@@ -280,7 +285,6 @@ export default class Map extends Component {
       }
     }, 'waterway-label')
 
-/*
     //incidents layer
     this.map.addLayer({
       'id': 'incidentsLayer',
@@ -353,7 +357,7 @@ export default class Map extends Component {
     // turn off photos for now
     // this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
     this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
-    */
+    this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
   }
 
   _addListeners = () => {

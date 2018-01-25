@@ -4,6 +4,7 @@ $gray: #878C88;
 $white: #7d7b7b;
 $green: #72D687;
 $flintRed: #FB3F48;
+$flintRedDarker: #CE2F37;
 
 $ig-black: #000 !default;
 $ig-white: #fff !default;
@@ -639,8 +640,9 @@ $posts-col-width: 12%;
   position: relative;
   float: right;
   // background-color: gray;
+}
 
-  .toggle-wrapper {
+.toggle-wrapper {
   margin: 0.5em auto;
 }
 
@@ -689,6 +691,13 @@ $posts-col-width: 12%;
   cursor: no-drop !important;
 }
 
+.react-toggle--checked .react-toggle-track {
+  background-color: $flintRed;
+}
+}
+.react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
+  background-color: $flintRedDarker;
+}
 //   .incident-photo-toggle-container {
 //     min-width: 150px;
 //     width: 20vw;

@@ -394,88 +394,54 @@
   min-height: 100px;
   position: relative;
   float: right; }
-  .ControlPanel .toggle-wrapper {
-    margin: 0.5em auto; }
-  .ControlPanel .toggle-wrapper label {
-    padding: 0.3em;
-    font-size: 17px;
-    display: block; }
-  .ControlPanel .toggleContainer {
-    width: 100%;
-    position: relative;
-    background: #ffffff;
-    border: 1px solid #eeeeee; }
-  .ControlPanel .toggleContainer .toggleOption {
-    display: inline-block;
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    cursor: pointer;
-    transition: all 0.5s ease-in-out;
-    color: #807b77;
-    font-size: 1em; }
-  .ControlPanel .toggleContainer .toggleOption.selected {
-    color: #ffffff;
-    cursor: initial; }
-  .ControlPanel .toggleContainer .toggle {
-    position: absolute;
-    height: 100%;
-    bottom: 0;
-    left: 0;
-    transition: all 0.4s ease-in-out;
-    background: #df5d5d; }
-  .ControlPanel .optionDisabled {
-    background: #e6e6e6;
-    cursor: no-drop !important; }
-  .ControlPanel .incident-photo-toggle-container {
-    min-width: 150px;
-    width: 20vw;
-    max-width: 200px;
-    height: 50px;
-    line-height: 50px;
-    background-color: #ddd;
-    position: absolute;
-    top: 0%;
-    transform: translate(0%, 0%);
-    left: 0%;
-    background-color: #e8e8e8;
-    overflow: hidden;
-    border-radius: 30px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1) inset; }
-    .ControlPanel .incident-photo-toggle-container label {
-      width: 50%;
-      float: left;
-      background-color: transparent;
-      color: #333;
-      z-index: 2;
-      cursor: pointer; }
-    .ControlPanel .incident-photo-toggle-container input[type="radio"] {
-      display: none; }
-    .ControlPanel .incident-photo-toggle-container .button-slider {
-      position: absolute;
-      left: 0%;
-      top: 0;
-      width: 50%;
-      height: 100%;
-      animation-timing-function: ease-in-out;
-      animation-duration: .3s;
-      animation-fill-mode: forwards;
-      transition: 0.2s left .05s ease-in-out;
-      z-index: -1; }
-    .ControlPanel .incident-photo-toggle-container .left-button:checked ~ .button-slider {
-      left: 0;
-      background-color: #FB3F48;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
-    .ControlPanel .incident-photo-toggle-container .right-button:checked ~ .button-slider {
-      left: 50%;
-      background-color: #FB3F48;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
-    .ControlPanel .incident-photo-toggle-container .left-button:checked ~ label,
-    .ControlPanel .incident-photo-toggle-container .right-button:checked ~ label {
-      font-weight: 700;
-      color: #fff; }
-    .ControlPanel .incident-photo-toggle-container .right-button:not(:checked) ~ label {
-      color: #333;
-      font-weight: 400; }
+
+.toggle-wrapper {
+  margin: 0.5em auto; }
+
+.toggle-wrapper label {
+  padding: 0.3em;
+  font-size: 17px;
+  display: block; }
+
+.toggleContainer {
+  width: 100%;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #eeeeee; }
+
+.toggleContainer .toggleOption {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  color: #807b77;
+  font-size: 1em; }
+
+.toggleContainer .toggleOption.selected {
+  color: #ffffff;
+  cursor: initial; }
+
+.toggleContainer .toggle {
+  position: absolute;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  transition: all 0.4s ease-in-out;
+  background: #FB3F48; }
+
+.optionDisabled {
+  background: #e6e6e6;
+  cursor: no-drop !important; }
+
+.react-toggle--checked .react-toggle-track {
+  background-color: #FB3F48; }
+
+.react-toggle--checked .react-toggle-track:hover {
+  background-color: #FB3F48; }
+
+.react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
+  background-color: #ce2f37; }

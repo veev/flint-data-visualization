@@ -54,7 +54,8 @@ class App extends Component {
       incidentMode: true,
       showLightbox: false,
       contentArray: [
-      ]
+      ],
+      showHeatmap: false
       // navState = 'Incidents'
     }
 
@@ -100,8 +101,13 @@ class App extends Component {
   // }
 
   handleVisMode = (value) => {
-    console.log('value', value)
+    //console.log('value', value)
     this.setState({ incidentMode: value })
+  }
+
+  handleHeatmapToggle = (event) => {
+    //console.log('showHeatmap', this.state.showHeatmap)
+    this.setState({ showHeatmap: !this.state.showHeatmap })
   }
 
   handlePhotoMarkerClick = (marker) => {
@@ -235,7 +241,7 @@ class App extends Component {
 
 
   render() {
-    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident, showLightbox, incidentMode } = this.state
+    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident, showLightbox, incidentMode, showHeatmap } = this.state
     const { endTS } = this.props
     const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
    
@@ -252,10 +258,13 @@ class App extends Component {
           photoData={photos}
           handlePhotos={this.handlePhotoMarkerClick}
           viewMode={incidentMode}
+          showHeatmap={showHeatmap}
         />
         <ControlPanel 
           handleToggle={this.handleVisMode}
           viewMode={incidentMode}
+          showHeatmap={showHeatmap}
+          handleHeatmapToggle={this.handleHeatmapToggle}
         />
         { incidentMode ?
           <div>

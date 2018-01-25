@@ -19,7 +19,8 @@
     "react-motion": "^0.5.2",
     "react-player-controls": "^0.5.17",
     "react-scripts": "1.0.17",
-    "react-table": "^6.7.6"
+    "react-table": "^6.7.6",
+    "react-toggle": "^4.0.2"
   },
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
