@@ -76,6 +76,13 @@ class App extends Component {
 
     data.features = data.features.map( incident => {
       incident.properties.status = "preCall"
+      if(incident.properties.unix_onscene) {
+        incident.properties.waitTime = incident.properties.unix_onscene - incident.properties.unix_timestamp
+      } else if (incident.properties.unix_end) {
+        incident.properties.waitTime = incident.properties.unix_end - incident.properties.unix_timestamp
+      } else {
+        incident.properties.waitTime = 60 * 60
+      }
       return incident
     })
     console.log(data.features)
@@ -201,7 +208,7 @@ class App extends Component {
       //}
       return (cTime >= strt && cTime <= end)
     })
-    console.log(filteredPresent)
+    //console.log(filteredPresent)
     return filteredPresent
   }
 

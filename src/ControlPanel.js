@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Toggle from 'react-toggle'
 import MultiToggle from './MultiToggle'
 
 const viewOptions = [
@@ -17,7 +18,7 @@ export default class ControlPanel extends Component {
 
     this.state = {
       viewMode: this.props.viewMode,
-      groupSize: 2
+      showHeatmap: this.props.showHeatmap
     }
 
   }
@@ -31,7 +32,7 @@ export default class ControlPanel extends Component {
   }
 
   render() {
-    const { viewMode, groupSize } = this.props
+    const { viewMode, showHeatmap } = this.props
 
     return (
       <div className="ControlPanel">
@@ -40,6 +41,13 @@ export default class ControlPanel extends Component {
           selectedOption={viewMode}
           onSelectOption={this.props.handleToggle}
         />
+        <label>
+          <Toggle
+            defaultChecked={showHeatmap}
+            icons={false}
+            onChange={this.props.handleHeatmapToggle} />
+          <span>Show Heatmap of length of call</span>
+        </label>
       </div>
     )
   }

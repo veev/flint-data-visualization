@@ -147,7 +147,7 @@ export default class CallBoard extends Component {
   insertComments = (comments) => {
     //console.log(comments)
     return comments.map( (comment, i) => {
-      console.log(comment)
+      //console.log(comment)
       return (
         <div className="whyDoWeNeedThisDiv">
         <div className="postComment" key={`${comment.id}-${i}`}>{comment.message}</div>

@@ -84,8 +84,8 @@ export default class Map extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldUpdate')
-    console.log(this.map.getLayer('totalTimeHeatmap'))
+    // console.log('shouldUpdate')
+    // console.log(this.map.getLayer('totalTimeHeatmap'))
     //console.log(nextProps.activeData, this.props.activeData)
     // return (
     //   nextProps.children !== this.props.children ||
@@ -97,7 +97,7 @@ export default class Map extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
+    //console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
 
 
     //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
@@ -239,7 +239,7 @@ export default class Map extends Component {
           'heatmap-weight': [
               'interpolate',
               ['linear'],
-              ['get', 'len_time_delta'],
+              ['get', 'waitTime'],
               0, 0,
               5000, 1
           ],

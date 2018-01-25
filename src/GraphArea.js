@@ -26,6 +26,11 @@ export default class GraphArea extends Component {
     this.makeHistogramData(this.props.data.features)
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    //return nextProps.data !== this.props.data
+    return true
+  }
+
   componentDidUpdate() {
     this.makeHistogramData(this.props.data.features)
   }
