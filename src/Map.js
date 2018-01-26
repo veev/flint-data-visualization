@@ -60,7 +60,7 @@ export default class Map extends Component {
       style: 'mapbox://styles/mapbox/dark-v9',
       center: [-83.6969862, 43.0215524],
       zoom: 12,
-      pitch: 60,
+      pitch: 50,
       bearing: 0
     })
 

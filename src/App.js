@@ -83,6 +83,7 @@ class App extends Component {
       } else {
         incident.properties.waitTime = 60 * 60
       }
+      console.log(incident.properties.waitTime)
       return incident
     })
     console.log(data.features)
@@ -110,6 +111,7 @@ class App extends Component {
   handleVisMode = (value) => {
     //console.log('value', value)
     this.setState({ incidentMode: value })
+    this.pausePlayback()
   }
 
   handleHeatmapToggle = (event) => {
@@ -147,6 +149,11 @@ class App extends Component {
     console.log('close gallery')
     this.setState({ showLightbox: false })
     console.log(this.state.showLightbox)
+  }
+
+  pausePlayback = () => {
+    window.clearInterval(this.timer)
+    this.setState({ isPlaying: false })
   }
 
   handlePlayState = (playState) => {
@@ -272,6 +279,7 @@ class App extends Component {
           viewMode={incidentMode}
           showHeatmap={showHeatmap}
           handleHeatmapToggle={this.handleHeatmapToggle}
+          pausePlay={this.pausePlayback}
         />
         { incidentMode ?
           <div>
