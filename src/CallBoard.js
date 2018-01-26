@@ -134,11 +134,20 @@ export default class CallBoard extends Component {
       // console.log(row.properties.postId)
       // console.log(post.comments.data)
       return (
-        <div className="postMessageWrapper">
-          <div className="postMessage">{post.message}</div>
-          {post.comments ? 
-          <div className="postCommentWrapper">{this.insertComments(post.comments.data)}</div> : 
-          null }
+        <div className="post-wrapper">
+          <div className="post">
+            <div className="post-info">
+              <div class="avatar"></div>
+                <div class="metadata">
+                  <div class="account">Flint Police Operations</div>
+                  <div class="time">{post.created_time}</div>
+                </div>
+            </div>
+            <div className="post-body"><p>{post.message}</p></div>
+            {post.comments ? 
+            <div className="postCommentWrapper">{this.insertComments(post.comments.data)}</div> : 
+            null }
+          </div>
         </div>
       )
     }
@@ -150,7 +159,7 @@ export default class CallBoard extends Component {
       //console.log(comment)
       return (
         <div className="whyDoWeNeedThisDiv">
-        <div className="postComment" key={`${comment.id}-${i}`}>{comment.message}</div>
+        <div className="postComment" key={`${comment.id}-${i}`}><p>{comment.message}</p></div>
         {(comment.replies) ?
         <ul className="commentReplyWrapper">{this.insertReplies(comment.replies.data)}</ul> :
         null }
@@ -162,9 +171,9 @@ export default class CallBoard extends Component {
   insertReplies = (replies) => {
     return (
       <ul>
-        {replies.map( reply => {
+        {replies.map( (reply, i) => {
           //console.log(reply)
-          return <li className="commentReply" key={reply.id}>{reply.message}</li>
+          return <li className="commentReply" key={`${reply.id}-${i}`}>{reply.message}</li>
         })
       }
       </ul>

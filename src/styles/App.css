@@ -123,12 +123,63 @@
       height: 70px;
     */
     height: auto; }
-  .Board .bogus-padding {
+  .Board .post-wrapper {
+    min-width: 330px;
+    width: 340px; }
+  .Board .post {
+    background-color: white;
+    position: relative;
+    min-height: 100px;
+    border: 1px solid gray;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px; }
+  .Board .post-info {
+    position: relative;
     padding: 10px; }
+    .Board .post-info .avatar {
+      position: relative;
+      float: left;
+      width: 50px;
+      height: 50px;
+      background-color: #365899;
+      border-radius: 50%; }
+    .Board .post-info .metadata {
+      position: relative;
+      padding-left: 60px;
+      font-family: sans-serif; }
+      .Board .post-info .metadata .account {
+        color: #365899;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1.38; }
+      .Board .post-info .metadata .time {
+        color: #90949c;
+        font-weight: normal;
+        font-size: 12px; }
+  .Board .post-body {
+    padding: 6px 10px 0px 10px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.38; }
+    .Board .post-body p {
+      font-family: sans-serif;
+      border-bottom: 1px solid #e5e5e5;
+      padding-bottom: 12px;
+      color: #000; }
   .Board .postCommentWrapper {
-    padding: 10px; }
+    padding: 10px;
+    color: #3D463F;
+    background-color: #f6f7f9; }
   .Board .postComment {
-    padding-top: 5px; }
+    width: auto;
+    display: table;
+    background-color: white;
+    font-family: sans-serif;
+    margin: 0px 0px 10px 0px;
+    border-radius: 25px; }
+    .Board .postComment p {
+      padding: 0px 10px;
+      font-size: 13px; }
 
 .timeOutput {
   padding: 5px;
