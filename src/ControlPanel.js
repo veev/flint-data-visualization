@@ -23,14 +23,6 @@ export default class ControlPanel extends Component {
 
   }
 
-  // onViewModeSelect = (value) => {
-  //   this.setState()
-  // }
-  onGroupSizeSelect = (value) => {
-    console.log(value)
-    this.setState({ viewMode: value })
-  }
-
   render() {
     const { viewMode, showHeatmap } = this.props
 

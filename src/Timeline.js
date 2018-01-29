@@ -26,15 +26,18 @@ export default class Timeline extends Component {
       lastSeekStart: this.props.currentTime,
       lastSeekEnd: this.props.currentTime,
 
-      graphWidth: 0,
+      graphWidth: 900,
       graphHeight: 0
     }
     // this.timer = null
   }
 
   componentWillMount() {
-    console.log(this.props.isPlaying)
-    this.mungeData(this.props.staticData)
+    //console.log(this.props.isPlaying)
+    //this.mungeData(this.props.staticData)
+    // const width = this.graphAreaDiv.clientWidth
+    // const height = this.graphAreaDiv.clientHeight
+    // this.setState({ graphWidth: width, graphHeight: height })
 
   }
 
@@ -65,6 +68,8 @@ export default class Timeline extends Component {
             data={staticData}
             size={[graphWidth, graphHeight]}
             height={100}
+            currentTime={currentTime}
+            unconvertTime={this.props.unconvertTime}
           />
         </div>
         <div className="ControlArea">

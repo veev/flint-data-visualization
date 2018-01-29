@@ -29,7 +29,7 @@
   position: absolute;
   width: 100%;
   top: 6vh;
-  height: 80vh;
+  height: 70vh;
   /*  bottom: 0;*/ }
 
 .mapboxgl-ctrl-bottom-left {
@@ -37,7 +37,7 @@
 
 .Board {
   position: relative;
-  height: 80vh;
+  height: 70vh;
   min-width: 330px;
   width: 360px;
   overflow-y: scroll;
@@ -182,7 +182,7 @@
       font-size: 13px; }
 
 .timeOutput {
-  padding: 5px;
+  padding: 0px 5px;
   color: #7d7b7b;
   font-size: 1em;
   font-family: courier, monospace;
@@ -265,7 +265,9 @@
 
 .ProgressBar {
   height: 8px;
-  margin: 18px 5px 19px 60px; }
+  width: 94vw;
+  bottom: 25px;
+  margin: 0px 0px 0px 60px; }
   .ProgressBar-elapsed {
     height: 100%; }
   .ProgressBar-seek {
@@ -289,9 +291,13 @@
 
 .GraphArea {
   margin: 20px 5px -15px 60px;
-  height: 8vh; }
-  .GraphArea .bar {
-    fill: #FB3F48; }
+  height: 22vh; }
+  .GraphArea .axis {
+    color: #7d7b7b; }
+    .GraphArea .axis .domain, .GraphArea .axis .tick line {
+      stroke: #7d7b7b; }
+    .GraphArea .axis .tick text {
+      fill: #7d7b7b; }
 
 .lightBox-wrapper {
   display: block;

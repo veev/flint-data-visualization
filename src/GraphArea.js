@@ -1,14 +1,18 @@
 import React, { Component } from 'react'
-import PropTypes from "prop-types"
-import { max, min, extent } from "d3-array"
-import { scaleLinear, scaleTime, scaleOrdinal } from "d3-scale"
-import { timeHour } from "d3-time"
-import { interpolateRound } from "d3-interpolate"
+import PropTypes from 'prop-types'
+import { max, min, extent } from 'd3-array'
+import { scaleLinear, scaleTime, scaleOrdinal, scalePow } from 'd3-scale'
+import { timeHour } from 'd3-time'
+import { interpolateRound } from 'd3-interpolate'
 import { select } from 'd3-selection'
 import { stack } from 'd3-shape'
+import { nest } from 'd3-collection'
+import { axisBottom } from 'd3-axis'
+import graphData from './data/d3data.json'
 
-import Histogram from "./Histogram"
+// import Histogram from "./Histogram"
 // import Slider from "./Slider";
+import Axis from './Axis'
 
 const SLIDER_HEIGHT = 30;
 const colrs = ['#72D687', '#FB3F48']
@@ -23,20 +27,266 @@ export default class GraphArea extends Component {
 
   componentDidMount() {
     //console.log(this.props.data)
-    this.makeHistogramData(this.props.data.features)
+    //this.makeHistogramData(this.props.data.features)
+    //this.makeIncidentGraph(this.props.data.features)
+    this.makeIncidentGraph(graphData)
+    //this.makeAxis(graphData)
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    //console.log("shouldComponentUpdate")
     //return nextProps.data !== this.props.data
     return true
   }
 
   componentDidUpdate() {
-    this.makeHistogramData(this.props.data.features)
+    //this.makeHistogramData(this.props.data.features)
+    //this.makeIncidentGraph(this.props.data.features)
+    this.makeIncidentGraph(graphData)
+    //this.makeAxis(graphData)
   }
 
-  makeStackedHistogramData = (data) => {
+  makeAxis = (data) => {
+    const dateRange = [data[0].start, data[data.length - 1].end]
+    const waitRange = extent(data, d => {
+      return d.wait
+    })
+    const xScale = scaleTime().range([0, this.props.size[0]])
+                              .domain(dateRange)
 
+    const xAxis = axisBottom().scale(xScale)
+
+  }
+
+  makeIncidentGraph = (data) => {
+
+    const node = this.node
+
+    // data.forEach( d => {
+    //   if (d.properties.unix_onscene) {
+    //     d.answered = "yes"
+    //     d.start = d.properties.unix_timestamp * 1000
+    //     d.scene = d.properties.unix_onscene * 1000
+    //     d.end = d.properties.unix_end * 1000
+    //     d.wait = d.properties.waitTime
+    //     d.priority = d.properties.priority
+    //   } else {
+    //     d.answered = "no"
+    //     d.start = d.properties.unix_timestamp * 1000
+    //     d.scene = d.properties.unix_end * 1000 // set scene to end so it doesn't show up
+    //     d.end = d.properties.unix_end * 1000
+    //     d.wait = d.properties.waitTime
+    //     d.priority = d.properties.priority
+    //   }
+    // })
+
+    // console.log(data)
+
+    // const priorities = nest()
+    //     .key(d => { return d.properties.priority })
+    //     //.rollup(function(v) { return v.length; })
+    //     .entries(data)
+
+    // console.log(priorities)
+
+    // const stackLayout = stack().keys(["yes", "no"])
+    // const bars = stackLayout(separate)
+
+    //console.log(bars)
+
+    // assumes data is sorted by time (it is)
+    const dateRange = [data[0].start, data[data.length - 1].end]
+    const waitRange = extent(data, d => {
+      return d.wait
+    })
+
+    // console.log(this.props.size)
+    // console.log(dateRange)
+    // console.log(waitRange)
+    const xScale = scaleTime().range([0, this.props.size[0]])
+                              .domain(dateRange)
+
+    // const yScale = scaleLinear().range([this.props.size[1], 0])
+    //                             .domain(waitRange)
+
+    const yScale = scalePow().exponent(0.65)
+                              .range([this.props.size[1] - 50, 0])
+                              .domain(waitRange)
+
+    // const yScale = scaleLinear().range([this.props.size[1], 0])
+    //     .domain(extent(data, d => return d.properties.priority ))
+
+    var boxes = select(node)
+      .append("g")
+      .selectAll("g")
+      .data(data)
+      .enter().append("g")
+        .attr("class", "bar-group")
+
+    boxes.append("rect")
+        // .attr("class", "stacked")
+      // .attr("stacked_state", function(d) { return "st"+d.state; })
+      .attr("x", function(d) {
+          //console.log(xScale(d.start))
+          return xScale(d.start);
+        })
+      .attr("y", function(d) {
+        return yScale(d.wait);
+      })
+      .attr("width", function(d) {
+        let w = xScale(d.end) - xScale(d.start)
+          if (w < 0) w = 0
+          return w
+      })
+      .attr("height", 1.5)
+      .style("fill", function(d) {
+          return colrs[1];
+      })
+      .style("opacity", 1.0)
+
+  boxes.append("rect")
+      .attr("x", function(d) {
+          return xScale(d.scene);
+        })
+      .attr("y", function(d) {
+        return yScale(d.wait);
+      })
+      .attr("width", function(d) {
+        let w = xScale(d.end) - xScale(d.scene)
+          if (w < 0) w = 0
+          return w
+      })
+      .attr("height", 1.5)
+      .style("fill", function(d) {
+          return colrs[0];
+      })
+      .style("opacity", 1.0)
+
+  select(node)
+        .selectAll("line")
+        .exit()
+        .remove()
+
+  // var line = select(node)
+  //     .append("line")
+  //       .attr("class", "line")
+  //     .attr("x1", xScale(this.props.unconvertTime(this.props.currentTime) * 1000))
+  //     .attr("y1", this.props.size[1])
+  //     .attr("x2", xScale(this.props.unconvertTime(this.props.currentTime) * 1000))
+  //     .attr("y2", 0)
+  //     .style("stroke", "white")
+
+  // TODO: follow new structure as outlined in this tutorial: 
+  // http://www.adeveloperdiary.com/react-js/integrate-react-and-d3/
+      // select(node)
+      // .append("g")
+      // .selectAll("g")
+      // .data(timeStackBars)
+      // .enter().append("g")
+      //   .attr("fill", d => { return zScale(d.key) })
+      // .selectAll("rect")
+      // .data( d => { return d })
+      // .enter().append("rect")
+      //   .attr("x", d => { return xScale(d.data.time) })
+      //   .attr("y", d => { return yScale(d[1]) })
+      //   .attr("height", d => { return yScale(d[0]) - yScale(d[1]) })
+      //   .attr("width", barWidth)
+      //     .style("stroke", "black")
+      //     .style("stroke-opacity", 0.05)
+
+    /*
+
+    select(node)
+      .selectAll("rect")
+      .data(data)
+      .enter().append("rect")
+        .attr("class", "bar")
+
+    select(node)
+        .selectAll("rect.bar")
+        .data(data)
+        .exit()
+        .remove()
+
+    select(node)
+        .selectAll("rect.bar")
+        .data(data)
+        .attr("x", d => { 
+          //console.log(xScale(d.properties.unix_timestamp * 1000))
+          return xScale(d.properties.unix_timestamp * 1000) 
+        })
+        .attr("y", d => {
+          //console.log(yScale(d.properties.waitTime)) 
+          return yScale(d.properties.waitTime) 
+        })
+        .attr("height", 2)
+        .attr("width", d => {
+          let w = xScale(d.properties.unix_end * 1000) - xScale(d.properties.unix_timestamp * 1000)
+          if (w < 0) w = 0
+          return w
+        })
+        .attr("fill", colrs[1])
+          .style("stroke", "black")
+          .style("stroke-opacity", 0.05)
+
+    select(node)
+      .selectAll("rect")
+      .data(answeredCalls)
+      .enter().append("rect")
+        .attr("class", "onSceneBar")
+
+    select(node)
+        .selectAll("rect.onSceneBar")
+        .data(answeredCalls)
+        .exit()
+        .remove()
+
+    select(node)
+        .selectAll("rect.onSceneBar")
+        .data(answeredCalls)
+        .attr("x", d => {
+          console.log(xScale(d.properties.unix_onscene * 1000))
+          return xScale(d.properties.unix_onscene * 1000)
+        })
+        .attr("y", d => yScale(d.properties.waitTime))
+        .attr("height", 2)
+        .attr("width", d => {
+          let w = xScale(d.properties.unix_end * 1000) - xScale(d.properties.unix_onscene * 1000)
+          if (w < 0) w = 0
+          return w
+        })
+        .attr("fill", colrs[0])
+          .style("stroke", "black")
+          .style("stroke-opacity", 0.05)
+
+
+          */
+
+        //   .selectAll("rect")
+    //   .data(combinedData)
+    //   .enter()
+    //   .append("rect")
+    //     .attr("class", "bar")
+    //     .on("mouseover", this.props.onHover)
+
+    // select(node)
+    //   .selectAll("rect.bar")
+    //   .data(combinedData)
+    //   .exit()
+    //   .remove()
+
+    // select(node)
+    //   .selectAll("rect.bar")
+    //   .data(combinedData)
+    //   .attr("x", (d,i) => xScale(d.time))
+    //   .attr("y", d => { return yScale(d.count) })
+    //   .attr("height", d => { return this.props.size[1] - yScale(d.count) })
+    //   .attr("width", barWidth)
+    //   // .style("fill", (d,i) => this.props.hoverElement === d.id ?
+    //   //   "#FCBC34" : this.props.colorScale(i))
+    //   .style("stroke", "black")
+    //   .style("stroke-opacity", 0.25)
   }
 
   binData = (data, bins, binner, interval) => {
@@ -101,7 +351,7 @@ export default class GraphArea extends Component {
       combinedData.push(dataObj)
     }
 
-    console.log(combinedData)
+    //console.log(combinedData)
 
     const dataStackLayout = stack().keys(["answered", "unanswered"])
     const timeStackBars = dataStackLayout(combinedData)
@@ -168,12 +418,27 @@ export default class GraphArea extends Component {
 
   render() {
   	// return null
+    const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
+    const waitRange = extent(graphData, d => {
+      return d.wait
+    })
+    const xScale = scaleTime().range([0, this.props.size[0]])
+                              .domain(dateRange)
+
+    const xAxis = axisBottom().scale(xScale)
+
     return (
       <svg 
         ref={node => this.node = node}
         width={this.props.size[0]}
         height={this.props.size[1]}>
+        <Axis 
+          h={this.props.size[1]}
+          axis={xAxis}
+          axisType="x"
+        />
       </svg>
+
     )
   }
 }

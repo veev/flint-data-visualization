@@ -67,7 +67,7 @@ $posts-col-width: 12%;
   position: absolute;
   width: 100%;
   top: 6vh;
-  height: 80vh;
+  height: 70vh;
 /*  bottom: 0;*/
 }
 
@@ -81,7 +81,7 @@ $posts-col-width: 12%;
 
 .Board {
   position: relative;
-  height: 80vh;
+  height: 70vh;
   min-width: 330px;
   width: 360px;
   overflow-y: scroll;
@@ -316,7 +316,7 @@ $posts-col-width: 12%;
 ////////////////////////////////
 
 .timeOutput {
-  padding: 5px;
+  padding: 0px 5px;
   color: $white;
   font-size: 1em;
   font-family: courier, monospace;
@@ -435,8 +435,12 @@ $posts-col-width: 12%;
 }
 
 .ProgressBar {
+  // height: 8px;
+  // margin: 18px 5px 19px 60px;
   height: 8px;
-  margin: 18px 5px 19px 60px;
+  width: 94vw;
+  bottom: 25px;
+  margin: 0px 0px 0px 60px;
 
   &-elapsed {
     height: 100%;
@@ -481,10 +485,22 @@ $posts-col-width: 12%;
 
 .GraphArea {
   margin: 20px 5px -15px 60px;
-  height: 8vh;
+  height: 22vh;
 
   .bar {
-    fill: $flintRed;
+    // fill: $flintRed;
+  }
+
+  .axis {
+    color: $white;
+
+    .domain, .tick line {
+      stroke: $white;
+    }
+
+    .tick text {
+      fill: $white;
+    }
   }
 }
 

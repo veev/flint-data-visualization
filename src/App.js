@@ -53,8 +53,6 @@ class App extends Component {
       },
       incidentMode: true,
       showLightbox: false,
-      contentArray: [
-      ],
       showHeatmap: false
       // navState = 'Incidents'
     }
@@ -71,8 +69,8 @@ class App extends Component {
   componentWillMount() {
     // no access yet to component in React DOM (has yet to render)
     // do init stuff here to data?
-    console.log('componentWillMount')
-    console.log(posts)
+    // console.log('componentWillMount')
+    // console.log(posts)
 
     data.features = data.features.map( incident => {
       incident.properties.status = "preCall"
@@ -83,11 +81,15 @@ class App extends Component {
       } else {
         incident.properties.waitTime = 60 * 60
       }
-      console.log(incident.properties.waitTime)
+
+      if (incident.properties.waitTime < 0) {
+        incident.properties.waitTime = 60
+      }
+      //console.log(incident.properties.waitTime)
       return incident
     })
-    console.log(data.features)
-    console.log(photos)
+    // console.log(data.features)
+    // console.log(photos)
   }
 
   componentWillUnmount() {
@@ -291,6 +293,7 @@ class App extends Component {
             //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
             formattedTime={formattedTime}
             currentTime={this.convertTime(currentTime)}
+            unconvertTime={this.unconvertTime}
             totalTime={this.convertTime(endTS)}
             isPlaying={isPlaying}
             staticData={data}

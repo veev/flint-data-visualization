@@ -137,10 +137,10 @@ export default class CallBoard extends Component {
         <div className="post-wrapper">
           <div className="post">
             <div className="post-info">
-              <div class="avatar"></div>
-                <div class="metadata">
-                  <div class="account">Flint Police Operations</div>
-                  <div class="time">{post.created_time}</div>
+              <div className="avatar"></div>
+                <div className="metadata">
+                  <div className="account">Flint Police Operations</div>
+                  <div className="time">{post.created_time}</div>
                 </div>
             </div>
             <div className="post-body"><p>{post.message}</p></div>
@@ -158,7 +158,7 @@ export default class CallBoard extends Component {
     return comments.map( (comment, i) => {
       //console.log(comment)
       return (
-        <div className="whyDoWeNeedThisDiv">
+        <div className="whyDoWeNeedThisDiv" key={`why${i}`}>
         <div className="postComment" key={`${comment.id}-${i}`}><p>{comment.message}</p></div>
         {(comment.replies) ?
         <ul className="commentReplyWrapper">{this.insertReplies(comment.replies.data)}</ul> :
