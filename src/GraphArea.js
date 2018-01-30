@@ -130,131 +130,6 @@ export default class GraphArea extends Component {
           return colrs[0];
       })
       .style("opacity", 1.0)
-
-  // select(node)
-  //       .selectAll("line")
-  //       .exit()
-  //       .remove()
-
-  // var line = select(node)
-  //     .append("line")
-  //       .attr("class", "line")
-  //     .attr("x1", xScale(this.props.unconvertTime(this.props.currentTime) * 1000))
-  //     .attr("y1", this.props.size[1])
-  //     .attr("x2", xScale(this.props.unconvertTime(this.props.currentTime) * 1000))
-  //     .attr("y2", 0)
-  //     .style("stroke", "white")
-
-  // TODO: follow new structure as outlined in this tutorial: 
-  // http://www.adeveloperdiary.com/react-js/integrate-react-and-d3/
-      // select(node)
-      // .append("g")
-      // .selectAll("g")
-      // .data(timeStackBars)
-      // .enter().append("g")
-      //   .attr("fill", d => { return zScale(d.key) })
-      // .selectAll("rect")
-      // .data( d => { return d })
-      // .enter().append("rect")
-      //   .attr("x", d => { return xScale(d.data.time) })
-      //   .attr("y", d => { return yScale(d[1]) })
-      //   .attr("height", d => { return yScale(d[0]) - yScale(d[1]) })
-      //   .attr("width", barWidth)
-      //     .style("stroke", "black")
-      //     .style("stroke-opacity", 0.05)
-
-    /*
-
-    select(node)
-      .selectAll("rect")
-      .data(data)
-      .enter().append("rect")
-        .attr("class", "bar")
-
-    select(node)
-        .selectAll("rect.bar")
-        .data(data)
-        .exit()
-        .remove()
-
-    select(node)
-        .selectAll("rect.bar")
-        .data(data)
-        .attr("x", d => { 
-          //console.log(xScale(d.properties.unix_timestamp * 1000))
-          return xScale(d.properties.unix_timestamp * 1000) 
-        })
-        .attr("y", d => {
-          //console.log(yScale(d.properties.waitTime)) 
-          return yScale(d.properties.waitTime) 
-        })
-        .attr("height", 2)
-        .attr("width", d => {
-          let w = xScale(d.properties.unix_end * 1000) - xScale(d.properties.unix_timestamp * 1000)
-          if (w < 0) w = 0
-          return w
-        })
-        .attr("fill", colrs[1])
-          .style("stroke", "black")
-          .style("stroke-opacity", 0.05)
-
-    select(node)
-      .selectAll("rect")
-      .data(answeredCalls)
-      .enter().append("rect")
-        .attr("class", "onSceneBar")
-
-    select(node)
-        .selectAll("rect.onSceneBar")
-        .data(answeredCalls)
-        .exit()
-        .remove()
-
-    select(node)
-        .selectAll("rect.onSceneBar")
-        .data(answeredCalls)
-        .attr("x", d => {
-          console.log(xScale(d.properties.unix_onscene * 1000))
-          return xScale(d.properties.unix_onscene * 1000)
-        })
-        .attr("y", d => yScale(d.properties.waitTime))
-        .attr("height", 2)
-        .attr("width", d => {
-          let w = xScale(d.properties.unix_end * 1000) - xScale(d.properties.unix_onscene * 1000)
-          if (w < 0) w = 0
-          return w
-        })
-        .attr("fill", colrs[0])
-          .style("stroke", "black")
-          .style("stroke-opacity", 0.05)
-
-
-          */
-
-        //   .selectAll("rect")
-    //   .data(combinedData)
-    //   .enter()
-    //   .append("rect")
-    //     .attr("class", "bar")
-    //     .on("mouseover", this.props.onHover)
-
-    // select(node)
-    //   .selectAll("rect.bar")
-    //   .data(combinedData)
-    //   .exit()
-    //   .remove()
-
-    // select(node)
-    //   .selectAll("rect.bar")
-    //   .data(combinedData)
-    //   .attr("x", (d,i) => xScale(d.time))
-    //   .attr("y", d => { return yScale(d.count) })
-    //   .attr("height", d => { return this.props.size[1] - yScale(d.count) })
-    //   .attr("width", barWidth)
-    //   // .style("fill", (d,i) => this.props.hoverElement === d.id ?
-    //   //   "#FCBC34" : this.props.colorScale(i))
-    //   .style("stroke", "black")
-    //   .style("stroke-opacity", 0.25)
   }
 
   binData = (data, bins, binner, interval) => {
@@ -406,9 +281,19 @@ export default class GraphArea extends Component {
     return {xScale, yScale}
   }
 
-  getRectWidth = (scale, d) => {
-    let w = scale(d.end) - scale(d.start)
+  getRectWidth = (scale, d, total) => {
+    let w = 0;
+    if (total) {
+      // total length of call duration
+      w = scale(d.end) - scale(d.start)
+    } else {
+      // duration of onscene portion
+      w = scale(d.end) - scale(d.scene)
+    }
+    
     //console.log(w)
+    // clamp at 0 for few calls where onscene time is 
+    // before start time (no seconds in raw data)
     if (w < 0) w = 0
     return w
   }
@@ -428,27 +313,12 @@ export default class GraphArea extends Component {
     const x = this.getScales().xScale
     const y = this.getScales().yScale
 
-    // const rectangles = graphData.forEach((d, i) => {
-    //   <g className="stackGroup">
-    //   <rect
-    //     key={"total-"+i}
-    //     className="totalDuration"
-    //     x={x(d.start)}
-    //     y={y(d.wait)}
-    //     width={this.getRectWidth(x, d)}
-    //     height={1.5}
-    //     fill={colrs[1]}
-    //   />
-    //   <rect className="onSceneDuration" />
-    // </g>
-    // })
-
     return (
       <svg 
         ref={node => this.node = node}
         width={this.props.size[0]}
         height={this.props.size[1]}>
-        <g className="group">
+        <g className="graph">
           { graphData.map( (d, i) => {
             return (
             <g className="stackGroup" key={`group-${i}`}>
@@ -457,15 +327,22 @@ export default class GraphArea extends Component {
               className="totalDuration"
               x={x(d.start)}
               y={y(d.wait)}
-              width={this.getRectWidth(x, d)}
+              width={this.getRectWidth(x, d, true)}
               height={1.5}
               fill={colrs[1]}
             />
-            <rect className="onSceneDuration" />
+            <rect 
+              key={`onScene-${i}`}
+              className="onSceneDuration" 
+              x={x(d.scene)}
+              y={y(d.wait)}
+              width={this.getRectWidth(x, d, false)}
+              height={1.5}
+              fill={colrs[0]}
+            />
           </g>
           )
         })}
-        
         <Axis 
           h={this.props.size[1]}
           axis={xAxis}
