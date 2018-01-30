@@ -138,7 +138,7 @@ export default class Gallery extends Component {
     } else if (index > slideCount) {
       nextIndex = 0
     }
-    console.log(nextIndex)
+    //console.log(nextIndex)
 
     this.setState({
       previousIndex: currentIndex,
@@ -158,7 +158,7 @@ export default class Gallery extends Component {
     const slideRight = this._slideRight
 
     let slides = []
-    console.log(this.props.items)
+    //console.log(this.props.items)
     this.props.items.forEach((item, index) => {
       //const renderItem = item.renderItem || this.props.renderItem || this._renderItem
       const slide = (

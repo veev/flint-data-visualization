@@ -26,7 +26,7 @@ export default class GraphArea extends Component {
   }
 
   componentDidMount() {
-    console.log(this.canvas)
+    //console.log(this.canvas)
     const canvas = this.canvas
     const ctx = canvas.getContext("2d")
     this.makeCanvasGraph(graphData, ctx)
@@ -80,6 +80,7 @@ export default class GraphArea extends Component {
                               .range([this.props.size[1] - 45, 0])
                               .domain(waitRange)
 
+    ctx.clearRect(0, 0, this.props.size[0], this.props.size[1])
     data.map( (d,i) => {
       ctx.fillStyle = colrs[1] // sets the color to fill in the rectangle with
       ctx.fillRect(xScale(d.start), yScale(d.wait), this.getRectWidth(xScale, d, true), 1)
@@ -326,7 +327,6 @@ export default class GraphArea extends Component {
   }
 
   render() {
-    console.log("in render")
   	// return null
     const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
     const waitRange = extent(graphData, d => {
