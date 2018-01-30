@@ -300,7 +300,8 @@
       fill: #7d7b7b; }
   .GraphArea .svgLayer {
     position: absolute;
-    left: 60px; }
+    left: 60px;
+    bottom: 0px; }
 
 .lightBox-wrapper {
   display: block;
