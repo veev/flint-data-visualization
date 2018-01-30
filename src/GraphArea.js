@@ -25,14 +25,14 @@ export default class GraphArea extends Component {
     };
   }
 
-  componentDidMount() {
-    //console.log(this.props.data)
-    //this.makeHistogramData(this.props.data.features)
-    //this.makeIncidentGraph(this.props.data.features)
-    this.makeIncidentGraph(graphData)
-    //this.makeAxis(graphData)
+  // componentDidMount() {
+  //   //console.log(this.props.data)
+  //   //this.makeHistogramData(this.props.data.features)
+  //   //this.makeIncidentGraph(this.props.data.features)
+  //   //this.makeIncidentGraph(graphData)
+  //   //this.makeAxis(graphData)
 
-  }
+  // }
 
   shouldComponentUpdate(nextProps, nextState) {
     //console.log("shouldComponentUpdate")
@@ -40,12 +40,12 @@ export default class GraphArea extends Component {
     return true
   }
 
-  componentDidUpdate() {
-    //this.makeHistogramData(this.props.data.features)
-    //this.makeIncidentGraph(this.props.data.features)
-    this.makeIncidentGraph(graphData)
-    //this.makeAxis(graphData)
-  }
+  // componentDidUpdate() {
+  //   //this.makeHistogramData(this.props.data.features)
+  //   //this.makeIncidentGraph(this.props.data.features)
+  //   //this.makeIncidentGraph(graphData)
+  //   //this.makeAxis(graphData)
+  // }
 
   makeAxis = (data) => {
     const dateRange = [data[0].start, data[data.length - 1].end]
@@ -62,38 +62,6 @@ export default class GraphArea extends Component {
   makeIncidentGraph = (data) => {
 
     const node = this.node
-
-    // data.forEach( d => {
-    //   if (d.properties.unix_onscene) {
-    //     d.answered = "yes"
-    //     d.start = d.properties.unix_timestamp * 1000
-    //     d.scene = d.properties.unix_onscene * 1000
-    //     d.end = d.properties.unix_end * 1000
-    //     d.wait = d.properties.waitTime
-    //     d.priority = d.properties.priority
-    //   } else {
-    //     d.answered = "no"
-    //     d.start = d.properties.unix_timestamp * 1000
-    //     d.scene = d.properties.unix_end * 1000 // set scene to end so it doesn't show up
-    //     d.end = d.properties.unix_end * 1000
-    //     d.wait = d.properties.waitTime
-    //     d.priority = d.properties.priority
-    //   }
-    // })
-
-    // console.log(data)
-
-    // const priorities = nest()
-    //     .key(d => { return d.properties.priority })
-    //     //.rollup(function(v) { return v.length; })
-    //     .entries(data)
-
-    // console.log(priorities)
-
-    // const stackLayout = stack().keys(["yes", "no"])
-    // const bars = stackLayout(separate)
-
-    //console.log(bars)
 
     // assumes data is sorted by time (it is)
     const dateRange = [data[0].start, data[data.length - 1].end]
@@ -163,10 +131,10 @@ export default class GraphArea extends Component {
       })
       .style("opacity", 1.0)
 
-  select(node)
-        .selectAll("line")
-        .exit()
-        .remove()
+  // select(node)
+  //       .selectAll("line")
+  //       .exit()
+  //       .remove()
 
   // var line = select(node)
   //     .append("line")
@@ -416,7 +384,37 @@ export default class GraphArea extends Component {
     //   .style("stroke-opacity", 0.25)
   }
 
+  getScales = () => {
+    const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
+    const waitRange = extent(graphData, d => {
+      return d.wait
+    })
+
+    // console.log(this.props.size)
+    // console.log(dateRange)
+    // console.log(waitRange)
+    const xScale = scaleTime().range([0, this.props.size[0]])
+                              .domain(dateRange)
+
+    // const yScale = scaleLinear().range([this.props.size[1], 0])
+    //                             .domain(waitRange)
+
+    const yScale = scalePow().exponent(0.65)
+                              .range([this.props.size[1] - 50, 0])
+                              .domain(waitRange)
+
+    return {xScale, yScale}
+  }
+
+  getRectWidth = (scale, d) => {
+    let w = scale(d.end) - scale(d.start)
+    //console.log(w)
+    if (w < 0) w = 0
+    return w
+  }
+
   render() {
+    console.log("in render")
   	// return null
     const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
     const waitRange = extent(graphData, d => {
@@ -427,16 +425,53 @@ export default class GraphArea extends Component {
 
     const xAxis = axisBottom().scale(xScale)
 
+    const x = this.getScales().xScale
+    const y = this.getScales().yScale
+
+    // const rectangles = graphData.forEach((d, i) => {
+    //   <g className="stackGroup">
+    //   <rect
+    //     key={"total-"+i}
+    //     className="totalDuration"
+    //     x={x(d.start)}
+    //     y={y(d.wait)}
+    //     width={this.getRectWidth(x, d)}
+    //     height={1.5}
+    //     fill={colrs[1]}
+    //   />
+    //   <rect className="onSceneDuration" />
+    // </g>
+    // })
+
     return (
       <svg 
         ref={node => this.node = node}
         width={this.props.size[0]}
         height={this.props.size[1]}>
+        <g className="group">
+          { graphData.map( (d, i) => {
+            return (
+            <g className="stackGroup" key={`group-${i}`}>
+            <rect
+              key={`total-${i}`}
+              className="totalDuration"
+              x={x(d.start)}
+              y={y(d.wait)}
+              width={this.getRectWidth(x, d)}
+              height={1.5}
+              fill={colrs[1]}
+            />
+            <rect className="onSceneDuration" />
+          </g>
+          )
+        })}
+        
         <Axis 
           h={this.props.size[1]}
           axis={xAxis}
           axisType="x"
         />
+        </g>
       </svg>
 
     )

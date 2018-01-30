@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Title from './Title'
 
-export default class Header extends Component {
+export default class Header extends PureComponent {
   render() {
+    console.log('Header rendered')
     return (
       <div className="App-header">
         <Title
