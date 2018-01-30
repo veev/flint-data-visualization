@@ -69,9 +69,6 @@ export default class GraphArea extends Component {
       return d.wait
     })
 
-    // console.log(this.props.size)
-    // console.log(dateRange)
-    // console.log(waitRange)
     const xScale = scaleTime().range([0, this.props.size[0]])
                               .domain(dateRange)
 
