@@ -502,6 +502,11 @@ $posts-col-width: 12%;
       fill: $white;
     }
   }
+
+  .svgLayer {
+    position: absolute;
+    left: 60px;
+  }
 }
 
 ///////////////////////////////////////

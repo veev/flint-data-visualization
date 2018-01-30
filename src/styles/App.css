@@ -298,6 +298,9 @@
       stroke: #7d7b7b; }
     .GraphArea .axis .tick text {
       fill: #7d7b7b; }
+  .GraphArea .svgLayer {
+    position: absolute;
+    left: 60px; }
 
 .lightBox-wrapper {
   display: block;
