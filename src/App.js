@@ -15,6 +15,7 @@ import { map_range } from './utils'
 import data from './data/may5-12-incidents-timestamps.json'
 import posts from './data/postsMay5_12-timezone.json'
 import photos from './data/photos-grouped2.json'
+import audio from './data/flint-transcribed.json'
 
 // class Board extends React.Component {
 //     shouldComponentUpdate(nextProps, nextState) {
@@ -90,6 +91,7 @@ class App extends Component {
     })
     // console.log(data.features)
     // console.log(photos)
+    console.log(Object.values(audio))
   }
 
   componentWillUnmount() {
