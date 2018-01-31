@@ -8,7 +8,7 @@ export default class AudioManager extends Component {
     super(props)
 
     this.state = {
-      currentKey: 'bcfy7811_1493957342093_0001.mp3',
+      currentKey: '',
       currentIndex: 0
     }
 
@@ -45,7 +45,7 @@ export default class AudioManager extends Component {
     // need to not trigger audio to play once file is playing
     if (nextProps.isPlaying) {
       const t = new Date(nextProps.currentTime * 1000)
-      console.log(t)
+      //console.log(t)
 
       const element = this.audioObjects.find( (a) => {
         const tStart = new Date(a.date).getTime()
@@ -55,28 +55,36 @@ export default class AudioManager extends Component {
       //console.log(element)
 
       if (element && this.childAudio.audioEl.paused) {
+
+        // check to see if currentKey and element id are the same
+        // if they are, play the file back at the right timestamp
+        // not from the beginning
         console.log(element.id)
-        //this.childAudio.audioEl.src = element.id
-        this.setState({ currentKey: `${element.id}.mp3` }, () => {
-          this.childAudio.audioEl.pause()
-          this.childAudio.audioEl.load()
+        console.log(this.state.currentKey)
+
+        if (element.id !== this.state.currentKey) {
+          // play back new file from the beginning
+          this.setState({ currentKey: element.id }, () => {
+            this.childAudio.audioEl.pause()
+            this.childAudio.audioEl.load()
+            this.childAudio.audioEl.play()
+          })
+          console.log(this.childAudio.audioEl.src)
+        } else {
+          // play back same file from current time
+          // we don't need to update currentKey
+          // just to update audio currentTime
+          // console.log(this.childAudio.audioEl.src)
+          // console.log(this.childAudio.audioEl.currentTime)
           this.childAudio.audioEl.play()
-        })
-        console.log(this.childAudio.audioEl.src)
-        // this.childAudio.audioEl.src = this.audioFiles[this.state.currentKey]
-        // console.log(this.childAudio.audioEl.src)
-        //this.childAudio.audioEl.load()
-        //this.childAudio.audioEl.play()
+        }
+
+        
       }
 
-      // this.audioObjects.forEach( a => {
-      //   const ts = new Date(a.date).getTime()
-      //   if (t >= ts) {
-      //     // play audio file
-      //     console.log('play audio file', a.id)
-      //     break;
-      //   }
-      // })
+    } else {
+      // isPlaying is false, pause audio
+      this.childAudio.audioEl.pause()
     }
   }
 
@@ -97,7 +105,7 @@ export default class AudioManager extends Component {
       <div>
         <AudioPlayer
           className={'audioPlayer'}
-          src={this.audioFiles[this.state.currentKey]}
+          src={this.audioFiles[`${this.state.currentKey}.mp3`]}
           autoPlay={false}
           loop={false}
           muted={false}
