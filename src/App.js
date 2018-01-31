@@ -8,6 +8,7 @@ import Header from './Header'
 import CallBoard from './CallBoard'
 import Gallery from './Gallery'
 import ControlPanel from './ControlPanel'
+import AudioManager from './AudioManager'
 // import './styles/App.css'
 // import Source from './Source'
 // import Layer from './Layer'
@@ -37,7 +38,8 @@ class App extends Component {
 
     this.state = {
       isPlaying: false,
-      currentTime: data['features'][0].properties.unix_timestamp,
+      // currentTime: data['features'][0].properties.unix_timestamp,
+      currentTime: 1493957337,
       highlightedBoardIncident: {
         type: 'Feature',
         geometry: { },
@@ -63,7 +65,8 @@ class App extends Component {
 
   static defaultProps = {
     incidents: data['features'],
-    startTS: data['features'][0].properties.unix_timestamp,
+    //startTS: data['features'][0].properties.unix_timestamp,
+    startTS: 1493957337,
     endTS: data['features'][data['features'].length - 1].properties.unix_end,
   }
 
@@ -91,7 +94,7 @@ class App extends Component {
     })
     // console.log(data.features)
     // console.log(photos)
-    console.log(Object.values(audio))
+    // console.log(Object.values(audio))
   }
 
   componentWillUnmount() {
@@ -172,7 +175,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { currentTime: (this.state.currentTime + 100) % this.props.endTS }
+          { currentTime: (this.state.currentTime + 1) % this.props.endTS }
         ))
       }, 1000)
     } else {
@@ -324,6 +327,10 @@ class App extends Component {
           </div> :
           null
         }
+        <AudioManager
+          currentTime={currentTime}
+          isPlaying={isPlaying}
+        />
       </div>
     );
   }

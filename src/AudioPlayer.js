@@ -5,62 +5,77 @@ import PropTypes from 'prop-types'
 
 export default class AudioPlayer extends Component {
 
+  constructor(props) {
+    super(props)
+  }
+
   componentDidMount() {
     const audio = this.audioEl
 
     this.updateVolume(this.props.volume)
 
     audio.addEventListener('error', (e) => {
+      console.log('error', e)
       this.props.onError(e)
     })
 
     audio.addEventListener('canplay', (e) => {
+      console.log('canplay')
       this.props.onCanPlay(e)
     })
 
     audio.addEventListener('canplaythrough', (e) => {
+      console.log('canplaythrough')
       this.props.onCanPlayThrough(e)
     })
 
     // When audio play starts
     audio.addEventListener('play', (e) => {
+      //console.log('audio play')
       this.setListenTrack()
       this.props.onPlay(e)
     })
 
     // When unloading the audio player (switching to another src)
     audio.addEventListener('abort', (e) => {
+      console.log('audio abort')
       this.clearListenTrack();
       this.props.onAbort(e);
     })
 
     audio.addEventListener('ended', (e) => {
+      console.log('audio ended')
       this.clearListenTrack()
       this.props.onEnded(e)
     })
 
     // When the user pauses playback
     audio.addEventListener('pause', (e) => {
+      console.log('audio pause')
       this.clearListenTrack()
       this.props.onPause(e)
     })
 
     // When the user drags the time indicator to a new time
     audio.addEventListener('seeked', (e) => {
+      console.log('audio seeked')
       this.props.onSeeked(e)
     })
 
     audio.addEventListener('loadedmetadata', (e) => {
+      console.log('loadedmetadata')
       this.props.onLoadedMetadata(e)
     })
 
     audio.addEventListener('volumechange', (e) => {
+      console.log('volumechange')
       this.props.onVolumeChanged(e)
     })
   }
 
   componentWillReceiveProps(nextProps) {
     this.updateVolume(nextProps.volume)
+    // console.log()
   }
 
   /**
@@ -71,6 +86,7 @@ export default class AudioPlayer extends Component {
       const listenInterval = this.props.listenInterval
       this.listenTracker = setInterval( () => {
         this.props.onListen(this.audioEl.currentTime)
+        //console.log(this.audioEl.currentTime)
       }, listenInterval)
     }
   }
@@ -112,13 +128,13 @@ export default class AudioPlayer extends Component {
     return (
       <audio
         autoPlay={this.props.autoPlay}
-        className={`audio-manager-${this.props.className}`}
+        className={`audio-manager ${this.props.className}`}
         controls={controls}
         loop={this.props.loop}
         muted={this.props.muted}
-        onPlay={this.onPlay}
-        preload={this.props.prelaod}
-        ref={(ref) => { this.audioEl = ref }}
+        onPlay={this.props.onPlay}
+        preload={this.props.preload}
+        ref={(ref) => { this.audioEl = ref}}
         src={this.props.src}
         style={this.props.style}
         {...conditionalProps}
