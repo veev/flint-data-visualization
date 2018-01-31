@@ -6,7 +6,6 @@ import { select } from 'd3-selection'
 export default class Axis extends Component {
   constructor(props) {
     super(props)
-
   }
 
   componentDidUpdate() {
@@ -30,7 +29,6 @@ export default class Axis extends Component {
       </g>
     )
   }
-
 }
 
 Axis.propTypes = {
