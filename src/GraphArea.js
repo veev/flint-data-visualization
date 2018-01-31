@@ -337,9 +337,12 @@ export default class GraphArea extends Component {
 
     const xAxis = axisBottom().scale(xScale)
 
+    const xCoord = xScale(this.props.currentTime)
+
     // const x = this.getScales().xScale
     // const y = this.getScales().yScale
-
+    console.log(this.props.currentTime)
+    
     return (
       <div className="graphWrapper">
       <canvas width={this.props.size[0]} height={this.props.size[1]} ref={(el) => { this.canvas = el }} />
@@ -352,6 +355,13 @@ export default class GraphArea extends Component {
           h={this.props.size[1]}
           axis={xAxis}
           axisType="x"
+        />
+        <line
+          className="currentTimeLine"
+          x1={xCoord}
+          y1={this.props.size[1] - 25}
+          x2={xCoord}
+          y2={7}
         />
       </svg>
       </div>

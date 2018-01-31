@@ -68,8 +68,7 @@ export default class Timeline extends Component {
             data={staticData}
             size={[graphWidth, graphHeight]}
             height={100}
-            currentTime={currentTime}
-            unconvertTime={this.props.unconvertTime}
+            currentTime={this.props.unconvertTime(currentTime) * 1000}
           />
         </div>
         <div className="ControlArea">

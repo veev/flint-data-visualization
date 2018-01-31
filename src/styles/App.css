@@ -302,6 +302,9 @@
     position: absolute;
     left: 60px;
     bottom: 0px; }
+  .GraphArea .currentTimeLine {
+    stroke: #7d7b7b;
+    stroke-width: 2; }
 
 .lightBox-wrapper {
   display: block;
