@@ -308,9 +308,8 @@ export default class Map extends Component {
           ]
         },
         'circle-stroke-opacity': 1,
-        'circle-radius': {
-          stops: [[8, 1], [11, 3], [16, 10]]
-        },
+        'circle-radius': 20,
+        'circle-blur': 0.5
       }
     })
 
