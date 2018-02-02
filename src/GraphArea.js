@@ -9,12 +9,12 @@ import { stack } from 'd3-shape'
 import { nest } from 'd3-collection'
 import { axisBottom } from 'd3-axis'
 import graphData from './data/d3data.json'
+import audioMap from './data/flint-transcribed.json'
 
 // import Histogram from "./Histogram"
 // import Slider from "./Slider";
 import Axis from './Axis'
 
-const SLIDER_HEIGHT = 30;
 const colrs = ['#72D687', '#FB3F48']
 
 export default class GraphArea extends Component {
@@ -22,7 +22,8 @@ export default class GraphArea extends Component {
     super(props)
     this.state = {
       dragging: false
-    };
+    }
+    this.audioObjects = Object.values(audioMap)
   }
 
   componentDidMount() {
@@ -54,6 +55,10 @@ export default class GraphArea extends Component {
   //   //this.makeAxis(graphData)
   }
 
+  graphAudioData = (data) => {
+
+  }
+
   makeAxis = (data) => {
     const dateRange = [data[0].start, data[data.length - 1].end]
     const waitRange = extent(data, d => {
@@ -73,6 +78,12 @@ export default class GraphArea extends Component {
       return d.wait
     })
 
+    const audioRange = extent(this.audioObjects, d => {
+      return new Date(d.date).getTime()
+    })
+    // console.log(dateRange)
+    // console.log(audioRange)
+
     const xScale = scaleTime().range([0, this.props.size[0]])
                               .domain(dateRange)
 
@@ -87,6 +98,15 @@ export default class GraphArea extends Component {
       ctx.fillStyle = colrs[0]
       ctx.fillRect(xScale(d.scene), yScale(d.wait), this.getRectWidth(xScale, d, false), 1)
     })
+
+    // this.audioObjects.map( (d,i) => {
+    //   ctx.fillStyle = "rgba(255, 255, 255, 0.1)"
+    //   ctx.fillRect(xScale(new Date(d.date).getTime()), 0, 0.25, this.props.size[1] - 45)
+    //   // ctx.beginPath()
+    //   // ctx.moveTo(xScale(d.date), this.props.size[1] - 45)
+    //   // ctx.lineTo(xScale(d.date), 0)
+    //   // ctx.stroke()
+    // })
 
   }
 
