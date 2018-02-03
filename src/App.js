@@ -196,6 +196,8 @@ class App extends Component {
   handleSeekChange = (time) => {
     const ts = this.unconvertTime(time)
     this.setState({ currentTime: ts })
+    console.log(this.state.audioIndex)
+    this.updateAudioIndex(ts)
   }
 
   handleNextAudioClip = () => {
@@ -230,6 +232,26 @@ class App extends Component {
     }
     
     this.audioChild.pauseAudio()
+  }
+
+  updateAudioIndex = (time) => {
+    const t = Math.floor(time * 1000)
+    // console.log(t)
+    // console.log(new Date(t))
+    // TODO! Not sure why this works, but checking if currentTime was
+    // greater than element's startTime didn't work
+    const newIndex = this.sortedAudio.findIndex(element => {
+      const tStart = Math.floor(new Date(element.date).getTime())
+      return t <= tStart
+    })
+    console.log(newIndex)
+    this.setState({ audioIndex: newIndex })
+  }
+
+  whatAudioElAtCurrentTime = (element, time) => {
+    const tStart = Math.floor(new Date(element.date).getTime())
+    const tEnd = tStart + element.length
+    return (time >= tStart && time <= tEnd)
   }
 
   updateCurrentTime = (index) => {
