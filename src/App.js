@@ -173,6 +173,7 @@ class App extends Component {
   }
 
   handlePlayState = (playState) => {
+    console.log('playButton', this.state.audioIndex)
     // this is what toggles the play / pause button
     this.setState({ isPlaying: playState })
 
@@ -198,37 +199,41 @@ class App extends Component {
   }
 
   handleNextAudioClip = () => {
-    
-    if (this.state.audioIndex === this.sortedAudio.length - 1) {
+    //console.log('nextButton', this.state.audioIndex)
+    const temp = this.state.audioIndex + 1
+    //console.log('next', temp)
+    if (this.state.audioIndex >= this.sortedAudio.length - 1) {
       this.setState({ hasNextClip: false })
     } else {
-      this.setState({ audioIndex: this.state.audioIndex + 1})
+      this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
     }
 
     if (this.state.audioIndex >= 0) {
       this.setState({ hasPrevClip: true })
     }
 
-    //this.setState({ currentTime})
-    console.log(this.state.audioIndex)
-    // const newTime = Math.floor(new Date(this.sortedAudio[this.state.audioIndex].date).getTime() / 1000 )
-    // this.setState({ currentTime: newTime })
-    this.updateCurrentTime(this.state.audioIndex)
-    //console.log(this.state.currentTime)
     this.audioChild.pauseAudio()
   }
 
   handlePrevAudioClip = () => {
-    if (this.state.audioIndex === 0) {
+    //console.log('prevButton', this.state.audioIndex)
+    const temp = this.state.audioIndex - 1
+    //console.log('prev', temp)
+    if (this.state.audioIndex <= 0) {
       this.setState({ hasPrevClip: false })
     } else {
-      this.setState({ audioIndex: this.state.audioIndex - 1})
+      this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
     }
-    this.updateCurrentTime(this.state.audioIndex)
+
+    if (this.state.audioIndex <= this.sortedAudio.length - 1) {
+      this.setState({ hasNextClip: true })
+    }
+    
     this.audioChild.pauseAudio()
   }
 
   updateCurrentTime = (index) => {
+    console.log(index)
     const newTime = Math.floor(new Date(this.sortedAudio[index].date).getTime() / 1000 )
     this.setState({ currentTime: newTime })
   }

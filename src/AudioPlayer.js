@@ -15,17 +15,17 @@ export default class AudioPlayer extends Component {
     this.updateVolume(this.props.volume)
 
     audio.addEventListener('error', (e) => {
-      console.log('error', e)
+      //console.log('error', e)
       this.props.onError(e)
     })
 
     audio.addEventListener('canplay', (e) => {
-      console.log('canplay')
+      //console.log('canplay')
       this.props.onCanPlay(e)
     })
 
     audio.addEventListener('canplaythrough', (e) => {
-      console.log('canplaythrough')
+      //console.log('canplaythrough')
       this.props.onCanPlayThrough(e)
     })
 
@@ -38,37 +38,37 @@ export default class AudioPlayer extends Component {
 
     // When unloading the audio player (switching to another src)
     audio.addEventListener('abort', (e) => {
-      console.log('audio abort')
+      //console.log('audio abort')
       this.clearListenTrack();
       this.props.onAbort(e);
     })
 
     audio.addEventListener('ended', (e) => {
-      console.log('audio ended')
+      //console.log('audio ended')
       this.clearListenTrack()
       this.props.onEnded(e)
     })
 
     // When the user pauses playback
     audio.addEventListener('pause', (e) => {
-      console.log('audio pause')
+      //console.log('audio pause')
       this.clearListenTrack()
       this.props.onPause(e)
     })
 
     // When the user drags the time indicator to a new time
     audio.addEventListener('seeked', (e) => {
-      console.log('audio seeked')
+      //console.log('audio seeked')
       this.props.onSeeked(e)
     })
 
     audio.addEventListener('loadedmetadata', (e) => {
-      console.log('loadedmetadata')
+      //console.log('loadedmetadata')
       this.props.onLoadedMetadata(e)
     })
 
     audio.addEventListener('volumechange', (e) => {
-      console.log('volumechange')
+      //console.log('volumechange')
       this.props.onVolumeChanged(e)
     })
   }

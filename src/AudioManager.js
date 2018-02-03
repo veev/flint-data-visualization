@@ -58,8 +58,8 @@ export default class AudioManager extends Component {
         // check to see if currentKey and element id are the same
         // if they are, play the file back at the right timestamp
         // not from the beginning
-        console.log(element.id)
-        console.log(this.state.currentKey)
+        // console.log(element.id)
+        // console.log(this.state.currentKey)
 
         if (element.id !== this.state.currentKey) {
           // play back new file from the beginning
@@ -68,7 +68,7 @@ export default class AudioManager extends Component {
             this.childAudio.audioEl.load()
             this.childAudio.audioEl.play()
           })
-          console.log(this.childAudio.audioEl.src)
+          //console.log(this.childAudio.audioEl.src)
         } else {
           // play back same file from current time
           // we don't need to update currentKey
@@ -98,7 +98,7 @@ export default class AudioManager extends Component {
   }
 
   pauseAudio = () => {
-    console.log('PAUSED')
+    //console.log('PAUSED')
     this.childAudio.audioEl.pause()
   }
 
