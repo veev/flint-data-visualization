@@ -18,20 +18,6 @@ import posts from './data/postsMay5_12-timezone.json'
 import photos from './data/photos-grouped2.json'
 import audio from './data/flint-transcribed.json'
 
-// class Board extends React.Component {
-//     shouldComponentUpdate(nextProps, nextState) {
-
-//     }
-//   }
-// }
-
-// import BoardMaker from 'boardmaker'
-
-// const Board = BoardMaker(staticStuff)
-
-
-// <Board ts={...} />
-
 class App extends Component {
   constructor() {
     super(); // for correct context
@@ -40,6 +26,9 @@ class App extends Component {
       isPlaying: false,
       // currentTime: data['features'][0].properties.unix_timestamp,
       currentTime: 1493957337,
+      audioIndex: 0,
+      hasNextClip: true,
+      hasPrevClip: false,
       highlightedBoardIncident: {
         type: 'Feature',
         geometry: { },
@@ -61,10 +50,12 @@ class App extends Component {
     }
 
     this.timer = null
+    this.sortedAudio = this.getSortedAudio(audio)
   }
 
   static defaultProps = {
     incidents: data['features'],
+    //audio: this.getOrderedAudio(audio),
     //startTS: data['features'][0].properties.unix_timestamp,
     startTS: 1493957337,
     endTS: data['features'][data['features'].length - 1].properties.unix_end,
@@ -94,7 +85,15 @@ class App extends Component {
     })
     // console.log(data.features)
     // console.log(photos)
-    // console.log(Object.values(audio))
+    // const audioArray = Object.values(audio)
+
+    // this.props.audio = audioArray.sort( (a,b) => {
+    //   return (typeof a.date === 'string') - (typeof b.date === 'string') || a.date - b.date || a.date.localeCompare(b.date);
+    // })
+
+    // console.log(audioArray)
+    console.log(this.sortedAudio)
+
   }
 
   componentWillUnmount() {
@@ -114,6 +113,16 @@ class App extends Component {
   //     //activeIncidents: // TODO - filtered incidents
   //   })
   // }
+
+  getSortedAudio = (audio) => {
+    const audioArray = Object.values(audio)
+
+    audioArray.sort( (a,b) => {
+      return (typeof a.date === 'string') - (typeof b.date === 'string') || a.date - b.date || a.date.localeCompare(b.date);
+    })
+
+    return audioArray
+  }
 
   handleVisMode = (value) => {
     //console.log('value', value)
@@ -186,6 +195,42 @@ class App extends Component {
   handleSeekChange = (time) => {
     const ts = this.unconvertTime(time)
     this.setState({ currentTime: ts })
+  }
+
+  handleNextAudioClip = () => {
+    
+    if (this.state.audioIndex === this.sortedAudio.length - 1) {
+      this.setState({ hasNextClip: false })
+    } else {
+      this.setState({ audioIndex: this.state.audioIndex + 1})
+    }
+
+    if (this.state.audioIndex >= 0) {
+      this.setState({ hasPrevClip: true })
+    }
+
+    //this.setState({ currentTime})
+    console.log(this.state.audioIndex)
+    // const newTime = Math.floor(new Date(this.sortedAudio[this.state.audioIndex].date).getTime() / 1000 )
+    // this.setState({ currentTime: newTime })
+    this.updateCurrentTime(this.state.audioIndex)
+    //console.log(this.state.currentTime)
+    this.audioChild.pauseAudio()
+  }
+
+  handlePrevAudioClip = () => {
+    if (this.state.audioIndex === 0) {
+      this.setState({ hasPrevClip: false })
+    } else {
+      this.setState({ audioIndex: this.state.audioIndex - 1})
+    }
+    this.updateCurrentTime(this.state.audioIndex)
+    this.audioChild.pauseAudio()
+  }
+
+  updateCurrentTime = (index) => {
+    const newTime = Math.floor(new Date(this.sortedAudio[index].date).getTime() / 1000 )
+    this.setState({ currentTime: newTime })
   }
 
   convertTime = (value) => {
@@ -262,7 +307,7 @@ class App extends Component {
 
 
   render() {
-    const { isPlaying, currentTime, highlightedBoardIncident, highlightedMapIncident, showLightbox, incidentMode, showHeatmap } = this.state
+    const { isPlaying, currentTime, audioIndex, highlightedBoardIncident, highlightedMapIncident, showLightbox, incidentMode, showHeatmap, hasNextClip, hasPrevClip } = this.state
     const { endTS } = this.props
     const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
    
@@ -293,7 +338,10 @@ class App extends Component {
           <Timeline
             handlePlay={this.handlePlayState}
             handleSeek={this.handleSeekChange}
-
+            handleNextClip={this.handleNextAudioClip}
+            handlePrevClip={this.handlePrevAudioClip}
+            hasNext={hasNextClip}
+            hasPrevious={hasPrevClip}
             // setTime={this._updateTime}
             //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
             formattedTime={formattedTime}
@@ -328,8 +376,11 @@ class App extends Component {
           null
         }
         <AudioManager
+          ref={audio => { this.audioChild = audio; }}
           currentTime={currentTime}
           isPlaying={isPlaying}
+          sortedAudio={this.sortedAudio}
+          currentIndex={audioIndex}
         />
       </div>
     );

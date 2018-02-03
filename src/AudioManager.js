@@ -9,17 +9,16 @@ export default class AudioManager extends Component {
 
     this.state = {
       currentKey: '',
-      currentIndex: 0
+      currentIndex: this.props.currentIndex
     }
 
     this.audioFiles = null
-    this.audioObjects = Object.values(audioMap)
+    //this.sortedAudio = this.props.getSortedAudio(audioMap)
   }
 
   componentWillMount() {
-    //const audioObjects = Object.values(audioMap)
-    console.log(this.audioObjects)
-    console.log(new Date(this.audioObjects[this.state.currentIndex].date))
+    //console.log(this.sortedAudio)
+    //console.log(new Date(this.sortedAudio[this.state.currentIndex].date))
     console.log(new Date(this.props.currentTime * 1000))
 
     this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
@@ -47,7 +46,7 @@ export default class AudioManager extends Component {
       const t = new Date(nextProps.currentTime * 1000)
       //console.log(t)
 
-      const element = this.audioObjects.find( (a) => {
+      const element = this.props.sortedAudio.find( (a) => {
         const tStart = new Date(a.date).getTime()
         const tEnd = tStart + a.length
         return (t >= tStart && t <= tEnd)
@@ -96,6 +95,11 @@ export default class AudioManager extends Component {
 
   audioOnPlay = (e) => {
     console.log('audio play')
+  }
+
+  pauseAudio = () => {
+    console.log('PAUSED')
+    this.childAudio.audioEl.pause()
   }
 
   render() {

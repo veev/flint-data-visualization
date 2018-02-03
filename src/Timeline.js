@@ -58,8 +58,8 @@ export default class Timeline extends Component {
 
   render() {
     const { isPlayable, showPrevious, showNext, isSeekable, graphWidth, graphHeight } = this.state
-    const { currentTime, totalTime, isPlaying, staticData, formattedTime } = this.props
-    //console.log(currentTime)
+    const { currentTime, totalTime, isPlaying, staticData, formattedTime, hasNext, hasPrevious } = this.props
+    console.log(currentTime)
     return(
       <div className="Timeline">
         <div className="timeOutput">{formattedTime}</div>
@@ -79,6 +79,10 @@ export default class Timeline extends Component {
             onPlaybackChange={this.props.handlePlay}
             showPrevious={showPrevious}
             showNext={showNext}
+            hasPrevious={hasPrevious}
+            hasNext={hasNext}
+            onPrevious={this.props.handlePrevClip}
+            onNext={this.props.handleNextClip}
             />
           <ProgressBar
             totalTime={totalTime}
