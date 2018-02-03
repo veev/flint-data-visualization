@@ -17,9 +17,10 @@ export default class Timeline extends Component {
     this.state = {
       isPlaying: this.props.isPlaying,
       isPlayable: true,
-      showPrevious: false,
-      showNext: false,
-
+      showPrevious: true,
+      hasPrevious: false,
+      showNext: true,
+      hasNext: true,
       totalTime: this.props.totalTime,
       currentTime: this.props.currentTime,
       isSeekable: true,

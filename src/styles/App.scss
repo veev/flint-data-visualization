@@ -11,6 +11,7 @@ $ig-white: #fff !default;
 $ig-background-black: rgba(0, 0, 0, .8) !default;
 
 $icon-size: 20px;
+$controls-width: 160px;
 
 $color-hover: saturate(lighten($flintRed, 10%), 20%);
 $color-active: desaturate(darken($flintRed, 20%), 20%);
@@ -333,15 +334,19 @@ $posts-col-width: 12%;
 
 .PlaybackControls {
   position: absolute;
-  bottom: -4px;
+  bottom: 0px;
   height: 6vh;
   // float: left;
-  width: $icon-size*2;
+  // width: $icon-size*2;
   padding-left: 10px;
 }
 
 .PlayButton,
-.PauseButton {
+.PauseButton,
+.PrevButton,
+.NextButton,
+.SoundOnButton,
+.SoundOffButton {
   margin-right: 10px;
   padding: 8px;
   background: $white;
@@ -438,9 +443,9 @@ $posts-col-width: 12%;
   // height: 8px;
   // margin: 18px 5px 19px 60px;
   height: 8px;
-  width: 94vw;
+  width: auto;
   bottom: 25px;
-  margin: 0px 0px 0px 60px;
+  margin: 0px 0px 0px $controls-width;
 
   &-elapsed {
     height: 100%;
@@ -484,7 +489,7 @@ $posts-col-width: 12%;
 ///////////////////////////////////////
 
 .GraphArea {
-  margin: 20px 5px -15px 60px;
+  margin: 20px 5px -15px $controls-width;
   height: 22vh;
 
   .bar {
@@ -505,7 +510,7 @@ $posts-col-width: 12%;
 
   .svgLayer {
     position: absolute;
-    left: 60px;
+    left: $controls-width;
     bottom: 0px;
   }
 

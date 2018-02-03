@@ -247,7 +247,7 @@ export default class GraphArea extends Component {
     const dataStackLayout = stack().keys(["answered", "unanswered"])
     const timeStackBars = dataStackLayout(combinedData)
 
-    console.log(timeStackBars)
+    //console.log(timeStackBars)
 
     const barWidth = this.props.size[0] / combinedData.length
     //console.log("barWidth", barWidth)
@@ -361,7 +361,7 @@ export default class GraphArea extends Component {
 
     // const x = this.getScales().xScale
     // const y = this.getScales().yScale
-    console.log(this.props.currentTime)
+    //console.log(this.props.currentTime)
     
     return (
       <div className="graphWrapper">
