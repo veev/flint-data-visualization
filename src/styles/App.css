@@ -317,7 +317,7 @@
     animation: barLoading 2s infinite; }
 
 .GraphArea {
-  margin: 20px 5px -15px 160px;
+  position: relative;
   height: 22vh; }
   .GraphArea .axis {
     color: #7d7b7b; }
@@ -325,10 +325,20 @@
       stroke: #7d7b7b; }
     .GraphArea .axis .tick text {
       fill: #7d7b7b; }
-  .GraphArea .svgLayer {
+  .GraphArea .graphWrapper {
     position: absolute;
+    top: 0px;
     left: 160px;
-    bottom: 0px; }
+    right: 0px; }
+    .GraphArea .graphWrapper .svgLayer {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px; }
+    .GraphArea .graphWrapper canvas {
+      top: 0px;
+      left: 0px;
+      right: 0px; }
   .GraphArea .currentTimeLine {
     stroke: #7d7b7b;
     stroke-width: 2; }

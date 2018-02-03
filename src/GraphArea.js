@@ -55,14 +55,8 @@ export default class GraphArea extends Component {
   }
 
   makeAxis = (data) => {
-    const dateRange = [data[0].start, data[data.length - 1].end]
-    const waitRange = extent(data, d => {
-      return d.wait
-    })
-    const xScale = scaleTime().range([0, this.props.size[0]])
-                              .domain(dateRange)
-
-    const xAxis = axisBottom().scale(xScale)
+    const xS = this.getScales().xScale
+    const xAxis = axisBottom().scale(xS)
 
   }
 
@@ -78,139 +72,45 @@ export default class GraphArea extends Component {
     // canvas.height = h * pixelRatio
     //console.log(canvas.width, canvas.height)
 
-    const dateRange = [data[0].start, data[data.length - 1].end]
-    const waitRange = extent(data, d => {
-      return d.wait
-    })
-
-    const audioRange = extent(this.audioObjects, d => {
-      return new Date(d.date).getTime()
-    })
-    // console.log(dateRange)
-    // console.log(audioRange)
-
-    const xScale = scaleTime().range([0, this.props.size[0]])
-                              .domain(dateRange)
-
-    const yScale = scalePow().exponent(0.7)
-                              .range([this.props.size[1] - 45, 0])
-                              .domain(waitRange)
+    const xScl = this.getScales().xScale
+    const yScl = this.getScales().yScale
 
     // TODO: Filter based on priority - via dropdown or buttons?
-    const filtered = data.filter( d => {
-      //return d.priority === '1'
-      return d
-    })
+    // const filtered = data.filter( d => {
+    //   return d.priority === '3'
+    //   //return d
+    // })
+    //const filtered = this.filterActiveCalls(this.props.currentTime)
 
     ctx.clearRect(0, 0, this.props.size[0], this.props.size[1])
-    filtered.map( (d,i) => {
+    graphData.map( (d,i) => {
       ctx.fillStyle = colrs[1] // sets the color to fill in the rectangle with
-      ctx.fillRect(xScale(d.start), yScale(d.wait), this.getRectWidth(xScale, d, true), 1)
+      ctx.fillRect(xScl(d.start), yScl(d.wait), this.getRectWidth(xScl, d, true), 1)
       ctx.fillStyle = colrs[0]
-      ctx.fillRect(xScale(d.scene), yScale(d.wait), this.getRectWidth(xScale, d, false), 1)
+      ctx.fillRect(xScl(d.scene), yScl(d.wait), this.getRectWidth(xScl, d, false), 1)
     })
-
-    // this.audioObjects.map( (d,i) => {
-    //   ctx.fillStyle = "rgba(255, 255, 255, 0.1)"
-    //   ctx.fillRect(xScale(new Date(d.date).getTime()), 0, 0.25, this.props.size[1] - 45)
-    //   // ctx.beginPath()
-    //   // ctx.moveTo(xScale(d.date), this.props.size[1] - 45)
-    //   // ctx.lineTo(xScale(d.date), 0)
-    //   // ctx.stroke()
-    // })
-
   }
-
-  makeIncidentGraph = (data) => {
-
-    const node = this.node
-
-    // assumes data is sorted by time (it is)
-    const dateRange = [data[0].start, data[data.length - 1].end]
-    const waitRange = extent(data, d => {
-      return d.wait
-    })
-
-    const xScale = scaleTime().range([0, this.props.size[0]])
-                              .domain(dateRange)
-
-    // const yScale = scaleLinear().range([this.props.size[1], 0])
-    //                             .domain(waitRange)
-
-    const yScale = scalePow().exponent(0.65)
-                              .range([this.props.size[1] - 50, 0])
-                              .domain(waitRange)
-
-    // const yScale = scaleLinear().range([this.props.size[1], 0])
-    //     .domain(extent(data, d => return d.properties.priority ))
-
-    var boxes = select(node)
-      .append("g")
-      .selectAll("g")
-      .data(data)
-      .enter().append("g")
-        .attr("class", "bar-group")
-
-    boxes.append("rect")
-        // .attr("class", "stacked")
-      // .attr("stacked_state", function(d) { return "st"+d.state; })
-      .attr("x", function(d) {
-          //console.log(xScale(d.start))
-          return xScale(d.start);
-        })
-      .attr("y", function(d) {
-        return yScale(d.wait);
-      })
-      .attr("width", function(d) {
-        let w = xScale(d.end) - xScale(d.start)
-          if (w < 0) w = 0
-          return w
-      })
-      .attr("height", 1.5)
-      .style("fill", function(d) {
-          return colrs[1];
-      })
-      .style("opacity", 1.0)
-
-  boxes.append("rect")
-      .attr("x", function(d) {
-          return xScale(d.scene);
-        })
-      .attr("y", function(d) {
-        return yScale(d.wait);
-      })
-      .attr("width", function(d) {
-        let w = xScale(d.end) - xScale(d.scene)
-          if (w < 0) w = 0
-          return w
-      })
-      .attr("height", 1.5)
-      .style("fill", function(d) {
-          return colrs[0];
-      })
-      .style("opacity", 1.0)
-  }
-
-
 
   getScales = () => {
     const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
     const waitRange = extent(graphData, d => {
       return d.wait
     })
-    
+
+    //console.log('waitRange', waitRange)
+
     const xScale = scaleTime().range([0, this.props.size[0]])
                               .domain(dateRange)
 
-    const yScale = scalePow().exponent(0.65)
-                              .range([this.props.size[1] - 50, 0])
+    const yScale = scalePow().exponent(0.7)
+                              .range([this.props.size[1] - 30, 0])
                               .domain(waitRange)
 
     return {xScale, yScale}
   }
 
   getRectWidth = (scale, d, total) => {
-    let w = 0;
+    let w = 0
     if (total) {
       // total length of call duration
       w = scale(d.end) - scale(d.start)
@@ -218,30 +118,39 @@ export default class GraphArea extends Component {
       // duration of onscene portion
       w = scale(d.end) - scale(d.scene)
     }
-    
-    //console.log(w)
+
     // clamp at 0 for few calls where onscene time is 
     // before start time (no seconds in raw data)
     if (w < 0) w = 0
     return w
   }
 
+  filterActiveCalls = (time) => {
+    const filtered = graphData.filter( (d) => {
+      return (time >= d.start && time <= d.end)
+    })
+    return filtered
+  }
+
   render() {
   	// return null
-    const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
-    const waitRange = extent(graphData, d => {
-      return d.wait
-    })
-    const xScale = scaleTime().range([0, this.props.size[0]])
-                              .domain(dateRange)
+    // const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
+    // const waitRange = extent(graphData, d => {
+    //   return d.wait
+    // })
+    // const xScale = scaleTime().range([0, this.props.size[0]])
+    //                           .domain(dateRange)
 
-    const xAxis = axisBottom().scale(xScale)
+    const x = this.getScales().xScale
+    const y = this.getScales().yScale
 
-    const xCoord = xScale(this.props.currentTime)
+    const xAxis = axisBottom().scale(x)
+    const xCoord = x(this.props.currentTime)
 
-    // const x = this.getScales().xScale
-    // const y = this.getScales().yScale
-    //console.log(this.props.currentTime)
+    // console.log(this.props.activeData)
+    // console.log(this.props.currentTime)
+    const filteredCalls = this.filterActiveCalls(this.props.currentTime)
+    //console.log(filteredCalls)
     
     return (
       <div className="graphWrapper">
@@ -252,10 +161,27 @@ export default class GraphArea extends Component {
         width={this.props.size[0]}
         height={this.props.size[1]}>
         <Axis 
-          h={this.props.size[1]}
+          h={this.props.size[1] + 5}
           axis={xAxis}
           axisType="x"
         />
+        <g className="graph">
+          {filteredCalls ?
+            filteredCalls.map( (d, i) => {
+              return (
+                <rect
+                  key={`active-${i}`}
+                  className="activeRects"
+                  x={x(d.start)}
+                  y={y(d.wait)}
+                  width={this.getRectWidth(x, d, true)}
+                  height={1}
+                  fill={'#fff'}
+                />
+              )
+            }) : null
+          }
+        </g>
         <line
           className="currentTimeLine"
           x1={xCoord}

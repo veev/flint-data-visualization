@@ -283,11 +283,11 @@ class App extends Component {
   }
 
   filterIncidents = (cTime) => {
-    let filteredPresent = this.props.incidents.filter( feature => {
+    const filteredPresent = this.props.incidents.filter( feature => {
       feature = this.updateIncidentStatus(cTime, feature)
       feature = this.updateElapsedTime(cTime, feature)
-      let strt = feature.properties.unix_timestamp
-      let end = feature.properties.unix_end
+      const strt = feature.properties.unix_timestamp
+      const end = feature.properties.unix_end
       //this.updateIncidentStatus(cTime, feature)
       //console.log("current time: ", formatTime(time), "start time: ", formatTime(strt), "end time: ", formatTime(end));
       //if (cTime >= strt && cTime <= end) {
@@ -392,6 +392,7 @@ class App extends Component {
             totalTime={this.convertTime(endTS)}
             isPlaying={isPlaying}
             staticData={data}
+            activeData={this.filterIncidents(currentTime)}
           />
           <CallBoard
             activeData={this.filterIncidents(currentTime)}

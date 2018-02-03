@@ -489,7 +489,8 @@ $posts-col-width: 12%;
 ///////////////////////////////////////
 
 .GraphArea {
-  margin: 20px 5px -15px $controls-width;
+  // margin: 0px 5px -15px $controls-width;
+  position: relative;
   height: 22vh;
 
   .bar {
@@ -508,10 +509,24 @@ $posts-col-width: 12%;
     }
   }
 
-  .svgLayer {
+  .graphWrapper {
     position: absolute;
+    top: 0px;
     left: $controls-width;
-    bottom: 0px;
+    right: 0px;
+
+    .svgLayer {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+    }
+
+    canvas {
+      top: 0px;
+      left: 0px;
+      right: 0px;
+    }
   }
 
   .currentTimeLine {
