@@ -102,7 +102,9 @@ export default class Map extends Component {
 
     //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
 
-    if (nextProps.activeData) this.map.getSource('incidentsLayer').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
+    if (nextProps.activeData && this.map.isSourceLoaded('incidentsLayer')) {
+      this.map.getSource('incidentsLayer').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
+    }
 
     this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
       nextProps.activeData.map( feature => {
