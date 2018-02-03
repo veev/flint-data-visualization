@@ -27,9 +27,6 @@ export default class GraphArea extends Component {
   }
 
   componentDidMount() {
-    //console.log(this.canvas)
-    // const canvas = this.canvas
-    // const ctx = canvas.getContext("2d")
     this.makeCanvasGraph(graphData)
   //   //console.log(this.props.data)
   //   //this.makeHistogramData(this.props.data.features)
@@ -46,11 +43,6 @@ export default class GraphArea extends Component {
   }
 
   componentDidUpdate() {
-    // const canvas = this.canvas
-    // const ctx = canvas.getContext("2d")
-    // const w = canvas.width
-    // const h = canvas.height
-    // const pixelRatio = window.devicePixelRatio
     this.makeCanvasGraph(graphData)
   //   //this.makeHistogramData(this.props.data.features)
   //   //this.makeIncidentGraph(this.props.data.features)
@@ -80,11 +72,11 @@ export default class GraphArea extends Component {
     const w = canvas.width
     const h = canvas.height
     // console.log(this.props.size[0], this.props.size[1])
-    console.log(w, h)
+    //console.log(w, h)
     // const pixelRatio = window.devicePixelRatio
     // canvas.width = w * pixelRatio
     // canvas.height = h * pixelRatio
-    console.log(canvas.width, canvas.height)
+    //console.log(canvas.width, canvas.height)
 
     const dateRange = [data[0].start, data[data.length - 1].end]
     const waitRange = extent(data, d => {
