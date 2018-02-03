@@ -96,10 +96,14 @@ export default class GraphArea extends Component {
                               .range([this.props.size[1] - 45, 0])
                               .domain(waitRange)
 
-    
+    // TODO: Filter based on priority - via dropdown or buttons?
+    const filtered = data.filter( d => {
+      //return d.priority === '1'
+      return d
+    })
 
     ctx.clearRect(0, 0, this.props.size[0], this.props.size[1])
-    data.map( (d,i) => {
+    filtered.map( (d,i) => {
       ctx.fillStyle = colrs[1] // sets the color to fill in the rectangle with
       ctx.fillRect(xScale(d.start), yScale(d.wait), this.getRectWidth(xScale, d, true), 1)
       ctx.fillStyle = colrs[0]
@@ -187,147 +191,16 @@ export default class GraphArea extends Component {
       .style("opacity", 1.0)
   }
 
-  binData = (data, bins, binner, interval) => {
-    let hist = []
-    for (let i = 0; i < bins.length; i++) {
-      hist[i] = 0
-    }
-    data.forEach( d => {
-      const tid = binner(interval.floor(new Date(d.properties.unix_timestamp * 1000)))
-      //console.log(tid)
-      if (!hist[tid]) {
-        hist[tid] = 1
-      } else {
-        hist[tid]++
-      }
-    })
-    return hist
-  }
 
-  makeHistogramData = (data) => {
-    const node = this.node
-    const binner = scaleTime()
-    const interval = timeHour
-    const dateRange = extent(data, d => {
-      return (d.properties.unix_timestamp * 1000)
-    })
-    const allIntervals = interval.range(interval.floor(dateRange[0]), interval.ceil(dateRange[1]))
-    //console.log(allIntervals)
-
-    binner.domain([allIntervals[0], allIntervals[allIntervals.length - 1]])
-      .range([0, allIntervals.length - 1])
-      .interpolate(interpolateRound)
-
-    // divide data into answered vs unanswered calls
-    const answeredCalls = data.filter( d => {
-      return d.properties.unix_onscene
-    })
-
-    const unansweredCalls = data.filter( d => {
-      return !d.properties.unix_onscene
-    })
-
-    // console.log(answeredCalls)
-    // console.log(unansweredCalls)
-
-    const allDataHist = this.binData(data, allIntervals, binner, interval)
-    //console.log(allDataHist)
-
-    const answeredHist = this.binData(answeredCalls, allIntervals, binner, interval)
-    const unansweredHist = this.binData(unansweredCalls, allIntervals, binner, interval)
-
-    // console.log(answeredHist)
-    // console.log(unansweredHist)
-
-    // create combined data for answered and unanswered call counts
-    let combinedData = []
-    for (let i = 0; i < allIntervals.length; i++) {
-      let dataObj = {}
-      dataObj.time = allIntervals[i]
-      dataObj.answered = answeredHist[i]
-      dataObj.unanswered = unansweredHist[i]
-      combinedData.push(dataObj)
-    }
-
-    //console.log(combinedData)
-
-    const dataStackLayout = stack().keys(["answered", "unanswered"])
-    const timeStackBars = dataStackLayout(combinedData)
-
-    //console.log(timeStackBars)
-
-    const barWidth = this.props.size[0] / combinedData.length
-    //console.log("barWidth", barWidth)
-    const xScale = scaleTime().range([0, this.props.size[0]])
-                              .domain(extent(combinedData, d => { return d.time }))
-    //const maxVal = max(combinedData, d => { return d.count })
-    //console.log(maxVal)
-    const maxCount = max(allDataHist)
-    // console.log(maxCount)
-    const yScale = scaleLinear().range([this.props.size[1], 0])
-                           .domain([0, maxCount])
-
-    const zScale = scaleOrdinal()
-      .range(colrs)
-      .domain(["answered", "unanswered"])
-
-    select(node)
-      .append("g")
-      .selectAll("g")
-      .data(timeStackBars)
-      .enter().append("g")
-        .attr("fill", d => { return zScale(d.key) })
-      .selectAll("rect")
-      .data( d => { return d })
-      .enter().append("rect")
-        .attr("x", d => { return xScale(d.data.time) })
-        .attr("y", d => { return yScale(d[1]) })
-        .attr("height", d => { return yScale(d[0]) - yScale(d[1]) })
-        .attr("width", barWidth)
-          .style("stroke", "black")
-          .style("stroke-opacity", 0.05)
-
-
-    //   .selectAll("rect")
-    //   .data(combinedData)
-    //   .enter()
-    //   .append("rect")
-    //     .attr("class", "bar")
-    //     .on("mouseover", this.props.onHover)
-
-    // select(node)
-    //   .selectAll("rect.bar")
-    //   .data(combinedData)
-    //   .exit()
-    //   .remove()
-
-    // select(node)
-    //   .selectAll("rect.bar")
-    //   .data(combinedData)
-    //   .attr("x", (d,i) => xScale(d.time))
-    //   .attr("y", d => { return yScale(d.count) })
-    //   .attr("height", d => { return this.props.size[1] - yScale(d.count) })
-    //   .attr("width", barWidth)
-    //   // .style("fill", (d,i) => this.props.hoverElement === d.id ?
-    //   //   "#FCBC34" : this.props.colorScale(i))
-    //   .style("stroke", "black")
-    //   .style("stroke-opacity", 0.25)
-  }
 
   getScales = () => {
     const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
     const waitRange = extent(graphData, d => {
       return d.wait
     })
-
-    // console.log(this.props.size)
-    // console.log(dateRange)
-    // console.log(waitRange)
+    
     const xScale = scaleTime().range([0, this.props.size[0]])
                               .domain(dateRange)
-
-    // const yScale = scaleLinear().range([this.props.size[1], 0])
-    //                             .domain(waitRange)
 
     const yScale = scalePow().exponent(0.65)
                               .range([this.props.size[1] - 50, 0])
