@@ -298,20 +298,50 @@ export default class Map extends Component {
       'layout': {},
       'paint': {
         'circle-color': 
-        {
-          property: 'status',
-          type: 'categorical',
-          stops: [
-            ['preCall', preCall],
-            ['notAssigned', notAssigned],
-            ['waitingforUnit', waitingforUnit],
-            ['onScene', onScene],
-            ['ended', ended]
-          ]
-        },
+        // ['rgb',
+        //   // ['interpolate',
+        //   //   ['linear']
+        //   //   ['get', 'elapsedTime'],
+        //   //   0,
+        //   //   300
+        //   // ],
+        //   255,
+        //   180,
+        //   180
+        // ],
+        [
+        'interpolate',
+          ['linear'],
+            // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
+          ['get', 'elapsedTime'],  
+          0,
+          '#fff',
+          3600,
+          '#FB3F48'
+
+          // 100,
+          // '#212529',
+          // 1000,
+          // '#ea950b',
+          // 5000,
+          // '#e94e34'
+        ],
+        
+        // {
+        //   property: 'status',
+        //   type: 'categorical',
+        //   stops: [
+        //     ['preCall', preCall],
+        //     ['notAssigned', notAssigned],
+        //     ['waitingforUnit', waitingforUnit],
+        //     ['onScene', onScene],
+        //     ['ended', ended]
+        //   ]
+        // },
         'circle-stroke-opacity': 1,
         'circle-radius': 20,
-        'circle-blur': 0.5
+        // 'circle-blur': 0.0
+        'circle-blur': ["/", ['get', 'elapsedTime'], 36000]
       }
     })
 

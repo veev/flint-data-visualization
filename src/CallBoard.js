@@ -35,6 +35,7 @@ export default class CallBoard extends Component {
     })
   }
 
+  // TODO: get updated elapsed time from active incidents in app
   getActiveTime = (ts) => {
     //console.log(this.props.currentTime, ts)
     const t = this.props.currentTime

@@ -69,6 +69,7 @@ class App extends Component {
 
     data.features = data.features.map( incident => {
       incident.properties.status = "preCall"
+      incident.properties.elapsedTime = 0
       if(incident.properties.unix_onscene) {
         incident.properties.waitTime = incident.properties.unix_onscene - incident.properties.unix_timestamp
       } else if (incident.properties.unix_end) {
@@ -248,11 +249,11 @@ class App extends Component {
     this.setState({ audioIndex: newIndex })
   }
 
-  whatAudioElAtCurrentTime = (element, time) => {
-    const tStart = Math.floor(new Date(element.date).getTime())
-    const tEnd = tStart + element.length
-    return (time >= tStart && time <= tEnd)
-  }
+  // whatAudioElAtCurrentTime = (element, time) => {
+  //   const tStart = Math.floor(new Date(element.date).getTime())
+  //   const tEnd = tStart + element.length
+  //   return (time >= tStart && time <= tEnd)
+  // }
 
   updateCurrentTime = (index) => {
     console.log(index)
@@ -284,6 +285,7 @@ class App extends Component {
   filterIncidents = (cTime) => {
     let filteredPresent = this.props.incidents.filter( feature => {
       feature = this.updateIncidentStatus(cTime, feature)
+      feature = this.updateElapsedTime(cTime, feature)
       let strt = feature.properties.unix_timestamp
       let end = feature.properties.unix_end
       //this.updateIncidentStatus(cTime, feature)
@@ -296,6 +298,18 @@ class App extends Component {
     })
     //console.log(filteredPresent)
     return filteredPresent
+  }
+
+  updateElapsedTime = (time, feature) => {
+
+    if (feature.properties.unix_timestamp && feature.properties.unix_end) {
+      if (+time >= feature.properties.unix_timestamp) {
+        feature.properties.elapsedTime = +time - feature.properties.unix_timestamp
+      }
+    } else {
+      feature.properties.elapsedTime = 0
+    }
+    return feature
   }
 
   updateIncidentStatus = (time, feature) => {
@@ -346,6 +360,7 @@ class App extends Component {
         <Map 
           staticData={data}
           activeData={this.filterIncidents(currentTime)}
+          currentTime={currentTime}
           handleHighlight={this.handleMapRolloverChange}
           boardHighlightedFeature={highlightedBoardIncident}
           photoData={photos}
