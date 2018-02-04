@@ -197,68 +197,60 @@ class App extends Component {
   handleSeekChange = (time) => {
     const ts = this.unconvertTime(time)
     this.setState({ currentTime: ts })
-    console.log(this.state.audioIndex)
     this.updateAudioIndex(ts)
   }
 
   handleNextAudioClip = () => {
     //console.log('nextButton', this.state.audioIndex)
     const temp = this.state.audioIndex + 1
-    //console.log('next', temp)
-    if (this.state.audioIndex >= this.sortedAudio.length - 1) {
-      this.setState({ hasNextClip: false })
-    } else {
+    if (this.state.audioIndex < this.sortedAudio.length - 1) {
       this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
     }
-
-    if (this.state.audioIndex >= 0) {
-      this.setState({ hasPrevClip: true })
-    }
-
     this.audioChild.pauseAudio()
   }
 
   handlePrevAudioClip = () => {
     //console.log('prevButton', this.state.audioIndex)
     const temp = this.state.audioIndex - 1
-    //console.log('prev', temp)
-    if (this.state.audioIndex <= 0) {
+    if (this.state.audioIndex > 0) {
+      this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
+    }    
+    this.audioChild.pauseAudio()
+  }
+
+  updateNextPrevButtons = (index) => {
+    if (index <= 0) {
       this.setState({ hasPrevClip: false })
     } else {
-      this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
+      this.setState({ hasPrevClip: true })
     }
 
-    if (this.state.audioIndex <= this.sortedAudio.length - 1) {
+    if (index >= this.sortedAudio.length - 1) {
+      this.setState({ hasNextClip: false })
+    } else {
       this.setState({ hasNextClip: true })
     }
-    
-    this.audioChild.pauseAudio()
   }
 
   updateAudioIndex = (time) => {
     const t = Math.floor(time * 1000)
-    // console.log(t)
-    // console.log(new Date(t))
     // TODO! Not sure why this works, but checking if currentTime was
     // greater than element's startTime didn't work
-    const newIndex = this.sortedAudio.findIndex(element => {
+    let newIndex = this.sortedAudio.findIndex(element => {
       const tStart = Math.floor(new Date(element.date).getTime())
       return t <= tStart
     })
-    console.log(newIndex)
-    this.setState({ audioIndex: newIndex })
+    if (newIndex < 0) {
+      newIndex = this.sortedAudio.length - 1
+    }
+    //console.log(newIndex)
+    this.setState({ audioIndex: newIndex }, this.updateNextPrevButtons(newIndex))
   }
-
-  // whatAudioElAtCurrentTime = (element, time) => {
-  //   const tStart = Math.floor(new Date(element.date).getTime())
-  //   const tEnd = tStart + element.length
-  //   return (time >= tStart && time <= tEnd)
-  // }
 
   updateCurrentTime = (index) => {
     console.log(index)
     const newTime = Math.floor(new Date(this.sortedAudio[index].date).getTime() / 1000 )
-    this.setState({ currentTime: newTime })
+    this.setState({ currentTime: newTime },  this.updateNextPrevButtons(index))
   }
 
   convertTime = (value) => {
