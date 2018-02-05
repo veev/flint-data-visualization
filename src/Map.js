@@ -6,6 +6,7 @@ import { MAPBOX_TOKEN } from './constants/keys.js'
 // import Tooltip from './Tooltip.js'
 import bounds from './data/subunits-flint.json'
 import descriptionLookup from './data/descriptionMap.json'
+import thumbnail from './data/photos/thumbnails/TREX_AUG_FLINT_2015-122-1.jpg'
 
 export default class Map extends Component {
 
@@ -133,14 +134,20 @@ export default class Map extends Component {
 
     //console.log(nextProps.viewMode)
     if (nextProps.viewMode) {
-    // show incidents if viewMode is true
-    this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
-    this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
+      // show incidents if viewMode is true
+      this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
+      //this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
+      this.props.photoData.features.map( (feature, index) => {
+        this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'none')
+      })
 
     } else {
-    // show photos if viewMode is false
-    this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
-    this.map.setLayoutProperty('photoMarkers', 'visibility', 'visible')
+      // show photos if viewMode is false
+      this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
+      //this.map.setLayoutProperty('photoMarkers', 'visibility', 'visible')
+      this.props.photoData.features.map( (feature, index) => {
+        this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'visible')
+      })
     }
 
     if (nextProps.showHeatmap) {
@@ -351,25 +358,58 @@ export default class Map extends Component {
     ))
 
     // add photo markers to map
+    // this.map.addSource('photos', {
+    //   'type': 'geojson',
+    //   'data': this.props.photoData
+    // })
 
-    this.map.addSource('photos', {
-      'type': 'geojson',
-      'data': this.props.photoData
+    this.props.photoData.features.map( (feature, index) => {
+      this.map.addSource(`photos-${index}`, {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': [{
+            'type': 'Feature',
+            'geometry': feature.geometry,
+            'properties': feature.properties
+          }]
+        }
+      })
     })
 
-    this.map.addLayer({
-      'id': 'photoMarkers',
-      'type': 'symbol',
-      'source': 'photos',
-      'layout': {
-        'icon-image': 'attraction-15',
-        'icon-allow-overlap': true
-      }
+    const s3path = 'https://s3.amazonaws.com/flint-pd-may/saved-for-web/thumbnails/'
+    this.props.photoData.features.map( (feature, index) => {
+      //https://s3.amazonaws.com/flint-pd-may/saved-for-web/thumbnails/TREX_AUG_FLINT_2015-122-1.png
+      this.map.loadImage(`${s3path}${feature.properties.thumbnail}.png`, (error, image) => {
+        if (error) throw error
+        this.map.addImage(`thumbnail-${index}`, image)
+        this.map.addLayer({
+          'id': `photoThumbnails-${index}`,
+          'type': 'symbol',
+          'source': `photos-${index}`,
+          'layout': {
+            'icon-image': `thumbnail-${index}`,
+            'icon-size': 0.5,
+            'icon-allow-overlap': true
+          }
+        })
+        this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'none')
+      })
     })
+
+    // this.map.addLayer({
+    //   'id': 'photoMarkers',
+    //   'type': 'symbol',
+    //   'source': 'photos',
+    //   'layout': {
+    //     'icon-image': 'attraction-15',
+    //     'icon-allow-overlap': true
+    //   }
+    // })
 
     // turn off photos for now
     // this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
-    this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
+    //this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
     this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
   }
 
@@ -422,6 +462,26 @@ export default class Map extends Component {
       //console.log(e.features[0].properties.photos)
       // call function in App to generate Modal sliders?
       this.props.handlePhotos(e.features[0])
+    })
+
+    this.props.photoData.features.map( (feature, index) => {
+      this.map.on('click', `photoThumbnails-${index}`, (e) => {
+        console.log(e)
+        this.props.handlePhotos(e.features[0])
+      })
+
+      this.map.on('mouseenter', `photoThumbnails-${index}`, (e) => {
+        if (this.map.getSource(`photos-${index}`) && this.map.isSourceLoaded(`photos-${index}`)) {
+          this.map.getCanvas().style.cursor = 'pointer';
+        }
+      })
+
+      this.map.on('mouseleave', `photoThumbnails-${index}`, (e) => {
+        if (this.map.getSource(`photos-${index}`) && this.map.isSourceLoaded(`photos-${index}`)) {
+          this.map.getCanvas().style.cursor = '';
+        }
+      })
+
     })
   }
 
