@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import Img from './Img'
+import placeholder from './styles/images/placeholder.png'
 const s3Path = 'https://s3.amazonaws.com/flint-pd-may/saved-for-web/'
 const localPath = 'data/photos/'
+Img.globalPlaceholder = placeholder
 
 export default class Gallery extends Component {
   constructor(props) {
@@ -101,7 +104,7 @@ export default class Gallery extends Component {
                     const photoPath = s3Path + item.url;
                       return (
                         <div className="image-wrapper">
-                          <img
+                          <Img
                             alt={item.title}
                             src={photoPath}
                             onLoad={this.props.onImageLoad}
