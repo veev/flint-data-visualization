@@ -584,7 +584,7 @@ $posts-col-width: 12%;
 .image-gallery-left-nav,
 .image-gallery-right-nav {
   position: absolute;
-  width: 45vw;
+  width: 35vw;
   height: 90vh;
   top: 5vh;
   background-color: transparent;
@@ -605,24 +605,30 @@ $posts-col-width: 12%;
 .image-gallery-left-nav {
   left: 5vw;
 
+  &:hover span {
+    visibility: visible;
+  }
+
   span {
     top: 40vh;
-    left: 3vw;
+    left: 5vw;
     position: absolute;
+    visibility: hidden;
   }
 }
 
 .image-gallery-right-nav {
   right: 5vw;
 
-  span {
-    top: 40vh;
-    right: 3vw;
-    position: absolute;
+  &:hover span {
+    visibility: visible;
   }
 
-  span:hover {
-
+  span {
+    top: 40vh;
+    right: 5vw;
+    position: absolute;
+    visibility: hidden;
   }
 }
 

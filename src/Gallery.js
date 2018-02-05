@@ -32,7 +32,7 @@ export default class Gallery extends Component {
           disabled={disabled}
           onClick={onClick}
         >
-          <span>◀</span>
+          <span className="prevIcon">◀</span>
         </span>
       )
     },
@@ -43,7 +43,7 @@ export default class Gallery extends Component {
           disabled={disabled}
           onClick={onClick}
         >
-          <span>▶</span>
+          <span className="nextIcon">▶</span>
         </span>
       )
     }

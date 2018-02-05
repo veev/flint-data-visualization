@@ -374,7 +374,7 @@
 .image-gallery-left-nav,
 .image-gallery-right-nav {
   position: absolute;
-  width: 45vw;
+  width: 35vw;
   height: 90vh;
   top: 5vh;
   background-color: transparent;
@@ -392,17 +392,23 @@
 
 .image-gallery-left-nav {
   left: 5vw; }
+  .image-gallery-left-nav:hover span {
+    visibility: visible; }
   .image-gallery-left-nav span {
     top: 40vh;
-    left: 3vw;
-    position: absolute; }
+    left: 5vw;
+    position: absolute;
+    visibility: hidden; }
 
 .image-gallery-right-nav {
   right: 5vw; }
+  .image-gallery-right-nav:hover span {
+    visibility: visible; }
   .image-gallery-right-nav span {
     top: 40vh;
-    right: 3vw;
-    position: absolute; }
+    right: 5vw;
+    position: absolute;
+    visibility: hidden; }
 
 .image-gallery-close {
   font-size: 3rem;
