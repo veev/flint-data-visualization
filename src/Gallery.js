@@ -101,13 +101,13 @@ export default class Gallery extends Component {
                     const photoPath = s3Path + item.url;
                       return (
                         <div className="image-wrapper">
-                        <img
-                          alt={item.title}
-                          src={photoPath}
-                          onLoad={this.props.onImageLoad}
-                          onError={onImageError}
-                        />
-                        <div className="image-date">{item.date}</div>
+                          <img
+                            alt={item.title}
+                            src={photoPath}
+                            onLoad={this.props.onImageLoad}
+                            onError={onImageError}
+                          />
+                          <div className="image-date">{item.date}</div>
                         </div>
                       )
                   case 'text':
@@ -184,7 +184,7 @@ export default class Gallery extends Component {
       {
         this._canNavigate() ?
           [
-          <span key="navigation">
+          <span key="navigation" className="nav-wrapper">
             {this.props.renderLeftNav(slideLeft, !this._canSlideLeft())}
             {this.props.renderRightNav(slideRight, !this._canSlideRight())}
             <div 
