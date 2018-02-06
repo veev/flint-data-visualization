@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import AudioPlayer from './AudioPlayer'
 import audioMap from './data/flint-transcribed.json'
-import audioFile  from './data/audio/bcfy7811_1493957342093_0001.mp3'
 
 export default class AudioManager extends Component {
 	constructor(props) {
@@ -12,7 +11,7 @@ export default class AudioManager extends Component {
       currentIndex: this.props.currentIndex
     }
 
-    this.audioFiles = null
+    //this.audioFiles = null
     //this.sortedAudio = this.props.getSortedAudio(audioMap)
   }
 
@@ -21,9 +20,14 @@ export default class AudioManager extends Component {
     //console.log(new Date(this.sortedAudio[this.state.currentIndex].date))
     console.log(new Date(this.props.currentTime * 1000))
 
-    this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
+    //this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
 
-    console.log(this.audioFiles)
+    // for (let key in audioMap) {
+    //   console.log(key)
+    //   `https://transmission-audio.emerging-response.com:8080/resources/audio/${key}.mp3`
+    // }
+
+    // console.log(this.audioFiles)
     
   }
 
@@ -109,7 +113,7 @@ export default class AudioManager extends Component {
       <div>
         <AudioPlayer
           className={'audioPlayer'}
-          src={this.audioFiles[`${this.state.currentKey}.mp3`]}
+          src={`https://transmission-audio.emerging-response.com:8080/resources/audio/${this.state.currentKey}`}
           autoPlay={false}
           loop={false}
           muted={false}
