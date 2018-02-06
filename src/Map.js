@@ -328,9 +328,9 @@ export default class Map extends Component {
           ]
         },
         'circle-stroke-opacity': 1,
-        'circle-radius': 10,
-        'circle-blur': 1.0
-        //'circle-blur': ["/", ['get', 'elapsedTime'], 24000]
+        'circle-radius': 12,
+        //'circle-blur': 1.0
+        'circle-blur': ["/", ['get', 'elapsedTime'], 24000]
       }
     })
 
