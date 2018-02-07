@@ -68,7 +68,7 @@ $posts-col-width: 12%;
   position: absolute;
   width: 100%;
   top: 6vh;
-  height: 70vh;
+  height: 76vh;
 /*  bottom: 0;*/
 }
 
@@ -82,7 +82,7 @@ $posts-col-width: 12%;
 
 .Board {
   position: relative;
-  height: 70vh;
+  height: 76vh;
   min-width: 330px;
   width: 360px;
   overflow-y: scroll;
@@ -491,7 +491,7 @@ $posts-col-width: 12%;
 .GraphArea {
   // margin: 0px 5px -15px $controls-width;
   position: relative;
-  height: 22vh;
+  height: 16vh;
 
   .bar {
     // fill: $flintRed;

@@ -29,7 +29,7 @@
   position: absolute;
   width: 100%;
   top: 6vh;
-  height: 70vh;
+  height: 76vh;
   /*  bottom: 0;*/ }
 
 .mapboxgl-ctrl-bottom-left {
@@ -37,7 +37,7 @@
 
 .Board {
   position: relative;
-  height: 70vh;
+  height: 76vh;
   min-width: 330px;
   width: 360px;
   overflow-y: scroll;
@@ -318,7 +318,7 @@
 
 .GraphArea {
   position: relative;
-  height: 22vh; }
+  height: 16vh; }
   .GraphArea .axis {
     color: #7d7b7b; }
     .GraphArea .axis .domain, .GraphArea .axis .tick line {
