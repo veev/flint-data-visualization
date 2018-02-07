@@ -35,35 +35,35 @@ export default class AudioManager extends Component {
 
     // this happens only if playState changes
     // good place to trigger playback?
-    if (this.props.isPlaying !== nextProps.isPlaying) {
-      // console.log("first", nextProps.currentTime * 1000)
-      // console.log(nextProps.isPlaying)
+    // if (this.props.isPlaying !== nextProps.isPlaying) {
+    //   // console.log("first", nextProps.currentTime * 1000)
+    //   // console.log(nextProps.isPlaying)
 
-    } else {
-      // assume that playback is still updating
-      //console.log(nextProps.currentTime * 1000)
-    }
+    // } else {
+    //   // assume that playback is still updating
+    //   //console.log(nextProps.currentTime * 1000)
+    // }
 
     // if timeline isPlaying, then find audio file to trigger
     // need to not trigger audio to play once file is playing
     if (nextProps.isPlaying) {
       const t = new Date(nextProps.currentTime * 1000)
-      //console.log(t)
+      console.log(t)
 
       const element = this.props.sortedAudio.find( (a) => {
         const tStart = new Date(a.date).getTime()
         const tEnd = tStart + a.length
         return (t >= tStart && t <= tEnd)
       })
-      //console.log(element)
+      console.log(element)
 
       if (element && this.childAudio.audioEl.paused) {
 
         // check to see if currentKey and element id are the same
         // if they are, play the file back at the right timestamp
         // not from the beginning
-        // console.log(element.id)
-        // console.log(this.state.currentKey)
+        console.log(element.id)
+        console.log(this.state.currentKey)
 
         if (element.id !== this.state.currentKey) {
           // play back new file from the beginning
@@ -72,13 +72,13 @@ export default class AudioManager extends Component {
             this.childAudio.audioEl.load()
             this.childAudio.audioEl.play()
           })
-          //console.log(this.childAudio.audioEl.src)
+          console.log(this.childAudio.audioEl.src)
         } else {
           // play back same file from current time
           // we don't need to update currentKey
           // just to update audio currentTime
-          // console.log(this.childAudio.audioEl.src)
-          // console.log(this.childAudio.audioEl.currentTime)
+          console.log(this.childAudio.audioEl.src)
+          console.log(this.childAudio.audioEl.currentTime)
           this.childAudio.audioEl.play()
         }
 
@@ -113,12 +113,12 @@ export default class AudioManager extends Component {
       <div>
         <AudioPlayer
           className={'audioPlayer'}
-          src={`https://transmission-audio.emerging-response.com:8080/resources/audio/${this.state.currentKey}`}
+          src={`https://s3.amazonaws.com/flint-pd-may/audio/${this.state.currentKey}.mp3`}
           autoPlay={false}
           loop={false}
           muted={false}
           controls={false}
-          onPlay={this.audioOnPlay}
+          
           ref={el => this.childAudio = el}
         />
       </div>

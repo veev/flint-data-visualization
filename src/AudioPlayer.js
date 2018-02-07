@@ -31,7 +31,7 @@ export default class AudioPlayer extends Component {
 
     // When audio play starts
     audio.addEventListener('play', (e) => {
-      //console.log('audio play')
+      console.log('different audio play')
       this.setListenTrack()
       this.props.onPlay(e)
     })

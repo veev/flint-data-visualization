@@ -23,7 +23,8 @@ class App extends Component {
     super(); // for correct context
 
     this.state = {
-      isPlaying: false,
+      isPlaying: true,
+      wasPlaying: true,
       // currentTime: data['features'][0].properties.unix_timestamp,
       currentTime: 1493957337,
       audioIndex: 0,
@@ -94,6 +95,11 @@ class App extends Component {
 
     // console.log(audioArray)
     console.log(this.sortedAudio)
+
+    // need this for autoplay
+    this.handlePlayState(this.state.isPlaying)
+    // need this to find next clip
+    this.handleNextAudioClip()
 
   }
 
@@ -175,9 +181,12 @@ class App extends Component {
 
   handlePlayState = (playState) => {
     console.log('playButton', this.state.audioIndex)
+    setTimeout(() => console.log(`wasPlaying-${this.state.wasPlaying}`), 200)
+    setTimeout(() => console.log(`isPlaying-${this.state.isPlaying}`), 200)
     // this is what toggles the play / pause button
-    this.setState({ isPlaying: playState })
-
+    //this.setState({ isPlaying: playState })
+    this.setState({ wasPlaying: playState, isPlaying: playState })
+    
     // need to update progress bar
     if (playState) {
       //console.log('playState is ', playState)
@@ -195,9 +204,25 @@ class App extends Component {
   }
 
   handleSeekChange = (time) => {
+    console.log(`seeking-${this.state.isPlaying}`)
+    
     const ts = this.unconvertTime(time)
     this.setState({ currentTime: ts })
     this.updateAudioIndex(ts)
+  }
+
+  handleSeekStart = () => {
+    console.log('seek start')
+    console.log(`wasPlaying-${this.state.wasPlaying}`)
+    console.log(`isPlaying-${this.state.isPlaying}`)
+    this.setState({ isPlaying: false })
+  }
+
+  handleSeekEnd = () => {
+    console.log('seek end')
+    if (this.state.wasPlaying) {
+      this.setState({ isPlaying: true })
+    }
   }
 
   handleNextAudioClip = () => {
@@ -206,7 +231,7 @@ class App extends Component {
     if (this.state.audioIndex < this.sortedAudio.length - 1) {
       this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
     }
-    this.audioChild.pauseAudio()
+    this.audioChild && this.audioChild.pauseAudio()
   }
 
   handlePrevAudioClip = () => {
@@ -215,7 +240,7 @@ class App extends Component {
     if (this.state.audioIndex > 0) {
       this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
     }    
-    this.audioChild.pauseAudio()
+    this.audioChild && this.audioChild.pauseAudio()
   }
 
   updateNextPrevButtons = (index) => {
@@ -372,6 +397,8 @@ class App extends Component {
           <Timeline
             handlePlay={this.handlePlayState}
             handleSeek={this.handleSeekChange}
+            handleSeekStart={this.handleSeekStart}
+            handleSeekEnd={this.handleSeekEnd}
             handleNextClip={this.handleNextAudioClip}
             handlePrevClip={this.handlePrevAudioClip}
             hasNext={hasNextClip}

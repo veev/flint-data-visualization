@@ -90,8 +90,8 @@ export default class Timeline extends Component {
             currentTime={currentTime}
             isSeekable={isSeekable}
             onSeek={this.props.handleSeek}
-            onSeekStart={time => this.setState(() => ({ lastSeekStart: time }))}
-            onSeekEnd={time => this.setState(() => ({ lastSeekEnd: time }))}
+            onSeekStart={this.props.handleSeekStart}
+            onSeekEnd={this.props.handleSeekEnd}
           />
         </div>
       </div>
