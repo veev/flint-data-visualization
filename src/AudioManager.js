@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AudioPlayer from './AudioPlayer'
-import audioMap from './data/flint-transcribed.json'
+import audioMap from './data/audio.json'
 
 export default class AudioManager extends Component {
 	constructor(props) {
@@ -51,7 +51,7 @@ export default class AudioManager extends Component {
       console.log(t)
 
       const element = this.props.sortedAudio.find( (a) => {
-        const tStart = new Date(a.date).getTime()
+        const tStart = a.timestamp
         const tEnd = tStart + a.length
         return (t >= tStart && t <= tEnd)
       })
@@ -80,9 +80,7 @@ export default class AudioManager extends Component {
           console.log(this.childAudio.audioEl.src)
           console.log(this.childAudio.audioEl.currentTime)
           this.childAudio.audioEl.play()
-        }
-
-        
+        } 
       }
 
     } else {
@@ -95,10 +93,6 @@ export default class AudioManager extends Component {
     let audio = {};
     r.keys().map((item, index) => { audio[item.replace('./', '')] = r(item); });
     return audio;
-  }
-
-  audioOnPlay = (e) => {
-    console.log('audio play')
   }
 
   pauseAudio = () => {
@@ -118,7 +112,6 @@ export default class AudioManager extends Component {
           loop={false}
           muted={false}
           controls={false}
-          
           ref={el => this.childAudio = el}
         />
       </div>

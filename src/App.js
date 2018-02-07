@@ -16,7 +16,7 @@ import { map_range } from './utils'
 import data from './data/may5-12-incidents-timestamps.json'
 import posts from './data/postsMay5_12-timezone.json'
 import photos from './data/photos-grouped2.json'
-import audio from './data/flint-transcribed.json'
+import audio from './data/audio.json'
 
 class App extends Component {
   constructor() {
@@ -125,7 +125,8 @@ class App extends Component {
     const audioArray = Object.values(audio)
 
     audioArray.sort( (a,b) => {
-      return (typeof a.date === 'string') - (typeof b.date === 'string') || a.date - b.date || a.date.localeCompare(b.date);
+      return +a.timestamp - +b.timestamp
+      //return (typeof a.timestamp === 'string') - (typeof b.date === 'string') || a.date - b.date || a.date.localeCompare(b.date);
     })
 
     return audioArray
@@ -203,6 +204,11 @@ class App extends Component {
     }
   }
 
+  getNearestTimestamp = (time) => {
+
+    //return index
+  }
+
   handleSeekChange = (time) => {
     console.log(`seeking-${this.state.isPlaying}`)
     
@@ -262,19 +268,27 @@ class App extends Component {
     // TODO! Not sure why this works, but checking if currentTime was
     // greater than element's startTime didn't work
     let newIndex = this.sortedAudio.findIndex(element => {
-      const tStart = Math.floor(new Date(element.date).getTime())
+      const tStart = Math.floor(element.timestamp)
       return t <= tStart
     })
+    const timeBefore =  this.sortedAudio[newIndex - 1]
+    const timeAfter =  this.sortedAudio[newIndex]
+    if (Math.abs(t - timeBefore.timestamp) < Math.abs(t - timeAfter.timestamp)) {
+      // index is timeBefore
+      newIndex = newIndex - 1
+    } 
+
     if (newIndex < 0) {
       newIndex = this.sortedAudio.length - 1
     }
     //console.log(newIndex)
     this.setState({ audioIndex: newIndex }, this.updateNextPrevButtons(newIndex))
+    this.updateCurrentTime(newIndex)
   }
 
   updateCurrentTime = (index) => {
     console.log(index)
-    const newTime = Math.floor(new Date(this.sortedAudio[index].date).getTime() / 1000 )
+    const newTime = Math.floor(this.sortedAudio[index].timestamp / 1000 )
     this.setState({ currentTime: newTime },  this.updateNextPrevButtons(index))
   }
 
@@ -423,7 +437,10 @@ class App extends Component {
           /></div> : null
         }
         { showLightbox ?
-          <div className="lightBox-wrapper">
+          <div 
+            className="lightBox-wrapper"
+            onClick={this.handleGalleryClose}
+            >
               <Gallery
                 ref={i => this._imageGallery = i}
                 items={this.state.contentArray}
