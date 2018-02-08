@@ -439,7 +439,6 @@ class App extends Component {
         { showLightbox ?
           <div 
             className="lightBox-wrapper"
-            onClick={this.handleGalleryClose}
             >
               <Gallery
                 ref={i => this._imageGallery = i}
