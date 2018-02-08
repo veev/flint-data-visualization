@@ -310,8 +310,8 @@ export default class Map extends Component {
             'interpolate',
               ['linear'],
               ['number', ['get', 'elapsedTime']],  
-              // 0, '#fff',
-              0, '#FBF23F',
+              //0, '#F7F7F7',
+              0, '#FEF877',
               7200, '#FB3F48'
             ],
             ['==', ['get', 'status'], 'waitingforUnit'],
@@ -320,12 +320,12 @@ export default class Map extends Component {
             'interpolate',
               ['linear'],
               ['number', ['get', 'elapsedTime']],  
-              // 0, '#fff',
-              0, '#FBF23F',
+              //0, '#F7F7F7',
+              0, '#FEF877',
               7200, '#FB3F48'
             ],
             ['==', ['get', 'status'], 'onScene'],
-            //['to-color', '#31ce75'],
+            //['to-color', '#31CE75'],
             [
             'interpolate',
               ['linear'],

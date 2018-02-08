@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import find from 'lodash.find'
 import { map_range } from './utils'
+import { interpolateHcl, interpolateRgb } from 'd3-interpolate'
+import { scaleLinear, scalePow } from 'd3-scale'
 
 export default class CallBoard extends Component {
 	constructor (props) {
@@ -72,6 +74,39 @@ export default class CallBoard extends Component {
   // componentWillUpdate(nextProps, nextState) {
   //   //console.log(nextProps, nextState)
   // }
+  getIncidentColor = (incident) => {
+    let colr, colrScl;
+    if (incident.properties.status === 'notAssigned' || incident.properties.status === 'waitingforUnit') {
+      //colr = '#FB3F48'
+      colrScl = scaleLinear()
+          .domain([0, 7200])
+          //.range(['#FBF23F', '#FB3F48'])
+          //'#F7F7F7', '#FBF23F', 
+          //.range(['#FB943F', '#FB3F48'])
+          .range(['#FEF877', '#FB3F48'])
+          .interpolate(interpolateRgb)
+          .clamp(true)
+
+      colr = colrScl(+incident.properties.elapsedTime)
+      console.log(colrScl(500))
+
+    } else if (incident.properties.status === 'onScene') {
+      //colr = '#31CE75'
+      colrScl = scaleLinear()
+          .domain([1800, 18000])
+          .range(['#31CE75', '#19673A'])
+          .interpolate(interpolateRgb)
+          .clamp(true)
+
+      colr = colrScl(+incident.properties.elapsedTime)
+
+    } else {
+      colr = '#FF00FF'
+    }
+    //console.log(colr)
+    console.log(colrScl(500))
+    return colr
+  }
 
   makeRows = (data) => {
     return data.map( row => {
@@ -100,9 +135,10 @@ export default class CallBoard extends Component {
                   style={{
                     width: `${this.getStatusBar(row.properties.unix_timestamp)}%`,
                     height: '100%',
-                    backgroundColor: row.properties.status === 'notAssigned' || row.properties.status === 'waitingforUnit' ? '#FB3F48'
-                      : row.properties.status === 'onScene' ? '#72D687'
-                      : '#ff2e00',
+                    backgroundColor: `${this.getIncidentColor(row)}`,
+                    // row.properties.status === 'notAssigned' || row.properties.status === 'waitingforUnit' ? '#FB3F48'
+                    //   : row.properties.status === 'onScene' ? '#72D687'
+                    //   : '#ff2e00',
                     borderRadius: '2px',
                     transition: 'all .2s ease-out'
                   }}
