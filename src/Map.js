@@ -99,76 +99,70 @@ export default class Map extends Component {
   componentWillUpdate(nextProps, nextState) {
     //console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
 
+    if (nextProps.activeData && this.map.getSource('incidents')) {
+      this.map.getSource('incidents').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
+    }
 
-    //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
-    //this.map.on('load', () => {
-      console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
+    if (this.map.isStyleLoaded()) {
+      this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
+        nextProps.activeData.map( feature => {
+          //console.log(feature.properties.eventNumber);
+          return feature.properties.eventNumber;
+        })
+      ))
 
-      if (nextProps.activeData && this.map.getSource('incidents')) {
-        this.map.getSource('incidents').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
+      this.map.setFilter('incidentsLayerHighlight', 
+        ['in', 'eventNumber', nextProps.boardHighlightedFeature.properties.eventNumber]
+      )
+
+      this.popup.remove()
+
+      this.popup = new MapboxGl.Popup({
+          closeButton: false,
+          closeOnClick: false
+      })
+
+      if (nextProps.boardHighlightedFeature.geometry.coordinates) {
+        this.popup.setLngLat(nextProps.boardHighlightedFeature.geometry.coordinates)
+        // console.log(descriptionLookup[nextProps.boardHighlightedFeature.properties.type])
+        this.setPopupHtml(this.popup, nextProps.boardHighlightedFeature)
+        this.popup.addTo(this.map)
       }
 
-      if (this.map.isStyleLoaded()) {
-        this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
-          nextProps.activeData.map( feature => {
-            //console.log(feature.properties.eventNumber);
-            return feature.properties.eventNumber;
-          })
-        ))
+      //console.log(nextProps.viewMode)
+      if (nextProps.viewMode) {
+        // show incidents if viewMode is true
+        if (this.map.getStyle('incidentsLayer')) {
 
-        this.map.setFilter('incidentsLayerHighlight', 
-          ['in', 'eventNumber', nextProps.boardHighlightedFeature.properties.eventNumber]
-        )
-
-        this.popup.remove()
-
-        this.popup = new MapboxGl.Popup({
-            closeButton: false,
-            closeOnClick: false
+        }
+        this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
+        this.props.photoData.features.map( (feature, index) => {
+          //console.log(this.map.getLayer(`photoThumbnails-${index}`))
+          if (this.map.isSourceLoaded(`photosSource-${index}`)) {
+            this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'none')
+          }
         })
 
-        if (nextProps.boardHighlightedFeature.geometry.coordinates) {
-          this.popup.setLngLat(nextProps.boardHighlightedFeature.geometry.coordinates)
-          // console.log(descriptionLookup[nextProps.boardHighlightedFeature.properties.type])
-          this.setPopupHtml(this.popup, nextProps.boardHighlightedFeature)
-          this.popup.addTo(this.map)
-        }
-
-        //console.log(nextProps.viewMode)
-        if (nextProps.viewMode) {
-          // show incidents if viewMode is true
-          if (this.map.getStyle('incidentsLayer')) {
-
+      } else {
+        // show photos if viewMode is false
+        this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
+        this.props.photoData.features.map( (feature, index) => {
+          if (this.map.isSourceLoaded(`photosSource-${index}`)) {
+            // console.log(this.map.getLayer(`photoThumbnails-${index}`))
+            if (this.map.getLayer(`photoThumbnails-${index}`)) {
+              this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'visible')
+            }
           }
-          this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
-          this.props.photoData.features.map( (feature, index) => {
-            //console.log(this.map.getLayer(`photoThumbnails-${index}`))
-            if (this.map.isSourceLoaded(`photosSource-${index}`)) {
-              this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'none')
-            }
-          })
+        })
 
-        } else {
-          // show photos if viewMode is false
-          this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
-          this.props.photoData.features.map( (feature, index) => {
-            if (this.map.isSourceLoaded(`photosSource-${index}`)) {
-              // console.log(this.map.getLayer(`photoThumbnails-${index}`))
-              if (this.map.getLayer(`photoThumbnails-${index}`)) {
-                this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'visible')
-              }
-            }
-          })
-
-        }
-
-        if (nextProps.showHeatmap) {
-          this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'visible')
-        } else {
-          this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
-        }
       }
-    // })
+
+      if (nextProps.showHeatmap) {
+        this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'visible')
+      } else {
+        this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
+      }
+    }
   }
 
   componentDidUpdate() {
@@ -238,10 +232,8 @@ export default class Map extends Component {
       ['linear'],
         // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
       ['get', 'elapsedTime'],  
-      0,
-      '#fff',
-      300,
-      '#FBF23F'
+      0, '#fff',
+      300, '#FBF23F'
     ]
 
     const waitingforUnit = [
