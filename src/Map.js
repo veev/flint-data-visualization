@@ -6,7 +6,6 @@ import { MAPBOX_TOKEN } from './constants/keys.js'
 // import Tooltip from './Tooltip.js'
 import bounds from './data/subunits-flint.json'
 import descriptionLookup from './data/descriptionMap.json'
-import thumbnail from './data/photos/thumbnails/TREX_AUG_FLINT_2015-122-1.jpg'
 
 export default class Map extends Component {
 
@@ -102,59 +101,74 @@ export default class Map extends Component {
 
 
     //console.log(nextProps.boardHighlightedFeature.properties.eventNumber === this.props.boardHighlightedFeature.properties.eventNumber)
+    //this.map.on('load', () => {
+      console.log(nextProps.boardHighlightedFeature.properties.eventNumber, this.props.boardHighlightedFeature.properties.eventNumber)
 
-    if (nextProps.activeData && this.map.isSourceLoaded('incidentsLayer')) {
-      this.map.getSource('incidentsLayer').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
-    }
+      if (nextProps.activeData && this.map.getSource('incidents')) {
+        this.map.getSource('incidents').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
+      }
 
-    this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
-      nextProps.activeData.map( feature => {
-        //console.log(feature.properties.eventNumber);
-        return feature.properties.eventNumber;
-      })
-    ))
+      if (this.map.isStyleLoaded()) {
+        this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
+          nextProps.activeData.map( feature => {
+            //console.log(feature.properties.eventNumber);
+            return feature.properties.eventNumber;
+          })
+        ))
 
-    this.map.setFilter('incidentsLayerHighlight', 
-      ['in', 'eventNumber', nextProps.boardHighlightedFeature.properties.eventNumber]
-    )
+        this.map.setFilter('incidentsLayerHighlight', 
+          ['in', 'eventNumber', nextProps.boardHighlightedFeature.properties.eventNumber]
+        )
 
-    this.popup.remove()
+        this.popup.remove()
 
-    this.popup = new MapboxGl.Popup({
-        closeButton: false,
-        closeOnClick: false
-    })
+        this.popup = new MapboxGl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        })
 
-    if (nextProps.boardHighlightedFeature.geometry.coordinates) {
-      this.popup.setLngLat(nextProps.boardHighlightedFeature.geometry.coordinates)
-      // console.log(descriptionLookup[nextProps.boardHighlightedFeature.properties.type])
-      this.setPopupHtml(this.popup, nextProps.boardHighlightedFeature)
-      this.popup.addTo(this.map)
-    }
+        if (nextProps.boardHighlightedFeature.geometry.coordinates) {
+          this.popup.setLngLat(nextProps.boardHighlightedFeature.geometry.coordinates)
+          // console.log(descriptionLookup[nextProps.boardHighlightedFeature.properties.type])
+          this.setPopupHtml(this.popup, nextProps.boardHighlightedFeature)
+          this.popup.addTo(this.map)
+        }
 
-    //console.log(nextProps.viewMode)
-    if (nextProps.viewMode) {
-      // show incidents if viewMode is true
-      this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
-      //this.map.setLayoutProperty('photoMarkers', 'visibility', 'none')
-      this.props.photoData.features.map( (feature, index) => {
-        this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'none')
-      })
+        //console.log(nextProps.viewMode)
+        if (nextProps.viewMode) {
+          // show incidents if viewMode is true
+          if (this.map.getStyle('incidentsLayer')) {
 
-    } else {
-      // show photos if viewMode is false
-      this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
-      //this.map.setLayoutProperty('photoMarkers', 'visibility', 'visible')
-      this.props.photoData.features.map( (feature, index) => {
-        this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'visible')
-      })
-    }
+          }
+          this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
+          this.props.photoData.features.map( (feature, index) => {
+            //console.log(this.map.getLayer(`photoThumbnails-${index}`))
+            if (this.map.isSourceLoaded(`photosSource-${index}`)) {
+              this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'none')
+            }
+          })
 
-    if (nextProps.showHeatmap) {
-      this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'visible')
-    } else {
-      this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
-    }
+        } else {
+          // show photos if viewMode is false
+          this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
+          this.props.photoData.features.map( (feature, index) => {
+            if (this.map.isSourceLoaded(`photosSource-${index}`)) {
+              // console.log(this.map.getLayer(`photoThumbnails-${index}`))
+              if (this.map.getLayer(`photoThumbnails-${index}`)) {
+                this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'visible')
+              }
+            }
+          })
+
+        }
+
+        if (nextProps.showHeatmap) {
+          this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'visible')
+        } else {
+          this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
+        }
+      }
+    // })
   }
 
   componentDidUpdate() {
@@ -213,11 +227,44 @@ export default class Map extends Component {
     // this layer is static and doesn't change - marks city boundaries
 
     // color variables
-    const preCall = '#FB3F48';
-    const notAssigned = '#FB3F48';
-    const waitingforUnit = '#FB3F48';
+    // const preCall = '#FB3F48';
+    // const notAssigned = '#FB3F48';
+    // const waitingforUnit = '#FB3F48';
     const onScene = '#31ce75'; //'#66ec7b';
-    const ended = 'gray';
+    // const ended = 'gray';
+
+    const notAssigned = [
+    'interpolate',
+      ['linear'],
+        // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
+      ['get', 'elapsedTime'],  
+      0,
+      '#fff',
+      300,
+      '#FBF23F'
+    ]
+
+    const waitingforUnit = [
+    'interpolate',
+      ['linear'],
+        // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
+      ['get', 'elapsedTime'],  
+      300,
+      '#FBF23F',
+      18000,
+      '#FB3F48'
+    ]
+
+    // const onScene = [
+    // 'interpolate',
+    //   ['linear'],
+    //     // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
+    //   ['get', 'elapsedTime'],  
+    //   300,
+    //   '#31ce75',
+    //   3600,
+    //   '#31B1CE'
+    // ]
 
     console.log(this.props.staticData)
 
@@ -235,13 +282,15 @@ export default class Map extends Component {
       }
     })
 
+    this.map.addSource('incidents', {
+      'type': 'geojson',
+      'data': this.props.staticData
+    })
+
     this.map.addLayer({
       'id': 'totalTimeHeatmap',
       'type': 'heatmap',
-      'source': {
-        'type': 'geojson',
-        'data': this.props.staticData
-      },
+      'source': 'incidents',
       'maxzoom': 18,
       'paint': {
           // Increase the heatmap weight based on frequency and property magnitude
@@ -298,10 +347,7 @@ export default class Map extends Component {
     this.map.addLayer({
       'id': 'incidentsLayer',
       'type': 'circle',
-      'source': {
-        'type': 'geojson',
-        'data': this.props.staticData
-      },
+      'source': 'incidents',
       'layout': {},
       'paint': {
         'circle-color': 
@@ -312,19 +358,20 @@ export default class Map extends Component {
         //   ['get', 'elapsedTime'],  
         //   0,
         //   '#fff',
+        //   300,
+        //   '#FBF23F'
         //   3600,
         //   '#FB3F48'
         // ],
-        
         {
           property: 'status',
           type: 'categorical',
           stops: [
-            ['preCall', preCall],
+            //['preCall', preCall],
             ['notAssigned', notAssigned],
             ['waitingforUnit', waitingforUnit],
             ['onScene', onScene],
-            ['ended', ended]
+            //['ended', ended]
           ]
         },
         'circle-stroke-opacity': 1,
@@ -338,10 +385,7 @@ export default class Map extends Component {
     this.map.addLayer({
       'id': 'incidentsLayerHighlight',
       'type': 'circle',
-      'source': {
-        'type': 'geojson',
-        'data': this.props.staticData
-      },
+      'source': 'incidents',
       'layout': {},
       'paint': {
         'circle-color': 'white'
@@ -364,7 +408,7 @@ export default class Map extends Component {
     // })
 
     this.props.photoData.features.map( (feature, index) => {
-      this.map.addSource(`photos-${index}`, {
+      this.map.addSource(`photosSource-${index}`, {
         'type': 'geojson',
         'data': {
           'type': 'FeatureCollection',
@@ -386,7 +430,7 @@ export default class Map extends Component {
         this.map.addLayer({
           'id': `photoThumbnails-${index}`,
           'type': 'symbol',
-          'source': `photos-${index}`,
+          'source': `photosSource-${index}`,
           'layout': {
             'icon-image': `thumbnail-${index}`,
             'icon-size': 0.5,
