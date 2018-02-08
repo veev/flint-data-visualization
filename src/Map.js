@@ -103,7 +103,7 @@ export default class Map extends Component {
       this.map.getSource('incidents').setData(this.makeGeoJsonFromFeatures(nextProps.activeData))
     }
 
-    if (this.map.isStyleLoaded()) {
+    if (this.map.isStyleLoaded() && this.map.getSource('incidents')) {
       this.map.setFilter('incidentsLayer', ['in', 'eventNumber'].concat(
         nextProps.activeData.map( feature => {
           //console.log(feature.properties.eventNumber);
@@ -130,7 +130,7 @@ export default class Map extends Component {
       }
 
       //console.log(nextProps.viewMode)
-      if (nextProps.viewMode) {
+      if (nextProps.viewMode && this.map.getSource('incidents')) {
         // show incidents if viewMode is true
         if (this.map.getStyle('incidentsLayer')) {
 
@@ -143,7 +143,7 @@ export default class Map extends Component {
           }
         })
 
-      } else {
+      } else if (this.map.getSource('incidents')) {
         // show photos if viewMode is false
         this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
         this.props.photoData.features.map( (feature, index) => {
@@ -235,6 +235,10 @@ export default class Map extends Component {
       0, '#fff',
       300, '#FBF23F'
     ]
+
+    console.log(notAssigned)
+    console.log(["to-color", notAssigned])
+    console.log(['==', ['get', 'status'], 'notAssigned'])
 
     const waitingforUnit = [
     'interpolate',
@@ -343,29 +347,58 @@ export default class Map extends Component {
       'layout': {},
       'paint': {
         'circle-color': 
+          [
+            'case',
+              ['==', ['get', 'status'], 'notAssigned'],
+              ['to-color', '#FBF23F'],
+              // [
+              // 'interpolate',
+              //   ['linear'],
+              //     // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
+              //   ['number', ['get', 'elapsedTime']],  
+              //   0, '#fff',
+              //   1800, '#FBF23F',
+              //   7200, '#FB3F48'
+              // ],
+              ['==', ['get', 'status'], 'waitingforUnit'],
+              ['to-color', '#FB3F48'],
+              ['==', ['get', 'status'], 'onScene'],
+              ['to-color', '#31ce75'],
+              '#FF0000'
+              // [
+              // 'interpolate',
+              //   ['linear'],
+              //     // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
+              //   ['number', ['get', 'elapsedTime']],  
+              //   0, '#fff',
+              //   1800, '#FBF23F',
+              //   7200, '#FB3F48'
+              // ]
+              // ['==',['get', 'status'], 'waitingforUnit'],
+              // waitingforUnit,
+              // ['==',['get', 'status'], 'onScene'],
+              // onScene
+          ],
         // [
         // 'interpolate',
         //   ['linear'],
         //     // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-        //   ['get', 'elapsedTime'],  
-        //   0,
-        //   '#fff',
-        //   300,
-        //   '#FBF23F'
-        //   3600,
-        //   '#FB3F48'
+        //   ['number', ['get', 'elapsedTime']],  
+        //   0, '#fff',
+        //   1800, '#FBF23F',
+        //   7200, '#FB3F48'
         // ],
-        {
-          property: 'status',
-          type: 'categorical',
-          stops: [
-            //['preCall', preCall],
-            ['notAssigned', notAssigned],
-            ['waitingforUnit', waitingforUnit],
-            ['onScene', onScene],
-            //['ended', ended]
-          ]
-        },
+        // {
+        //   property: 'status',
+        //   type: 'categorical',
+        //   stops: [
+        //     //['preCall', preCall],
+        //     ['notAssigned', notAssigned],
+        //     ['waitingforUnit', waitingforUnit],
+        //     ['onScene', onScene],
+        //     //['ended', ended]
+        //   ]
+        // },
         'circle-stroke-opacity': 1,
         'circle-radius': 12,
         //'circle-blur': 1.0
