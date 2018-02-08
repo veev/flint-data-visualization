@@ -23,8 +23,8 @@ class App extends Component {
     super(); // for correct context
 
     this.state = {
-      isPlaying: true,
-      wasPlaying: true,
+      isPlaying: false,
+      wasPlaying: false,
       // currentTime: data['features'][0].properties.unix_timestamp,
       currentTime: 1493957337,
       audioIndex: 0,
