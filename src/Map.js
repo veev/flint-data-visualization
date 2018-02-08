@@ -219,49 +219,6 @@ export default class Map extends Component {
 
   _initMap = () => {
     // this layer is static and doesn't change - marks city boundaries
-
-    // color variables
-    // const preCall = '#FB3F48';
-    // const notAssigned = '#FB3F48';
-    // const waitingforUnit = '#FB3F48';
-    const onScene = '#31ce75'; //'#66ec7b';
-    // const ended = 'gray';
-
-    const notAssigned = [
-    'interpolate',
-      ['linear'],
-        // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-      ['get', 'elapsedTime'],  
-      0, '#fff',
-      300, '#FBF23F'
-    ]
-
-    console.log(notAssigned)
-    console.log(["to-color", notAssigned])
-    console.log(['==', ['get', 'status'], 'notAssigned'])
-
-    const waitingforUnit = [
-    'interpolate',
-      ['linear'],
-        // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-      ['get', 'elapsedTime'],  
-      300,
-      '#FBF23F',
-      18000,
-      '#FB3F48'
-    ]
-
-    // const onScene = [
-    // 'interpolate',
-    //   ['linear'],
-    //     // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-    //   ['get', 'elapsedTime'],  
-    //   300,
-    //   '#31ce75',
-    //   3600,
-    //   '#31B1CE'
-    // ]
-
     console.log(this.props.staticData)
 
     this.map.addLayer({
@@ -346,78 +303,40 @@ export default class Map extends Component {
       'source': 'incidents',
       'layout': {},
       'paint': {
-        'circle-color': 
-          [
-            'case',
-              ['==', ['get', 'status'], 'notAssigned'],
-              //['to-color', '#FBF23F'],
-              [
-              'interpolate',
-                ['linear'],
-                  // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-                ['number', ['get', 'elapsedTime']],  
-                // 0, '#fff',
-                0, '#FBF23F',
-                7200, '#FB3F48'
-              ],
-              ['==', ['get', 'status'], 'waitingforUnit'],
-              //['to-color', '#FB3F48'],
-              [
-              'interpolate',
-                ['linear'],
-                  // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-                ['number', ['get', 'elapsedTime']],  
-                // 0, '#fff',
-                0, '#FBF23F',
-                7200, '#FB3F48'
-              ],
-              ['==', ['get', 'status'], 'onScene'],
-              //['to-color', '#31ce75'],
-              [
-              'interpolate',
-                ['linear'],
-                  // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-                ['get', 'elapsedTime'],  
-                1800,
-                '#31CE75',
-                18000,
-                '#19673A'
-              ],
-              '#FF0000'
-              // [
-              // 'interpolate',
-              //   ['linear'],
-              //     // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-              //   ['number', ['get', 'elapsedTime']],  
-              //   0, '#fff',
-              //   1800, '#FBF23F',
-              //   7200, '#FB3F48'
-              // ]
-              // ['==',['get', 'status'], 'waitingforUnit'],
-              // waitingforUnit,
-              // ['==',['get', 'status'], 'onScene'],
-              // onScene
-          ],
-        // [
-        // 'interpolate',
-        //   ['linear'],
-        //     // ['/', ['get', 'B19001_017'], ['/', ['get', 'ALAND'], 1000000]],
-        //   ['number', ['get', 'elapsedTime']],  
-        //   0, '#fff',
-        //   1800, '#FBF23F',
-        //   7200, '#FB3F48'
-        // ],
-        // {
-        //   property: 'status',
-        //   type: 'categorical',
-        //   stops: [
-        //     //['preCall', preCall],
-        //     ['notAssigned', notAssigned],
-        //     ['waitingforUnit', waitingforUnit],
-        //     ['onScene', onScene],
-        //     //['ended', ended]
-        //   ]
-        // },
+        'circle-color': [
+          'case',
+            ['==', ['get', 'status'], 'notAssigned'],
+            [
+            'interpolate',
+              ['linear'],
+              ['number', ['get', 'elapsedTime']],  
+              // 0, '#fff',
+              0, '#FBF23F',
+              7200, '#FB3F48'
+            ],
+            ['==', ['get', 'status'], 'waitingforUnit'],
+            //['to-color', '#FB3F48'],
+            [
+            'interpolate',
+              ['linear'],
+              ['number', ['get', 'elapsedTime']],  
+              // 0, '#fff',
+              0, '#FBF23F',
+              7200, '#FB3F48'
+            ],
+            ['==', ['get', 'status'], 'onScene'],
+            //['to-color', '#31ce75'],
+            [
+            'interpolate',
+              ['linear'],
+              ['get', 'elapsedTime'],  
+              1800,
+              '#31CE75',
+              18000,
+              '#19673A'
+            ],
+            '#FF0000'
+        ],
         'circle-stroke-opacity': 1,
         'circle-radius': 12,
         //'circle-blur': 1.0
