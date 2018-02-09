@@ -149,7 +149,7 @@ class App extends Component {
       const eTS = moment(end).utcOffset('+04:00').format('x')
       console.log(day, start, end)
       console.log(sTS, eTS)
-      this.setState({ dateRange: [sTS, eTS], startTS: sTS, endTS: eTS, currentTime: sTS })
+      this.setState({ dateRange: [+sTS, +eTS], startTS: +sTS, endTS: +eTS, currentTime: +sTS })
     }
   }
 

@@ -16,34 +16,19 @@ export default class AudioManager extends Component {
   }
 
   componentWillMount() {
-    //console.log(this.sortedAudio)
-    //console.log(new Date(this.sortedAudio[this.state.currentIndex].date))
-    //console.log(new Date(this.props.currentTime * 1000))
+  //this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
 
-    //this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
+  // for (let key in audioMap) {
+  //   console.log(key)
+  //   `https://transmission-audio.emerging-response.com:8080/resources/audio/${key}.mp3`
+  // }
 
-    // for (let key in audioMap) {
-    //   console.log(key)
-    //   `https://transmission-audio.emerging-response.com:8080/resources/audio/${key}.mp3`
-    // }
-
-    // console.log(this.audioFiles)
+  // console.log(this.audioFiles)
     
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.currentTime)
     // this happens only if playState changes
-    // good place to trigger playback?
-    // if (this.props.isPlaying !== nextProps.isPlaying) {
-    //   // console.log("first", nextProps.currentTime * 1000)
-    //   // console.log(nextProps.isPlaying)
-
-    // } else {
-    //   // assume that playback is still updating
-    //   //console.log(nextProps.currentTime * 1000)
-    // }
-
     // if timeline isPlaying, then find audio file to trigger
     // need to not trigger audio to play once file is playing
     if (nextProps.isPlaying) {

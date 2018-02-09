@@ -43,7 +43,7 @@ export default class CallBoard extends Component {
 
   // TODO: get updated elapsed time from active incidents in app
   getActiveTime = (ts) => {
-    console.log(this.props.currentTime, ts)
+    //console.log(this.props.currentTime, ts)
     const t = this.props.currentTime
     if (t >= ts) {
       //console.log(t - ts)
@@ -54,15 +54,12 @@ export default class CallBoard extends Component {
   getStatusBar = (ts) => {
     //get width of elapsed time, up to an hour (60 sec * 60 min)
     const elapsedTime = this.getActiveTime(ts) / 1000
-    console.log(elapsedTime)
     let barWidth = map_range(elapsedTime, 0, 3600, 0, 100)
     if (barWidth > 100) barWidth = 100
     return barWidth
   }
 
   formatSeconds = (millis) => {
-    console.log(millis)
-    console.log(moment.duration(millis, 'milliseconds').format('hh:mm:ss', { trim: false }))
     return moment.duration(millis, 'milliseconds').format('hh:mm:ss', { trim: false })
   }
 
@@ -80,7 +77,7 @@ export default class CallBoard extends Component {
   //   //console.log(nextProps, nextState)
   // }
   getIncidentColor = (incident) => {
-    console.log(+incident.properties.elapsedTime)
+    //console.log(+incident.properties.elapsedTime)
     let colr, colrScl;
     if (incident.properties.status === 'notAssigned' || incident.properties.status === 'waitingforUnit') {
       //colr = '#FB3F48'
