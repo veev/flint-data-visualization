@@ -14,7 +14,7 @@ import AudioManager from './AudioManager'
 // import Source from './Source'
 // import Layer from './Layer'
 import { map_range } from './utils'
-import data from './data/may5-12-incidents-formatted.json'
+import data from './data/may5-12-incidents-timestamps-formatted.json'
 import posts from './data/postsMay5_12-timezone.json'
 import photos from './data/photos-grouped2.json'
 import audio from './data/audio.json'
@@ -49,7 +49,7 @@ class App extends Component {
       showLightbox: false,
       showHeatmap: false,
       timeframe: 'Show entire week',
-      startTS: 1493957337,
+      startTS: 1493957337, // this corresponds to the start time of first audio clip
       endTS: data['features'][data['features'].length - 1].properties.unix_end,
       dateRange: [1493957337, data['features'][data['features'].length - 1].properties.unix_end]
       // navState = 'Incidents'
@@ -92,13 +92,7 @@ class App extends Component {
     // })
     // console.log(data.features)
     // console.log(photos)
-    // const audioArray = Object.values(audio)
 
-    // this.props.audio = audioArray.sort( (a,b) => {
-    //   return (typeof a.date === 'string') - (typeof b.date === 'string') || a.date - b.date || a.date.localeCompare(b.date);
-    // })
-
-    // console.log(audioArray)
     console.log(this.sortedAudio)
 
     // need this for autoplay
@@ -111,20 +105,6 @@ class App extends Component {
   componentWillUnmount() {
     window.clearInterval(this.timer)
   }
-
-  // _update = (e) => {
-  //   console.log(e.type)
-  //   this.setState({currentEvent: e.type})
-  // }
-
-  // _updateTime = (t) => { // writing an arrow function this way means you don't have to bind things
-  //   // filter incidents / make a copy, whatever
-
-  //   this.setState({
-  //     currentTime: t,
-  //     //activeIncidents: // TODO - filtered incidents
-  //   })
-  // }
 
   getSortedAudio = (audio) => {
     const audioArray = Object.values(audio)
@@ -162,8 +142,8 @@ class App extends Component {
       const day = moment(`${option.label} 2017`)
       const start = moment(day).startOf('day')
       const end = moment(day).endOf('day')
-      const sTS = moment(start).format('X')
-      const eTS = moment(end).format('X')
+      const sTS = moment(start).format('x') // lowercase 'x' for millis, uppercase 'X' for seconds
+      const eTS = moment(end).format('x')
       // console.log(day, start, end)
       console.log(sTS, eTS)
       this.setState({ dateRange: [sTS, eTS], startTS: sTS, endTS: eTS, currentTime: sTS })
@@ -223,7 +203,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { currentTime: (this.state.currentTime + 1) % this.props.endTS }
+          { currentTime: (this.state.currentTime + 1000) % this.props.endTS }
         ))
       }, 1000)
     } else {
@@ -315,7 +295,7 @@ class App extends Component {
 
   updateCurrentTime = (index) => {
     console.log(index)
-    const newTime = Math.floor(this.sortedAudio[index].timestamp / 1000 )
+    const newTime = this.sortedAudio[index].timestamp
     this.setState({ currentTime: newTime },  this.updateNextPrevButtons(index))
   }
 
@@ -399,9 +379,6 @@ class App extends Component {
 
     //console.log(feature)
     return feature
-  
-  //console.log(answeredGeoJson.features);
-  //map.getSource('answeredIncidents').setData(answeredGeoJson);
 }
 
 
@@ -423,9 +400,10 @@ class App extends Component {
       endTS
     } = this.state
     // const { endTS } = this.props
-    const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
+    //const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
+    const formattedTime = moment(currentTime).format('MMM Do YYYY, h:mm:ss A');
    
-    window.convertTime = this.convertTime;
+    //window.convertTime = this.convertTime;
 
     return (
       <div className="App">

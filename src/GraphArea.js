@@ -101,7 +101,7 @@ export default class GraphArea extends Component {
     // console.log(this.props.dateRange)
 
     const xScale = scaleTime().range([0, this.props.size[0]])
-                              .domain([this.props.dateRange[0] * 1000, this.props.dateRange[1] * 1000])
+                              .domain([this.props.dateRange[0], this.props.dateRange[1]])
                               .clamp(true)
 
     const yScale = scalePow().exponent(0.7)

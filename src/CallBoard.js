@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import find from 'lodash.find'
+import moment from 'moment'
+import momentDurationFormatSetup from 'moment-duration-format'
 import { map_range } from './utils'
 import { interpolateHcl, interpolateRgb } from 'd3-interpolate'
 import { scaleLinear, scalePow } from 'd3-scale'
@@ -11,6 +13,8 @@ export default class CallBoard extends Component {
       openIncidents: [],
       rowIsHighlighted: false
     }
+    // need this to format moment durations
+    momentDurationFormatSetup(moment)
 	}
 
   static defaultProps = {
@@ -39,11 +43,12 @@ export default class CallBoard extends Component {
 
   // TODO: get updated elapsed time from active incidents in app
   getActiveTime = (ts) => {
-    //console.log(this.props.currentTime, ts)
+    console.log(this.props.currentTime, ts)
+    console.log(moment(this.props.currentTime))
+    console.log(moment(ts))
     const t = this.props.currentTime
-    // let strt = feature.properties.unix_timestamp;
     if (t >= ts) {
-      //console.log(t - ts)
+      console.log(t - ts)
       return t - ts
     }
   }
@@ -56,9 +61,14 @@ export default class CallBoard extends Component {
     return barWidth
   }
 
-  formatSeconds = (seconds) => {
+  formatSeconds = (millis) => {
+    console.log(millis)
+    //console.log(moment.duration.format([moment.duration(millis, 'milliseconds')],'HH:mm:SS'))
+    console.log(moment.duration(millis, 'milliseconds').format('h:mm:ss', { trim: false }))
+    //console.log(moment.duration(millis).format('HH:mm:SS'))
     // ok to do if elapsed seconds are under 24 hours
-    return new Date(seconds * 1000).toISOString().substr(11, 8)
+    //return new Date(seconds * 1000).toISOString().substr(11, 8)
+    //return moment.duration(millis).format('HH:mm:SS')
   }
 
   // highlightOn = (row) => {
