@@ -88,7 +88,6 @@ export default class CallBoard extends Component {
           .clamp(true)
 
       colr = colrScl(+incident.properties.elapsedTime)
-      console.log(colrScl(500))
 
     } else if (incident.properties.status === 'onScene') {
       //colr = '#31CE75'
@@ -103,8 +102,6 @@ export default class CallBoard extends Component {
     } else {
       colr = '#FF00FF'
     }
-    //console.log(colr)
-    console.log(colrScl(500))
     return colr
   }
 

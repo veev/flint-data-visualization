@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Toggle from 'react-toggle'
 import MultiToggle from './MultiToggle'
+import Dropdown from 'react-dropdown'
+
 
 const viewOptions = [
   {
@@ -12,6 +14,10 @@ const viewOptions = [
   }
 ]
 
+const dayOptions = [
+  'Show entire week', 'Friday May 5', 'Saturday May 6', 'Sunday May 7', 'Monday May 8', 'Tuesday May 9', 'Wednesday May 10', 'Thursday May 11', 'Friday May 12'
+]
+
 export default class ControlPanel extends Component {
   constructor(props) {
     super(props)
@@ -20,11 +26,10 @@ export default class ControlPanel extends Component {
       viewMode: this.props.viewMode,
       showHeatmap: this.props.showHeatmap
     }
-
   }
 
   render() {
-    const { viewMode, showHeatmap } = this.props
+    const { viewMode, showHeatmap, timeframe } = this.props
 
     return (
       <div className="ControlPanel">
@@ -33,12 +38,17 @@ export default class ControlPanel extends Component {
           selectedOption={viewMode}
           onSelectOption={this.props.handleToggle}
         />
+        <Dropdown
+          options={dayOptions}
+          onChange={this.props.handleDropdown}
+          value={timeframe}
+        />
         <label>
           <Toggle
             defaultChecked={showHeatmap}
             icons={false}
             onChange={this.props.handleHeatmapToggle} />
-          <span>Show Heatmap of length of call</span>
+          <span>Show Heatmap of longest wait times</span>
         </label>
       </div>
     )

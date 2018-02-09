@@ -42,10 +42,6 @@ export default class Timeline extends Component {
 
   }
 
-  mungeData = (data) => {
-    console.log(data.features)
-  }
-
   componentDidMount() {
     const width = this.graphAreaDiv.clientWidth - 160
     const height = this.graphAreaDiv.clientHeight
@@ -70,6 +66,7 @@ export default class Timeline extends Component {
             size={[graphWidth, graphHeight]}
             height={100}
             currentTime={this.props.unconvertTime(currentTime) * 1000}
+            dateRange={this.props.dateRange}
             activeData={this.props.activeData}
           />
         </div>

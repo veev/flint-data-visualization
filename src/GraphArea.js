@@ -92,15 +92,17 @@ export default class GraphArea extends Component {
   }
 
   getScales = () => {
-    const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
+    const dateRangeGD = [graphData[0].start, graphData[graphData.length - 1].end]
     const waitRange = extent(graphData, d => {
       return d.wait
     })
 
-    //console.log('waitRange', waitRange)
+    // console.log(dateRangeGD)
+    // console.log(this.props.dateRange)
 
     const xScale = scaleTime().range([0, this.props.size[0]])
-                              .domain(dateRange)
+                              .domain([this.props.dateRange[0] * 1000, this.props.dateRange[1] * 1000])
+                              .clamp(true)
 
     const yScale = scalePow().exponent(0.7)
                               .range([this.props.size[1] - 30, 0])

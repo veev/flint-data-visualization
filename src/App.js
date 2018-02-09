@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import moment from 'moment'
 
 import Map from './Map'
 import Timeline from './Timeline'
@@ -13,7 +14,7 @@ import AudioManager from './AudioManager'
 // import Source from './Source'
 // import Layer from './Layer'
 import { map_range } from './utils'
-import data from './data/may5-12-incidents-timestamps.json'
+import data from './data/may5-12-incidents-formatted.json'
 import posts from './data/postsMay5_12-timezone.json'
 import photos from './data/photos-grouped2.json'
 import audio from './data/audio.json'
@@ -46,7 +47,11 @@ class App extends Component {
       },
       incidentMode: true,
       showLightbox: false,
-      showHeatmap: false
+      showHeatmap: false,
+      timeframe: 'Show entire week',
+      startTS: 1493957337,
+      endTS: data['features'][data['features'].length - 1].properties.unix_end,
+      dateRange: [1493957337, data['features'][data['features'].length - 1].properties.unix_end]
       // navState = 'Incidents'
     }
 
@@ -58,8 +63,8 @@ class App extends Component {
     incidents: data['features'],
     //audio: this.getOrderedAudio(audio),
     //startTS: data['features'][0].properties.unix_timestamp,
-    startTS: 1493957337,
-    endTS: data['features'][data['features'].length - 1].properties.unix_end,
+    // startTS: 1493957337,
+    // endTS: data['features'][data['features'].length - 1].properties.unix_end,
   }
 
   componentWillMount() {
@@ -68,23 +73,23 @@ class App extends Component {
     // console.log('componentWillMount')
     // console.log(posts)
 
-    data.features = data.features.map( incident => {
-      incident.properties.status = "preCall"
-      incident.properties.elapsedTime = 0
-      if(incident.properties.unix_onscene) {
-        incident.properties.waitTime = incident.properties.unix_onscene - incident.properties.unix_timestamp
-      } else if (incident.properties.unix_end) {
-        incident.properties.waitTime = incident.properties.unix_end - incident.properties.unix_timestamp
-      } else {
-        incident.properties.waitTime = 60 * 60
-      }
+    // data.features = data.features.map( incident => {
+    //   incident.properties.status = "preCall"
+    //   incident.properties.elapsedTime = 0
+    //   if(incident.properties.unix_onscene) {
+    //     incident.properties.waitTime = incident.properties.unix_onscene - incident.properties.unix_timestamp
+    //   } else if (incident.properties.unix_end) {
+    //     incident.properties.waitTime = incident.properties.unix_end - incident.properties.unix_timestamp
+    //   } else {
+    //     incident.properties.waitTime = 60 * 60
+    //   }
 
-      if (incident.properties.waitTime < 0) {
-        incident.properties.waitTime = 60
-      }
-      //console.log(incident.properties.waitTime)
-      return incident
-    })
+    //   if (incident.properties.waitTime < 0) {
+    //     incident.properties.waitTime = 60
+    //   }
+    //   //console.log(incident.properties.waitTime)
+    //   return incident
+    // })
     // console.log(data.features)
     // console.log(photos)
     // const audioArray = Object.values(audio)
@@ -141,6 +146,28 @@ class App extends Component {
   handleHeatmapToggle = (event) => {
     //console.log('showHeatmap', this.state.showHeatmap)
     this.setState({ showHeatmap: !this.state.showHeatmap })
+  }
+
+  handleTimeDropdown = (option) => {
+    console.log(option)
+    console.log('You selected ', option.label)
+    this.setState({ timeframe: option })
+    if (option.label === 'Show entire week') {
+      const range = [1493957337, data['features'][data['features'].length - 1].properties.unix_end]
+      const start = 1493957337
+      const end = data['features'][data['features'].length - 1].properties.unix_end
+      this.setState({ dateRange: range, startTS: start, endTS: end, currentTime: start })
+    } else {
+      //newStartTime = 
+      const day = moment(`${option.label} 2017`)
+      const start = moment(day).startOf('day')
+      const end = moment(day).endOf('day')
+      const sTS = moment(start).format('X')
+      const eTS = moment(end).format('X')
+      // console.log(day, start, end)
+      console.log(sTS, eTS)
+      this.setState({ dateRange: [sTS, eTS], startTS: sTS, endTS: eTS, currentTime: sTS })
+    }
   }
 
   handlePhotoMarkerClick = (marker) => {
@@ -294,13 +321,13 @@ class App extends Component {
 
   convertTime = (value) => {
     // convert time so that start is 0 (what progress bar likes)
-    return map_range(value, this.props.startTS, this.props.endTS, 0, (this.props.endTS - this.props.startTS))
+    return map_range(value, this.state.startTS, this.state.endTS, 0, (this.state.endTS - this.state.startTS))
   }
 
   unconvertTime = (value) => {
     // unconvert time so that user seeking will send the correct timestamp
     // back to the main app from the Timeline
-    return map_range(value, 0, (this.props.endTS - this.props.startTS), this.props.startTS, this.props.endTS)
+    return map_range(value, 0, (this.state.endTS - this.state.startTS), this.state.startTS, this.state.endTS)
   }
 
   handleBoardHighlightChange = (feature) => {
@@ -379,8 +406,23 @@ class App extends Component {
 
 
   render() {
-    const { isPlaying, currentTime, audioIndex, highlightedBoardIncident, highlightedMapIncident, showLightbox, incidentMode, showHeatmap, hasNextClip, hasPrevClip } = this.state
-    const { endTS } = this.props
+    const { 
+      isPlaying,
+      currentTime,
+      audioIndex,
+      highlightedBoardIncident,
+      highlightedMapIncident,
+      showLightbox,
+      incidentMode,
+      showHeatmap,
+      hasNextClip,
+      hasPrevClip,
+      timeframe,
+      dateRange,
+      startTS,
+      endTS
+    } = this.state
+    // const { endTS } = this.props
     const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
    
     window.convertTime = this.convertTime;
@@ -405,6 +447,8 @@ class App extends Component {
           showHeatmap={showHeatmap}
           handleHeatmapToggle={this.handleHeatmapToggle}
           pausePlay={this.pausePlayback}
+          handleDropdown={this.handleTimeDropdown}
+          timeframe={timeframe}
         />
         { incidentMode ?
           <div>
@@ -426,6 +470,7 @@ class App extends Component {
             isPlaying={isPlaying}
             staticData={data}
             activeData={this.filterIncidents(currentTime)}
+            dateRange={dateRange}
           />
           <CallBoard
             activeData={this.filterIncidents(currentTime)}
