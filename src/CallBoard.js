@@ -80,6 +80,7 @@ export default class CallBoard extends Component {
   //   //console.log(nextProps, nextState)
   // }
   getIncidentColor = (incident) => {
+    console.log(+incident.properties.elapsedTime)
     let colr, colrScl;
     if (incident.properties.status === 'notAssigned' || incident.properties.status === 'waitingforUnit') {
       //colr = '#FB3F48'

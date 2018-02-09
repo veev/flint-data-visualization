@@ -346,10 +346,10 @@ class App extends Component {
   }
 
   updateElapsedTime = (time, feature) => {
-
+    //console.log(time)
     if (feature.properties.unix_timestamp && feature.properties.unix_end) {
-      if (+time >= feature.properties.unix_timestamp) {
-        feature.properties.elapsedTime = +time - feature.properties.unix_timestamp
+      if (+time >= +feature.properties.unix_timestamp) {
+        feature.properties.elapsedTime = Math.floor((+time - +feature.properties.unix_timestamp) / 1000)
       }
     } else {
       feature.properties.elapsedTime = 0
