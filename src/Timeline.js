@@ -65,7 +65,7 @@ export default class Timeline extends Component {
             data={staticData}
             size={[graphWidth, graphHeight]}
             height={100}
-            currentTime={this.props.unconvertTime(currentTime) * 1000}
+            currentTime={this.props.unconvertTime(currentTime)}
             dateRange={this.props.dateRange}
             activeData={this.props.activeData}
           />

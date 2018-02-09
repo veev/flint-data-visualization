@@ -19,6 +19,8 @@ import posts from './data/postsMay5_12-timezone.json'
 import photos from './data/photos-grouped2.json'
 import audio from './data/audio.json'
 
+const AUDIO_START_TS = 1493957337000
+
 class App extends Component {
   constructor() {
     super(); // for correct context
@@ -27,7 +29,7 @@ class App extends Component {
       isPlaying: false,
       wasPlaying: false,
       // currentTime: data['features'][0].properties.unix_timestamp,
-      currentTime: 1493957337,
+      currentTime: AUDIO_START_TS,
       audioIndex: 0,
       hasNextClip: true,
       hasPrevClip: false,
@@ -49,9 +51,9 @@ class App extends Component {
       showLightbox: false,
       showHeatmap: false,
       timeframe: 'Show entire week',
-      startTS: 1493957337, // this corresponds to the start time of first audio clip
+      startTS: AUDIO_START_TS, // this corresponds to the start time of first audio clip
       endTS: data['features'][data['features'].length - 1].properties.unix_end,
-      dateRange: [1493957337, data['features'][data['features'].length - 1].properties.unix_end]
+      dateRange: [AUDIO_START_TS, data['features'][data['features'].length - 1].properties.unix_end]
       // navState = 'Incidents'
     }
 
@@ -133,18 +135,19 @@ class App extends Component {
     console.log('You selected ', option.label)
     this.setState({ timeframe: option })
     if (option.label === 'Show entire week') {
-      const range = [1493957337, data['features'][data['features'].length - 1].properties.unix_end]
-      const start = 1493957337
+      const range = [AUDIO_START_TS, data['features'][data['features'].length - 1].properties.unix_end]
+      const start = AUDIO_START_TS
       const end = data['features'][data['features'].length - 1].properties.unix_end
       this.setState({ dateRange: range, startTS: start, endTS: end, currentTime: start })
     } else {
       //newStartTime = 
       const day = moment(`${option.label} 2017`)
+      console.log(day)
       const start = moment(day).startOf('day')
       const end = moment(day).endOf('day')
-      const sTS = moment(start).format('x') // lowercase 'x' for millis, uppercase 'X' for seconds
-      const eTS = moment(end).format('x')
-      // console.log(day, start, end)
+      const sTS = moment(start).utcOffset('+04:00').format('x') // lowercase 'x' for millis, uppercase 'X' for seconds
+      const eTS = moment(end).utcOffset('+04:00').format('x')
+      console.log(day, start, end)
       console.log(sTS, eTS)
       this.setState({ dateRange: [sTS, eTS], startTS: sTS, endTS: eTS, currentTime: sTS })
     }
