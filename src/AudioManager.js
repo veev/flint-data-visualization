@@ -18,7 +18,7 @@ export default class AudioManager extends Component {
   componentWillMount() {
     //console.log(this.sortedAudio)
     //console.log(new Date(this.sortedAudio[this.state.currentIndex].date))
-    console.log(new Date(this.props.currentTime * 1000))
+    //console.log(new Date(this.props.currentTime * 1000))
 
     //this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
 
@@ -32,7 +32,7 @@ export default class AudioManager extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
+    console.log(nextProps.currentTime)
     // this happens only if playState changes
     // good place to trigger playback?
     // if (this.props.isPlaying !== nextProps.isPlaying) {
@@ -47,7 +47,7 @@ export default class AudioManager extends Component {
     // if timeline isPlaying, then find audio file to trigger
     // need to not trigger audio to play once file is playing
     if (nextProps.isPlaying) {
-      const t = new Date(nextProps.currentTime * 1000)
+      const t = nextProps.currentTime
       console.log(t)
 
       const element = this.props.sortedAudio.find( (a) => {

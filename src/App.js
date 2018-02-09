@@ -96,7 +96,7 @@ class App extends Component {
     // console.log(photos)
 
     console.log(this.sortedAudio)
-
+    console.log(this.state.currentTime)
     // need this for autoplay
     this.handlePlayState(this.state.isPlaying)
     // need this to find next clip
@@ -191,6 +191,7 @@ class App extends Component {
   }
 
   handlePlayState = (playState) => {
+    console.log(this.state.currentTime)
     console.log('playButton', this.state.audioIndex)
     setTimeout(() => console.log(`wasPlaying-${this.state.wasPlaying}`), 200)
     setTimeout(() => console.log(`isPlaying-${this.state.isPlaying}`), 200)
@@ -206,7 +207,7 @@ class App extends Component {
         this.setState(Object.assign(
           {},
           this.state,
-          { currentTime: (this.state.currentTime + 1000) % this.props.endTS }
+          { currentTime: (this.state.currentTime + 1000) % this.state.endTS }
         ))
       }, 1000)
     } else {
@@ -223,6 +224,7 @@ class App extends Component {
     console.log(`seeking-${this.state.isPlaying}`)
     
     const ts = this.unconvertTime(time)
+    console.log('seek change', ts)
     this.setState({ currentTime: ts })
     this.updateAudioIndex(ts)
   }
@@ -242,7 +244,7 @@ class App extends Component {
   }
 
   handleNextAudioClip = () => {
-    //console.log('nextButton', this.state.audioIndex)
+    console.log('nextButton', this.state.audioIndex)
     const temp = this.state.audioIndex + 1
     if (this.state.audioIndex < this.sortedAudio.length - 1) {
       this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
@@ -251,7 +253,7 @@ class App extends Component {
   }
 
   handlePrevAudioClip = () => {
-    //console.log('prevButton', this.state.audioIndex)
+    console.log('prevButton', this.state.audioIndex)
     const temp = this.state.audioIndex - 1
     if (this.state.audioIndex > 0) {
       this.setState({ audioIndex: temp }, this.updateCurrentTime(temp))
@@ -274,7 +276,8 @@ class App extends Component {
   }
 
   updateAudioIndex = (time) => {
-    const t = Math.floor(time * 1000)
+    console.log(time)
+    const t = Math.floor(time)
     // TODO! Not sure why this works, but checking if currentTime was
     // greater than element's startTime didn't work
     let newIndex = this.sortedAudio.findIndex(element => {
@@ -291,7 +294,7 @@ class App extends Component {
     if (newIndex < 0) {
       newIndex = this.sortedAudio.length - 1
     }
-    //console.log(newIndex)
+    console.log('newIndex', newIndex)
     this.setState({ audioIndex: newIndex }, this.updateNextPrevButtons(newIndex))
     this.updateCurrentTime(newIndex)
   }
@@ -299,6 +302,7 @@ class App extends Component {
   updateCurrentTime = (index) => {
     console.log(index)
     const newTime = this.sortedAudio[index].timestamp
+    console.log('updateCurrentTime', newTime)
     this.setState({ currentTime: newTime },  this.updateNextPrevButtons(index))
   }
 
