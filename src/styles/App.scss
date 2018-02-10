@@ -163,6 +163,10 @@ $posts-col-width: 12%;
     cursor: pointer;
   }
 
+  .boardWrapper {
+    height: 35px;
+  }
+
   .boardWrapper:nth-child(even) {
     background: #616161;//#ccc;
   }
@@ -722,11 +726,19 @@ $posts-col-width: 12%;
 ///////////////////////////////////////
 
 .ControlPanel {
-  width: 30vw;
+  width: 20vw;
+  min-width: 200px;
   min-height: 100px;
-  position: relative;
-  float: right;
-  // background-color: gray;
+  position: absolute;
+  right: 10px;
+
+  .buttonLayer {
+    padding: 10px 0px;
+  }
+}
+
+.Dropdown-menu {
+  max-height: 310px;
 }
 
 .toggle-wrapper {

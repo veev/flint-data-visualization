@@ -159,6 +159,7 @@ export default class Map extends Component {
 
       if (nextProps.showHeatmap) {
         this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'visible')
+        console.log(this.map.getLayer('totalTimeHeatmap'))
       } else {
         this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
       }

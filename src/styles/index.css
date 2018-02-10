@@ -88,6 +88,8 @@
   .Board .highlight {
     background: rgba(0, 0, 0, 0.05);
     cursor: pointer; }
+  .Board .boardWrapper {
+    height: 35px; }
   .Board .boardWrapper:nth-child(even) {
     background: #616161; }
   .Board .boardWrapper:nth-child(odd) {
@@ -472,10 +474,16 @@
       max-width: 55vw; }
 
 .ControlPanel {
-  width: 30vw;
+  width: 20vw;
+  min-width: 200px;
   min-height: 100px;
-  position: relative;
-  float: right; }
+  position: absolute;
+  right: 10px; }
+  .ControlPanel .buttonLayer {
+    padding: 10px 0px; }
+
+.Dropdown-menu {
+  max-height: 310px; }
 
 .toggle-wrapper {
   margin: 0.5em auto; }

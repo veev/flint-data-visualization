@@ -126,12 +126,11 @@ class App extends Component {
   }
 
   handleHeatmapToggle = (event) => {
-    //console.log('showHeatmap', this.state.showHeatmap)
-    this.setState({ showHeatmap: !this.state.showHeatmap })
+    console.log('showHeatmap', this.state.showHeatmap)
+    this.setState({ showHeatmap: !this.state.showHeatmap }, () => {console.log(this.state.showHeatmap)})
   }
 
   handleTimeDropdown = (option) => {
-    console.log(option)
     console.log('You selected ', option.label)
     this.setState({ timeframe: option })
     if (option.label === 'Show entire week') {
@@ -142,13 +141,13 @@ class App extends Component {
     } else {
       //newStartTime = 
       const day = moment(`${option.label} 2017`)
-      console.log(day)
+      //console.log(day)
       const start = moment(day).startOf('day')
       const end = moment(day).endOf('day')
       const sTS = moment(start).utcOffset('+04:00').format('x') // lowercase 'x' for millis, uppercase 'X' for seconds
       const eTS = moment(end).utcOffset('+04:00').format('x')
-      console.log(day, start, end)
-      console.log(sTS, eTS)
+      // console.log(day, start, end)
+      // console.log(sTS, eTS)
       this.setState({ dateRange: [+sTS, +eTS], startTS: +sTS, endTS: +eTS, currentTime: +sTS })
     }
   }

@@ -43,13 +43,15 @@ export default class ControlPanel extends Component {
           onChange={this.props.handleDropdown}
           value={timeframe}
         />
-        <label>
-          <Toggle
-            defaultChecked={showHeatmap}
-            icons={false}
-            onChange={this.props.handleHeatmapToggle} />
-          <span>Show Heatmap of longest wait times</span>
-        </label>
+        <div className="buttonLayer">
+          <label>
+            <Toggle
+              defaultChecked={showHeatmap}
+              icons={false}
+              onChange={this.props.handleHeatmapToggle} />
+            <span>Show Heatmap of longest wait times</span>
+          </label>
+        </div>
       </div>
     )
   }
