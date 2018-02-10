@@ -134,10 +134,16 @@ class App extends Component {
     console.log('You selected ', option.label)
     this.setState({ timeframe: option })
     if (option.label === 'Show entire week') {
+      let newCurrTime
+      if (this.state.currentTime === AUDIO_START_TS) {
+        newCurrTime = AUDIO_START_TS
+      } else {
+        newCurrTime = this.state.currentTime
+      }
       const range = [AUDIO_START_TS, data['features'][data['features'].length - 1].properties.unix_end]
       const start = AUDIO_START_TS
       const end = data['features'][data['features'].length - 1].properties.unix_end
-      this.setState({ dateRange: range, startTS: start, endTS: end, currentTime: start })
+      this.setState({ dateRange: range, startTS: start, endTS: end, currentTime: newCurrTime })
     } else {
       //newStartTime = 
       const day = moment(`${option.label} 2017`)
