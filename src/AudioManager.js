@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AudioPlayer from './AudioPlayer'
-import audioMap from './data/audio.json'
+import audioMap from './data/audio-noMoses.json'
 
 export default class AudioManager extends Component {
 	constructor(props) {

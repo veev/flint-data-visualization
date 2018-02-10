@@ -17,7 +17,7 @@ import { map_range } from './utils'
 import data from './data/may5-12-incidents-timestamps-formatted.json'
 import posts from './data/postsMay5_12-timezone.json'
 import photos from './data/photos-grouped2.json'
-import audio from './data/audio.json'
+import audio from './data/audio-noMoses.json'
 
 const AUDIO_START_TS = 1493957337000
 
@@ -95,7 +95,7 @@ class App extends Component {
     // console.log(data.features)
     // console.log(photos)
 
-    console.log(this.sortedAudio)
+    console.log(this.sortedAudio[0])
     console.log(this.state.currentTime)
     // need this for autoplay
     this.handlePlayState(this.state.isPlaying)
@@ -132,7 +132,7 @@ class App extends Component {
 
   handleTimeDropdown = (option) => {
     console.log('You selected ', option.label)
-    this.setState({ timeframe: option })
+    this.setState({ timeframe: option, playState: false })
     if (option.label === 'Show entire week') {
       let newCurrTime
       if (this.state.currentTime === AUDIO_START_TS) {
@@ -143,7 +143,19 @@ class App extends Component {
       const range = [AUDIO_START_TS, data['features'][data['features'].length - 1].properties.unix_end]
       const start = AUDIO_START_TS
       const end = data['features'][data['features'].length - 1].properties.unix_end
-      this.setState({ dateRange: range, startTS: start, endTS: end, currentTime: newCurrTime })
+      this.updateAudioIndex(newCurrTime)
+      this.setState({ dateRange: range, startTS: start, endTS: end })
+    } else if (option.label === 'Friday May 5') {
+      const day = moment(`${option.label} 2017`)
+      //console.log(day)
+      const start = moment(day).startOf('day')
+      const end = moment(day).endOf('day')
+      const sTS = AUDIO_START_TS //moment(start).utcOffset('+04:00').format('x') // lowercase 'x' for millis, uppercase 'X' for seconds
+      const eTS = moment(end).utcOffset('+04:00').format('x')
+      // console.log(day, start, end)
+      // console.log(sTS, eTS)
+      this.updateAudioIndex(+sTS)
+      this.setState({ dateRange: [+sTS, +eTS], startTS: +sTS, endTS: +eTS })
     } else {
       //newStartTime = 
       const day = moment(`${option.label} 2017`)
@@ -154,7 +166,8 @@ class App extends Component {
       const eTS = moment(end).utcOffset('+04:00').format('x')
       // console.log(day, start, end)
       // console.log(sTS, eTS)
-      this.setState({ dateRange: [+sTS, +eTS], startTS: +sTS, endTS: +eTS, currentTime: +sTS })
+      this.updateAudioIndex(+sTS)
+      this.setState({ dateRange: [+sTS, +eTS], startTS: +sTS, endTS: +eTS })
     }
   }
 
@@ -283,19 +296,22 @@ class App extends Component {
   updateAudioIndex = (time) => {
     console.log(time)
     const t = Math.floor(time)
+    console.log(t)
     // TODO! Not sure why this works, but checking if currentTime was
     // greater than element's startTime didn't work
     let newIndex = this.sortedAudio.findIndex(element => {
       const tStart = Math.floor(element.timestamp)
       return t <= tStart
     })
-    const timeBefore =  this.sortedAudio[newIndex - 1]
-    const timeAfter =  this.sortedAudio[newIndex]
-    if (Math.abs(t - timeBefore.timestamp) < Math.abs(t - timeAfter.timestamp)) {
-      // index is timeBefore
-      newIndex = newIndex - 1
-    } 
-
+    if (newIndex > 0) {
+      const timeBefore =  this.sortedAudio[newIndex - 1]
+      const timeAfter =  this.sortedAudio[newIndex]
+      if (Math.abs(t - timeBefore.timestamp) < Math.abs(t - timeAfter.timestamp)) {
+        // index is timeBefore
+        newIndex = newIndex - 1
+      } 
+    }
+    
     if (newIndex < 0) {
       newIndex = this.sortedAudio.length - 1
     }
@@ -413,8 +429,9 @@ class App extends Component {
     } = this.state
     // const { endTS } = this.props
     //const formattedTime = new Date(currentTime * 1000).toString().substring(0, 24)
-    const formattedTime = moment(currentTime).format('MMM Do YYYY, h:mm:ss A');
-   
+    const formattedTime = moment(currentTime).format('h:mm:ss A');
+    const formattedDay = moment(currentTime).format('MMM Do YYYY')
+
     //window.convertTime = this.convertTime;
 
     return (
@@ -453,7 +470,7 @@ class App extends Component {
             hasPrevious={hasPrevClip}
             // setTime={this._updateTime}
             //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
-            formattedTime={formattedTime}
+            formattedTime={[formattedDay, formattedTime]}
             currentTime={this.convertTime(currentTime)}
             unconvertTime={this.unconvertTime}
             totalTime={this.convertTime(endTS)}
