@@ -90,7 +90,8 @@ $posts-col-width: 12%;
   color: $ig-white;
   /* top: 50px; */
   font-size: 0.8em;
-  display: flex; 
+  display: flex;
+  display: -webkit-flex;
   // height: 100%;
   flex-direction: column;
 
@@ -105,6 +106,7 @@ $posts-col-width: 12%;
   .boardContent {
     width: 100%;
     flex: 1;
+    -webkit-flex: 1;
     overflow: auto
   }
 
@@ -116,6 +118,7 @@ $posts-col-width: 12%;
     padding: 5px 0px;
     font-weight: bold;
     display: flex;
+    display: -webkit-flex;
     width: 100%;
     align-items: center;
     background-color: rgba(24, 24, 24, 1.0);
@@ -124,36 +127,43 @@ $posts-col-width: 12%;
   .boardColumn-type {
     width: $type-col-width;
     display: flex;
+    display: -webkit-flex;
     // flex: 100 0 auto;
   }
 
   .boardColumn-priority {
     width: $priority-col-width;
     display: flex;
+    display: -webkit-flex;
     // flex: 100 0 auto;
   }
 
   .boardColumn-activeTime {
     width: $active-col-width;
     display: flex;
+    display: -webkit-flex;
     // flex: 100 0 auto;
   }
 
   .boardColumn-status {
     width: $status-col-width;
     display: flex;
+    display: -webkit-flex;
+    height: 15px;
     // flex: 100 0 auto;
   }
 
   .boardColumn-expander {
     width: $posts-col-width;
     display: flex;
+    display: -webkit-flex;
     // flex: 100 0 auto;
   }
 
   .boardRow {
     padding: 10px 0px 10px 0px;
     display: flex;
+    display: -webkit-flex;
     width: 100%;
     // align-items: center;
   }
@@ -178,26 +188,31 @@ $posts-col-width: 12%;
   .boardRow-type {
     width: $type-col-width;
     display: flex;
+    display: -webkit-flex;
   }
 
   .boardRow-priority {
     width: $priority-col-width;
     display: flex;
+    display: -webkit-flex;
   }
 
   .boardRow-activeTime {
     width: $active-col-width;
     display: flex;
+    display: -webkit-flex;
   }
 
   .boardRow-status {
     width: $status-col-width;
     display: flex;
+    display: -webkit-flex;
   }
 
   .boardRow-expander {
     width: $posts-col-width;
     display: flex;
+    display: -webkit-flex;
 
     span {
       width: 30px;
@@ -211,6 +226,7 @@ $posts-col-width: 12%;
     height: 0px;
     // color: red;
     display: flex;
+    display: -webkit-flex;
     overflow: hidden;
     transition: height 0.2s;
   }
