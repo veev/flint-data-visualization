@@ -38,20 +38,24 @@ export default class ControlPanel extends Component {
           selectedOption={viewMode}
           onSelectOption={this.props.handleToggle}
         />
-        <Dropdown
-          options={dayOptions}
-          onChange={this.props.handleDropdown}
-          value={timeframe}
-        />
-        <div className="buttonLayer">
-          <label>
-            <Toggle
-              defaultChecked={showHeatmap}
-              icons={false}
-              onChange={this.props.handleHeatmapToggle} />
-            <span>Show Heatmap of longest wait times</span>
-          </label>
-        </div>
+        { viewMode ?
+        <div>
+          <Dropdown
+            options={dayOptions}
+            onChange={this.props.handleDropdown}
+            value={timeframe}
+          />
+          <div className="buttonLayer">
+            <label>
+              <Toggle
+                defaultChecked={showHeatmap}
+                icons={false}
+                onChange={this.props.handleHeatmapToggle} />
+              <span>Show Heatmap of longest wait times</span>
+            </label>
+          </div>
+        </div> : null
+      }
       </div>
     )
   }
