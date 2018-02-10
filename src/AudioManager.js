@@ -55,7 +55,8 @@ export default class AudioManager extends Component {
           this.setState({ currentKey: element.id }, () => {
             this.childAudio.audioEl.pause()
             this.childAudio.audioEl.load()
-            this.childAudio.audioEl.play()
+            this.fetchAudioAndPlay()
+            //this.childAudio.audioEl.play()
           })
           console.log(this.childAudio.audioEl.src)
         } else {
@@ -83,6 +84,21 @@ export default class AudioManager extends Component {
   pauseAudio = () => {
     //console.log('PAUSED')
     this.childAudio.audioEl.pause()
+  }
+
+  fetchAudioAndPlay = () => {
+    fetch(`https://s3.amazonaws.com/flint-pd-may/audio/${this.state.currentKey}.mp3`)
+    .then(response => response.blob())
+    .then(blob => {
+      this.childAudio.audioEl.srcObject = blob;
+      return this.childAudio.audioEl.play();
+    })
+    .then(_ => {
+      // Video playback started ;)
+    })
+    .catch(e => {
+      // Video playback failed ;(
+    })
   }
 
   render() {
