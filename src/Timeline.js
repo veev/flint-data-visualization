@@ -58,7 +58,10 @@ export default class Timeline extends Component {
 
     return(
       <div className="Timeline">
-        <div className="timeOutput">{formattedTime}</div>
+        <div className="timeOutput">
+          <div className="time">{formattedTime[1]}</div>
+          <div className="day">{formattedTime[0]}</div>
+        </div>
         <div className="GraphArea"
           ref={(graphAreaDiv) => this.graphAreaDiv = graphAreaDiv} >
           <GraphArea

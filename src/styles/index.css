@@ -200,6 +200,7 @@
       font-size: 13px; }
 
 .timeOutput {
+  width: 140px;
   padding: 0px 5px;
   color: #7d7b7b;
   font-size: 1em;
@@ -207,6 +208,10 @@
   position: absolute;
   top: 0;
   left: 0; }
+  .timeOutput .time {
+    font-size: 1.2em; }
+  .timeOutput .day {
+    font-size: 1.1em; }
 
 .Timeline {
   position: absolute;
