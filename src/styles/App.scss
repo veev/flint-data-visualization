@@ -218,6 +218,22 @@ $posts-col-width: 12%;
       width: 30px;
       display: inline-block;
     }
+
+    .badge-wrapper {
+      width: 5em;
+    }
+
+    .likesBadge {
+      font-size: 0.8em;
+      display: inline-block;
+      // width: 1em;
+      position: relative;
+      transform: translate(-5px, -13px);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px;
+      border-radius: 3px;
+    }
   }
 
   .boardRow-openIncident {

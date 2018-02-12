@@ -5,6 +5,7 @@ import momentDurationFormatSetup from 'moment-duration-format'
 import { map_range } from './utils'
 import { interpolateHcl, interpolateRgb } from 'd3-interpolate'
 import { scaleLinear, scalePow } from 'd3-scale'
+import fbSvg from './styles/images/facebook-messenger.svg'
 
 export default class CallBoard extends Component {
 	constructor (props) {
@@ -15,6 +16,7 @@ export default class CallBoard extends Component {
     }
     // need this to format moment durations
     momentDurationFormatSetup(moment)
+    console.log(fbSvg)
 	}
 
   static defaultProps = {
@@ -112,6 +114,7 @@ export default class CallBoard extends Component {
     return data.map( row => {
       const incidentIsOpen = this.state.openIncidents.includes(row.properties.id)
       const rowIsHighlighted = (row.properties.id === this.props.mapHighlightedFeature.properties.id || row.properties.id === this.props.boardHighlightedFeature.properties.id)
+      const numComments = this.getNumComments(row)
       //this.handleRowHighlight(row)
       return (
         <div className="boardWrapper" key={row.properties.id}>
@@ -149,13 +152,14 @@ export default class CallBoard extends Component {
             (<div 
               className="boardColumn boardRow-expander" 
               onClick={() => this.toggleOpenIncident(row.properties.id)}>
-                <div>
-                  {incidentIsOpen
-                    ? <span>&#x2299;</span>
-                    : <span>&#x2295;</span>}
+                <div className="badge-wrapper">
+                  <img className="fbSvg" width="20px" height="20px" src={fbSvg} />
+                  <div className="likesBadge" width={`${numComments.stringLength + 0.5}em`}>{numComments.numComments}</div>
                 </div>
               </div>) :
-            <div className="boardColumn boardRow-expander"></div>}
+            <div className="boardColumn boardRow-expander">
+              <div className="badge-wrapper"></div>
+            </div>}
           </div>
           <div className={"boardColumn boardRow-openIncident " + (incidentIsOpen ? "boardColumn boardRow-openIncident-open" : "")} >
             <div className="bogus-padding">{this.insertPost(row)}</div>
@@ -163,6 +167,14 @@ export default class CallBoard extends Component {
         </div>
       )
     })
+  }
+
+  getNumComments = (row) => {
+    const post = find(this.props.postData, ['id', row.properties.postId])
+    if (post != undefined) {
+      const stringLength = (post.numComments).toString().length
+      return {numComments: post.numComments, stringLength}
+    }
   }
 
   insertPost = (row) => {

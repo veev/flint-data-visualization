@@ -127,6 +127,17 @@
     .Board .boardRow-expander span {
       width: 30px;
       display: inline-block; }
+    .Board .boardRow-expander .badge-wrapper {
+      width: 5em; }
+    .Board .boardRow-expander .likesBadge {
+      font-size: 0.8em;
+      display: inline-block;
+      position: relative;
+      transform: translate(-5px, -13px);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px;
+      border-radius: 3px; }
   .Board .boardRow-openIncident {
     box-sizing: border-box;
     width: 100%;
