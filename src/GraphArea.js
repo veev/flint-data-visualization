@@ -153,10 +153,10 @@ export default class GraphArea extends Component {
         // console.log(xScl(bin.x1))
         if (d.answered === "yes") {
           ctx.fillStyle = colrs[0]
-          ctx.fillRect(xPos, (ht * j), w/bins.length - 1, (ht - 1))
+          ctx.fillRect(xPos, (h - 30) - (ht * j), w/bins.length - 1, (ht - 1))
         } else {
           ctx.fillStyle = colrs[1]
-          ctx.fillRect(xPos, (ht * j), w/bins.length - 1, (ht - 1))
+          ctx.fillRect(xPos, (h - 30) - (ht * j), w/bins.length - 1, (ht - 1))
         }
 
         
