@@ -28,7 +28,7 @@ export default class GraphArea extends Component {
   }
 
   componentDidMount() {
-    this.makeCanvasGraph(graphData)
+    //this.makeCanvasGraph(graphData)
     this.binData(graphData)
   //   //console.log(this.props.data)
   //   //this.makeHistogramData(this.props.data.features)
@@ -45,7 +45,7 @@ export default class GraphArea extends Component {
   }
 
   componentDidUpdate() {
-    this.makeCanvasGraph(graphData)
+   // this.makeCanvasGraph(graphData)
     this.binData(graphData)
   //   //this.makeHistogramData(this.props.data.features)
   //   //this.makeIncidentGraph(this.props.data.features)
@@ -70,10 +70,10 @@ export default class GraphArea extends Component {
     const hourBins = timeHours(timeHour.offset(timeExtent[0],-1),
                                timeHour.offset(timeExtent[1],1))
 
-    console.log(timeExtent)
-    console.log(hourBins)
-    console.log(typeof(hourBins[0]))
-    console.log(moment(data[0].start))
+    // console.log(timeExtent)
+    // console.log(hourBins)
+    // console.log(typeof(hourBins[0]))
+    // console.log(moment(data[0].start))
 
     // Use the histogram layout to create a function that will bin the data
     const binByHour = histogram()
@@ -83,55 +83,90 @@ export default class GraphArea extends Component {
       .domain(timeExtent)
       .thresholds(hourBins)
 
-    console.log(binByHour(data))
+    //console.log(binByHour(data))
       
-      //console.log(i)
-      let bins = []
-      const xScl = this.getScales().xScale
-      for (let i=0; i < hourBins.length - 1; i++) {
-        let bin = {}
-        bin.values = []
-        let count = 0
-        const x0 = hourBins[i]
-        const x1 = hourBins[i + 1]
-        bin['x0'] = x0
-        bin['x1'] = x1
+    //console.log(i)
+    let bins = []
+    const xScl = this.getScales().xScale
+    for (let i=0; i < hourBins.length - 1; i++) {
+      let bin = {}
+      bin.values = []
+      let count = 0
+      const x0 = hourBins[i]
+      const x1 = hourBins[i + 1]
+      bin['x0'] = x0
+      bin['x1'] = x1
 
-        let incidentArray = []
-        data.forEach( (d) => {
-          // if incident has an end time
-          if (d.end > 0) {
-            // contained within the hour
-            if (xScl(d.start) >= xScl(x0) && xScl(d.start) < xScl(x1)) {
-              incidentArray.push(d)
-              return
-            } 
-            // check ending
-            else if (xScl(d.end) >= xScl(x0) && xScl(d.end) < xScl(x1)) {
-              incidentArray.push(d)
-              return
-            }
-            // contains an hour within incident
-            else if (xScl(d.start) <= xScl(x0) && xScl(d.end) >= xScl(x1)) {
-              incidentArray.push(d)
-              return
-            }
+      let incidentArray = []
+      data.forEach( (d) => {
+        // if incident has an end time
+        if (d.end > 0) {
+          // contained within the hour
+          if (xScl(d.start) >= xScl(x0) && xScl(d.start) < xScl(x1)) {
+            incidentArray.push(d)
+            return
           } 
-          // case with made up durations (wait is 3600)
-          else {
-            if (xScl(d.start)  >= xScl(x0) && xScl(d.start) < xScl(x1)) {
-              incidentArray.push(d)
-              return
-            }
+          // check ending
+          else if (xScl(d.end) >= xScl(x0) && xScl(d.end) < xScl(x1)) {
+            incidentArray.push(d)
+            return
           }
-          
-        })
-        bin.values = incidentArray
-        bins.push(bin)
-      }
-      console.log(bins)
+          // contains an hour within incident
+          else if (xScl(d.start) <= xScl(x0) && xScl(d.end) >= xScl(x1)) {
+            incidentArray.push(d)
+            return
+          }
+        } 
+        // case with made up durations (wait is 3600)
+        else {
+          if (xScl(d.start)  >= xScl(x0) && xScl(d.start) < xScl(x1)) {
+            incidentArray.push(d)
+            return
+          }
+        }
+        
+      })
+      bin.values = incidentArray
+      bins.push(bin)
+    }
+    //console.log(bins)
 
+    const canvas = this.canvas
+    const ctx = canvas.getContext("2d")
+    const w = canvas.width
+    const h = canvas.height
 
+    ctx.clearRect(0, 0, this.props.size[0], this.props.size[1])
+    bins.map( (bin,i) => {
+      bin.values.sort( (a,b) => {
+        return a.priority - b.priority
+      })
+      console.log(bin)
+      //const ht = h / bin.values.length
+      //console.log(ht)
+      const ht = (h - 30) / bin.values.length
+      const xPos = (w / bins.length) * i
+      bin.values.map( (d,j) => {
+
+        // console.log(ht * j)
+        // console.log(xScl(bin.x0))
+        // console.log(xScl(bin.x1))
+        if (d.answered === "yes") {
+          ctx.fillStyle = colrs[0]
+          ctx.fillRect(xPos, (ht * j), w/bins.length - 1, (ht - 1))
+        } else {
+          ctx.fillStyle = colrs[1]
+          ctx.fillRect(xPos, (ht * j), w/bins.length - 1, (ht - 1))
+        }
+
+        
+      })
+      
+      // ctx.fillStyle = colrs[1] // sets the color to fill in the rectangle with
+      // ctx.fillRect(xScl(d.start), yScl(d.wait), this.getRectWidth(xScl, d, true), 1)
+      // ctx.fillStyle = colrs[0]
+      // ctx.fillRect(xScl(d.scene), yScl(d.wait), this.getRectWidth(xScl, d, false), 1)
+    })
   }
 
   makeCanvasGraph = (data) => {
