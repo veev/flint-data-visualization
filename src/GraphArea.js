@@ -146,7 +146,12 @@ export default class GraphArea extends Component {
     const x = this.getScales().xScale
     const y = this.getScales().yScale
 
-    const xAxis = axisBottom().scale(x)
+    const xAxis = axisBottom()
+                    .scale(x)
+                    .ticks(14)
+                    // .tickFormat( d => {
+                      
+                    // })
     const xCoord = x(this.props.currentTime)
 
     // console.log(this.props.activeData)
