@@ -144,7 +144,7 @@ export default class GraphArea extends Component {
       console.log(bin)
       //const ht = h / bin.values.length
       //console.log(ht)
-      const ht = (h - 30) / bin.values.length
+      const ht = (h - 30) / 38//bin.values.length
       const xPos = (w / bins.length) * i
       bin.values.map( (d,j) => {
 
