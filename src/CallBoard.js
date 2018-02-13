@@ -6,12 +6,14 @@ import { map_range } from './utils'
 import { interpolateHcl, interpolateRgb } from 'd3-interpolate'
 import { scaleLinear, scalePow } from 'd3-scale'
 import fbSvg from './styles/images/facebook-messenger.svg'
+import CommentDrawer from './CommentDrawer'
 
 export default class CallBoard extends Component {
 	constructor (props) {
 		super(props)
     this.state = {
       openIncidents: [],
+      isCommentDrawerOpen: false,
       rowIsHighlighted: false
     }
     // need this to format moment durations
@@ -123,7 +125,6 @@ export default class CallBoard extends Component {
             onMouseLeave={() => this.props.handleHighlight(this.props.defaultFeature)}
           >
             <div className="boardColumn boardColumn-type">{row.properties.type}</div>
-            <div className="boardColumn boardColumn-priority">{row.properties.priority}</div>
             <div className="boardColumn boardColumn-activeTime">{this.formatSeconds(this.getActiveTime(row.properties.unix_timestamp))}</div>
             <div className="boardColumn boardColumn-status">
               <div
@@ -234,19 +235,22 @@ export default class CallBoard extends Component {
     const { activeData, postData } = this.props
 
 		return (
-      <div className="Board">
-        <div className="boardDescription">
-        The amount of active incidents at a given moment. Some incidents have been waiting for officers to appear for over an hour.
+      <div className="grossWrapper">
+        <div className="Board">
+          <div className="boardDescription">
+          The amount of active incidents at a given moment. Some incidents have been waiting for officers to appear for over an hour.
+          </div>
+          <div className="boardHeader">
+            <div className="boardColumn boardColumn-type">Type</div>
+            <div className="boardColumn boardColumn-activeTime">Elapsed Time</div>
+            <div className="boardColumn boardColumn-status">Status</div>
+            <div className="boardColumn boardColumn-expander">Posts</div>
+          </div>
+          <div className="boardContent">{this.makeRows(activeData)}</div>
         </div>
-        <div className="boardHeader">
-          <div className="boardColumn boardColumn-type">Type</div>
-          <div className="boardColumn boardColumn-priority">Priority</div>
-          <div className="boardColumn boardColumn-activeTime">Elapsed Time</div>
-          <div className="boardColumn boardColumn-status">Status</div>
-          <div className="boardColumn boardColumn-expander">Posts</div>
-        </div>
-        <div className="boardContent">{this.makeRows(activeData)}</div>
+        <CommentDrawer isCommentDrawerOpen={this.state.isCommentDrawerOpen} width={this.state.isCommentDrawerOpen ? `320px` : `0px`}/>
       </div>
+
 		)
 	}
 }

@@ -39,7 +39,7 @@
   position: relative;
   height: 76vh;
   min-width: 330px;
-  width: 360px;
+  width: 345px;
   overflow-y: scroll;
   background-color: rgba(24, 24, 24, 0.8);
   color: #fff;
@@ -47,7 +47,8 @@
   font-size: 0.8em;
   display: flex;
   display: -webkit-flex;
-  flex-direction: column; }
+  flex-direction: column;
+  z-index: 200; }
   .Board .boardDescription {
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
@@ -128,7 +129,7 @@
       width: 30px;
       display: inline-block; }
     .Board .boardRow-expander .badge-wrapper {
-      width: 5em; }
+      width: 6em; }
     .Board .boardRow-expander .likesBadge {
       font-size: 0.8em;
       display: inline-block;
@@ -209,6 +210,20 @@
     .Board .postComment p {
       padding: 0px 10px;
       font-size: 13px; }
+
+.boardComments {
+  height: 64vh;
+  background: #fff;
+  width: 320px;
+  transition: all 1s ease-in-out;
+  position: absolute;
+  top: 144px;
+  left: 25px;
+  z-index: 100;
+  opacity: 0; }
+  .boardComments.open {
+    transform: translateX(320px);
+    opacity: 1; }
 
 .timeOutput {
   width: 140px;

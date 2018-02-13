@@ -84,7 +84,7 @@ $posts-col-width: 12%;
   position: relative;
   height: 76vh;
   min-width: 330px;
-  width: 360px;
+  width: 345px;
   overflow-y: scroll;
   background-color: rgba(24, 24, 24, 0.8);
   color: $ig-white;
@@ -94,6 +94,7 @@ $posts-col-width: 12%;
   display: -webkit-flex;
   // height: 100%;
   flex-direction: column;
+  z-index: 200;
 
   .boardDescription {
     background: rgba(0, 0, 0, 0.8);
@@ -220,7 +221,7 @@ $posts-col-width: 12%;
     }
 
     .badge-wrapper {
-      width: 5em;
+      width: 6em;
     }
 
     .likesBadge {
@@ -347,6 +348,25 @@ $posts-col-width: 12%;
 
 
 }
+
+.boardComments {
+  height: 64vh;
+  background: #fff;
+  width: 320px;
+  transition: all 1s ease-in-out;
+  position: absolute;
+  top: 144px;
+  left: 25px;
+  z-index: 100;
+  opacity: 0;
+
+  &.open {
+    transform: translateX(320px);
+    opacity: 1;
+  }
+}
+
+
 
 ////////////////////////////////
 ////////// TIMELINE ////////////
