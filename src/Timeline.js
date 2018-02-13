@@ -43,13 +43,35 @@ export default class Timeline extends Component {
   }
 
   componentDidMount() {
-    const width = this.graphAreaDiv.clientWidth - 160
-    const height = this.graphAreaDiv.clientHeight
-    this.setState({ graphWidth: width, graphHeight: height })
+    this.fitParentContainer()
+    window.addEventListener('resize', this.fitParentContainer)
+  }
+
+  componentDidUpdate() {
   }
 
   componentWillUnmount() {
-    // window.clearInterval(this.timer)
+    window.removeEventListener('resize', this.fitParentContainer)
+  }
+
+  getGraphSize() {
+    const width = this.graphAreaDiv.clientWidth - 160
+    const height = this.graphAreaDiv.clientHeight
+    return { width, height }
+  }
+
+  fitParentContainer = () => {
+    const { graphWidth } = this.state
+    const currentContainerWidth = this.getGraphSize().width
+
+    const shouldResize = graphWidth !== currentContainerWidth
+
+    if (shouldResize) {
+      this.setState({
+        graphWidth: currentContainerWidth,
+        graphHeight: this.getGraphSize().height
+      })
+    }
   }
 
   render() {
