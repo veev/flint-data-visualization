@@ -52,9 +52,9 @@ export default class CallBoard extends Component {
 
   isPostActive = (row) => {
     const post = find(this.props.postData, ['id', row.properties.postId])
-    if (post.id === this.state.openPost.id) {
+    if (post.id === this.state.openPost.id && this.state.isCommentDrawerOpen) {
       return true
-    } else {
+    } else if (post.id === this.state.openPost.id && !this.state.isCommentDrawerOpen) {
       return false
     }
   }
@@ -65,7 +65,7 @@ export default class CallBoard extends Component {
     if (post.id === this.state.openPost.id) {
       //console.log("same post", this.state.openPost)
       this.setState({ isCommentDrawerOpen: false })
-      timeout(1000).then(() => {
+      timeout(800).then(() => {
         this.setState({ openPost: new Object() })
       })
     } 
@@ -80,7 +80,7 @@ export default class CallBoard extends Component {
       //console.log("post is open", this.state.openPost)
       this.setState({ isCommentDrawerOpen: false })
       //await timeout(1000)
-      timeout(1000).then(() => {
+      timeout(800).then(() => {
         this.setPostInfo(row)
         this.setState({ isCommentDrawerOpen: true })
       })
