@@ -385,6 +385,7 @@
       left: 0px;
       right: 0px; }
     .GraphArea .graphWrapper canvas {
+      position: absolute;
       top: 0px;
       left: 0px;
       right: 0px; }

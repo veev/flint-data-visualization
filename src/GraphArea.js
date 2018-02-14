@@ -8,6 +8,9 @@ import { select } from 'd3-selection'
 import { stack } from 'd3-shape'
 import { nest } from 'd3-collection'
 import { axisBottom } from 'd3-axis'
+//import { quadtree } from 'd3-geom'
+import { zoom } from 'd3-zoom'
+import { transform } from 'd3-transform'
 import graphData from './data/d3data.json'
 import audioMap from './data/flint-transcribed.json'
 
@@ -21,13 +24,23 @@ export default class GraphArea extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      dragging: false
+      dragging: false,
+      mouseX: 0,
+      mouseY: 0,
+      // zoomTransform: null
     }
-    this.audioObjects = Object.values(audioMap)
+    //this.audioObjects = Object.values(audioMap)
+    // this.zoom = zoom()
+    //               .scaleExtent([-5, 5])
+    //               .translateExtent([[-1, -1], [this.props.size[0]+1, this.props.size[1]+1]])
+    //               .extent([[-1, -1], [this.props.size[0]+1, this.props.size[1]+1]])
+    //               .on('zoom', this.zoomed)
   }
 
   componentDidMount() {
     this.makeCanvasGraph(graphData)
+    // console.log(select(this.svgLayer))
+    // select(this.svgLayer).call(this.zoom)
   //   //console.log(this.props.data)
   //   //this.makeHistogramData(this.props.data.features)
   //   //this.makeIncidentGraph(this.props.data.features)
@@ -44,27 +57,52 @@ export default class GraphArea extends Component {
 
   componentDidUpdate() {
     this.makeCanvasGraph(graphData)
+    // select(this.canvas).call(this.zoom)
   //   //this.makeHistogramData(this.props.data.features)
   //   //this.makeIncidentGraph(this.props.data.features)
   //   //this.makeIncidentGraph(graphData)
   //   //this.makeAxis(graphData)
   }
 
+  // zoomed = () => {
+  //   console.log('zoomed')
+  //   this.setState({ 
+  //     zoomTransform: transform
+  //   })
+  // }
+
   graphAudioData = (data) => {
 
   }
 
   makeAxis = (data) => {
-    const xS = this.getScales().xScale
+    const xS = this.getScales(1).xScale
     const xAxis = axisBottom().scale(xS)
 
   }
 
   makeCanvasGraph = (data) => {
+
     const canvas = this.canvas
     const ctx = canvas.getContext("2d")
     const w = canvas.width
     const h = canvas.height
+
+    const mouseCanvas = this.mouseCanvas
+    const mouseCtx = mouseCanvas.getContext("2d")
+    const maxWidth = 40
+
+    const scalar = 4.0
+    // const factory = quadtree()
+    //                   .extent([
+    //                     [0, 0],
+    //                     [w, h-30]
+    //                   ])
+
+    // const tree = factory(graphData)
+
+    //var col = ctx.getImageData(this.state.mouseX, this.state.mouseY, 1, 1).data
+    //console.log(col)
     // console.log(this.props.size[0], this.props.size[1])
     //console.log(w, h)
     // const pixelRatio = window.devicePixelRatio
@@ -72,8 +110,20 @@ export default class GraphArea extends Component {
     // canvas.height = h * pixelRatio
     //console.log(canvas.width, canvas.height)
 
-    const xScl = this.getScales().xScale
-    const yScl = this.getScales().yScale
+    const xScl = this.getScales(scalar).xScale
+    const yScl = this.getScales(scalar).yScale
+
+    console.log(this.state.mouseX, this.state.mouseY)
+    console.log(xScl(this.props.currentTime)/scalar)
+
+    graphData.map( (d,i) => {
+      if (this.state.mouseX >= xScl(d.start) && 
+          this.state.mouseX <= (xScl(d.start) + this.getRectWidth(xScl, d, true)) &&
+          this.state.mouseY >= yScl(d.wait) &&
+          this.state.mouseY <= yScl(d.wait) + 1) {
+        console.log(d)
+      }
+    })
 
     // TODO: Filter based on priority - via dropdown or buttons?
     // const filtered = data.filter( d => {
@@ -82,30 +132,37 @@ export default class GraphArea extends Component {
     // })
     //const filtered = this.filterActiveCalls(this.props.currentTime)
 
-    ctx.clearRect(0, 0, this.props.size[0], this.props.size[1])
+    ctx.clearRect(0, 0, w, h)
     graphData.map( (d,i) => {
       ctx.fillStyle = colrs[1] // sets the color to fill in the rectangle with
-      ctx.fillRect(xScl(d.start), yScl(d.wait), this.getRectWidth(xScl, d, true), 1)
+      ctx.fillRect(xScl(d.start)/scalar, yScl(d.wait)/scalar, this.getRectWidth(xScl, d, true) / scalar, 1)
       ctx.fillStyle = colrs[0]
-      ctx.fillRect(xScl(d.scene), yScl(d.wait), this.getRectWidth(xScl, d, false), 1)
+      ctx.fillRect(xScl(d.scene)/scalar, yScl(d.wait)/scalar, this.getRectWidth(xScl, d, false) / scalar, 1)
     })
+
+    // mouseCtx.clearRect(0, 0, w, h)
+    // mouseCtx.fillStyle= '#fff'
+    // mouseCtx.fillRect(xScl(this.props.currentTime)/scalar, 0, maxWidth, h)
+    // graphData.map( (d,i) => {
+    //   mouseCtx.fillStyle = "#ff00ff"
+    //   mouseCtx.fillRect(xScl(d.start), yScl(d.wait), this.getRectWidth(xScl, d, true), 1)
+    // })
   }
 
-  getScales = () => {
+  getScales = (scalar) => {
     //const dateRangeGD = [graphData[0].start, graphData[graphData.length - 1].end]
     const waitRange = extent(graphData, d => {
       return d.wait
     })
-
     //console.log(dateRangeGD)
     //console.log(this.props.dateRange)
 
-    const xScale = scaleTime().range([0, this.props.size[0]])
+    const xScale = scaleTime().range([0, (this.props.size[0]) * scalar])
                               .domain([+this.props.dateRange[0], +this.props.dateRange[1]])
                               .clamp(true)
 
     const yScale = scalePow().exponent(0.7)
-                              .range([this.props.size[1] - 30, 0])
+                              .range([0, (this.props.size[1] - 30) * scalar])
                               .domain(waitRange)
 
     return {xScale, yScale}
@@ -134,6 +191,15 @@ export default class GraphArea extends Component {
     return filtered
   }
 
+  onMouseMove = (e) => {
+    //console.log(this.ref)
+    const position = this.svgLayer.getBoundingClientRect()
+    // console.log(e.nativeEvent.offsetX)
+    // console.log(e.nativeEvent.offsetY)
+
+    this.setState({ mouseX: e.nativeEvent.offsetX, mouseY: e.nativeEvent.offsetY });
+  }
+
   render() {
   	// return null
     // const dateRange = [graphData[0].start, graphData[graphData.length - 1].end]
@@ -143,8 +209,8 @@ export default class GraphArea extends Component {
     // const xScale = scaleTime().range([0, this.props.size[0]])
     //                           .domain(dateRange)
 
-    const x = this.getScales().xScale
-    const y = this.getScales().yScale
+    const x = this.getScales(1).xScale
+    const y = this.getScales(1).yScale
 
     const xAxis = axisBottom()
                     .scale(x)
@@ -158,13 +224,25 @@ export default class GraphArea extends Component {
     // console.log(this.props.currentTime)
     const filteredCalls = this.filterActiveCalls(this.props.currentTime)
     //console.log(filteredCalls)
+
+    // console.log(this.state.mouseX, this.state.mouseY)
     
     return (
       <div className="graphWrapper">
-      <canvas width={this.props.size[0]} height={this.props.size[1]} ref={(el) => { this.canvas = el }} />
+      <canvas
+        width={this.props.size[0]}
+        height={this.props.size[1]}
+        ref={(el) => { this.canvas = el }}
+      />
+      <canvas 
+        ref={(el) => { this.mouseCanvas = el }}
+        width={this.props.size[0]}
+        height={this.props.size[1]}
+      />
       <svg
         className="svgLayer"
-        ref={node => this.node = node}
+        ref={(node) => { this.svgLayer = node }}
+        onMouseMove = {this.onMouseMove}
         width={this.props.size[0]}
         height={this.props.size[1]}>
         <Axis 
