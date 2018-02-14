@@ -253,13 +253,31 @@ $posts-col-width: 12%;
       for now, automatic sizing is more important
       height: 70px;
     */
-
     height: auto;
+  }
+}
+
+.boardComments {
+  height: 64vh;
+  // background: #fff;
+  width: 320px;
+  transition: all 1s ease-in-out;
+  position: absolute;
+  top: 144px;
+  left: 25px;
+  z-index: 100;
+  opacity: 0;
+
+  &.open {
+    transform: translateX(320px);
+    opacity: 1;
   }
 
   .post-wrapper {
     min-width: 330px;
-    width: 340px;
+    width: 100%;
+    overflow-y: scroll;
+    height: 64vh;
   }
 
   .post {
@@ -345,25 +363,6 @@ $posts-col-width: 12%;
       font-size: 13px;
     }
   }
-
-
-}
-
-.boardComments {
-  height: 64vh;
-  background: #fff;
-  width: 320px;
-  transition: all 1s ease-in-out;
-  position: absolute;
-  top: 144px;
-  left: 25px;
-  z-index: 100;
-  opacity: 0;
-
-  &.open {
-    transform: translateX(320px);
-    opacity: 1;
-  }
 }
 
 
@@ -395,6 +394,9 @@ $posts-col-width: 12%;
   position: absolute;
   width: 100vw;
   bottom: 0;
+  z-index: 600;
+  /* height: 17vh; */
+  background-color: #222;
 }
 
 .PlaybackControls {
@@ -581,6 +583,7 @@ $posts-col-width: 12%;
     right: 0px;
 
     .svgLayer {
+      fill: #0084ff;
       position: absolute;
       top: 0px;
       left: 0px;

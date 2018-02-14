@@ -5,20 +5,22 @@ import momentDurationFormatSetup from 'moment-duration-format'
 import { map_range } from './utils'
 import { interpolateHcl, interpolateRgb } from 'd3-interpolate'
 import { scaleLinear, scalePow } from 'd3-scale'
-import fbSvg from './styles/images/facebook-messenger.svg'
+import MessageIcon from './MessageIcon'
 import CommentDrawer from './CommentDrawer'
+
+const timeout = ms => new Promise(res => setTimeout(res, ms))
 
 export default class CallBoard extends Component {
 	constructor (props) {
 		super(props)
     this.state = {
       openIncidents: [],
+      openPost: {},
       isCommentDrawerOpen: false,
       rowIsHighlighted: false
     }
     // need this to format moment durations
     momentDurationFormatSetup(moment)
-    console.log(fbSvg)
 	}
 
   static defaultProps = {
@@ -40,9 +42,51 @@ export default class CallBoard extends Component {
     } else {
       temp.push(r)
     }
-    this.setState({
-      openIncidents: temp
-    })
+    this.setState({ openIncidents: temp })
+  }
+
+  setPostInfo = (row) => {
+    const post = find(this.props.postData, ['id', row.properties.postId])
+    this.setState({ openPost: post || {} })
+  }
+
+  isPostActive = (row) => {
+    const post = find(this.props.postData, ['id', row.properties.postId])
+    if (post.id === this.state.openPost.id) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  handleBadgeClick = (row) => {
+    const post = find(this.props.postData, ['id', row.properties.postId])
+    // clicked on same post if it's open
+    if (post.id === this.state.openPost.id) {
+      //console.log("same post", this.state.openPost)
+      this.setState({ isCommentDrawerOpen: false })
+      timeout(1000).then(() => {
+        this.setState({ openPost: new Object() })
+      })
+    } 
+    // first time clicked on a post
+    else if (Object.keys(this.state.openPost).length === 0) {
+      //console.log("empty post start", this.state.openPost)
+      this.setPostInfo(row)
+      this.setState({ isCommentDrawerOpen: true })
+    } 
+    // clicked on a different post if it's already open
+    else {
+      //console.log("post is open", this.state.openPost)
+      this.setState({ isCommentDrawerOpen: false })
+      //await timeout(1000)
+      timeout(1000).then(() => {
+        this.setPostInfo(row)
+        this.setState({ isCommentDrawerOpen: true })
+      })
+      
+    }
+    //this.setState({ isCommentDrawerOpen: !this.state.isCommentDrawerOpen }
   }
 
   // TODO: get updated elapsed time from active incidents in app
@@ -152,18 +196,17 @@ export default class CallBoard extends Component {
             {row.properties.postId.length ?
             (<div 
               className="boardColumn boardRow-expander" 
-              onClick={() => this.toggleOpenIncident(row.properties.id)}>
+              onClick={() => this.handleBadgeClick(row)}>
                 <div className="badge-wrapper">
-                  <img className="fbSvg" width="20px" height="20px" src={fbSvg} />
+                  <MessageIcon 
+                    postActive={this.isPostActive(row)}
+                  />
                   <div className="likesBadge" width={`${numComments.stringLength + 0.5}em`}>{numComments.numComments}</div>
                 </div>
               </div>) :
             <div className="boardColumn boardRow-expander">
               <div className="badge-wrapper"></div>
             </div>}
-          </div>
-          <div className={"boardColumn boardRow-openIncident " + (incidentIsOpen ? "boardColumn boardRow-openIncident-open" : "")} >
-            <div className="bogus-padding">{this.insertPost(row)}</div>
           </div>
         </div>
       )
@@ -178,57 +221,58 @@ export default class CallBoard extends Component {
     }
   }
 
-  insertPost = (row) => {
-    const post = find(this.props.postData, ['id', row.properties.postId]);
-    if (post !== undefined) {
-      // console.log(row.properties.postId)
-      // console.log(post.comments.data)
-      return (
-        <div className="post-wrapper">
-          <div className="post">
-            <div className="post-info">
-              <div className="avatar"></div>
-                <div className="metadata">
-                  <div className="account">Flint Police Operations</div>
-                  <div className="time">{post.created_time}</div>
-                </div>
-            </div>
-            <div className="post-body"><p>{post.message}</p></div>
-            {post.comments ? 
-            <div className="postCommentWrapper">{this.insertComments(post.comments.data)}</div> : 
-            null }
-          </div>
-        </div>
-      )
-    }
-  }
+  // insertPost = (row) => {
+  //   //const post = find(this.props.postData, ['id', row.properties.postId]);
+  //   const post = this.state.openIncident
+  //   if (post !== undefined) {
+  //     // console.log(row.properties.postId)
+  //     // console.log(post.comments.data)
+  //     return (
+  //       <div className="post-wrapper">
+  //         <div className="post">
+  //           <div className="post-info">
+  //             <div className="avatar"></div>
+  //               <div className="metadata">
+  //                 <div className="account">Flint Police Operations</div>
+  //                 <div className="time">{post.created_time}</div>
+  //               </div>
+  //           </div>
+  //           <div className="post-body"><p>{post.message}</p></div>
+  //           {post.comments ? 
+  //           <div className="postCommentWrapper">{this.insertComments(post.comments.data)}</div> : 
+  //           null }
+  //         </div>
+  //       </div>
+  //     )
+  //   }
+  // }
 
-  insertComments = (comments) => {
-    //console.log(comments)
-    return comments.map( (comment, i) => {
-      //console.log(comment)
-      return (
-        <div className="whyDoWeNeedThisDiv" key={`why${i}`}>
-        <div className="postComment" key={`${comment.id}-${i}`}><p>{comment.message}</p></div>
-        {(comment.replies) ?
-        <ul className="commentReplyWrapper">{this.insertReplies(comment.replies.data)}</ul> :
-        null }
-        </div>
-      )
-    })
-  }
+  // insertComments = (comments) => {
+  //   //console.log(comments)
+  //   return comments.map( (comment, i) => {
+  //     //console.log(comment)
+  //     return (
+  //       <div className="whyDoWeNeedThisDiv" key={`why${i}`}>
+  //       <div className="postComment" key={`${comment.id}-${i}`}><p>{comment.message}</p></div>
+  //       {(comment.replies) ?
+  //       <ul className="commentReplyWrapper">{this.insertReplies(comment.replies.data)}</ul> :
+  //       null }
+  //       </div>
+  //     )
+  //   })
+  // }
 
-  insertReplies = (replies) => {
-    return (
-      <ul>
-        {replies.map( (reply, i) => {
-          //console.log(reply)
-          return <li className="commentReply" key={`${reply.id}-${i}`}>{reply.message}</li>
-        })
-      }
-      </ul>
-    )
-  }
+  // insertReplies = (replies) => {
+  //   return (
+  //     <ul>
+  //       {replies.map( (reply, i) => {
+  //         //console.log(reply)
+  //         return <li className="commentReply" key={`${reply.id}-${i}`}>{reply.message}</li>
+  //       })
+  //     }
+  //     </ul>
+  //   )
+  // }
 
 	render() {
 
@@ -248,7 +292,10 @@ export default class CallBoard extends Component {
           </div>
           <div className="boardContent">{this.makeRows(activeData)}</div>
         </div>
-        <CommentDrawer isCommentDrawerOpen={this.state.isCommentDrawerOpen} width={this.state.isCommentDrawerOpen ? `320px` : `0px`}/>
+        <CommentDrawer 
+          isCommentDrawerOpen={this.state.isCommentDrawerOpen}
+          postData={this.state.openPost}
+        />
       </div>
 
 		)
