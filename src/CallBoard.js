@@ -111,6 +111,10 @@ export default class CallBoard extends Component {
     return moment.duration(millis, 'milliseconds').format('hh:mm:ss', { trim: false })
   }
 
+  formatFacebookTime = (date) => {
+    return moment(date).format("MMM Do YYYY, h:mm:ss a")
+  }
+
   // highlightOn = (row) => {
   //   // this calls a function in the main App to update highlightedFeature
   //   this.props.handleHighlight(row)

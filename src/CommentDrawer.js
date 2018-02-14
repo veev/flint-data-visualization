@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 
 export default class CommentDrawer extends Component {
   constructor(props) {
     super(props)
 
+  }
+
+  formatFacebookTime = (date) => {
+    return moment(date).format("MMM Do YYYY") + " at " + moment(date).format("h:mma")
   }
 
   insertPost = () => {
@@ -19,7 +24,7 @@ export default class CommentDrawer extends Component {
               <div className="avatar"></div>
                 <div className="metadata">
                   <div className="account">Flint Police Operations</div>
-                  <div className="time">{post.created_time}</div>
+                  <div className="time">{this.formatFacebookTime(post.created_time)}</div>
                 </div>
             </div>
             <div className="post-body"><p>{post.message}</p></div>
