@@ -42,11 +42,11 @@ export default class GraphArea extends Component {
 
   componentDidMount() {
 
-    //this.makeCanvasGraph(graphData)
+    this.makeCanvasGraph(graphData)
     // console.log(select(this.svgLayer))
     // select(this.svgLayer).call(this.zoom)
 
-    this.binData(graphData)
+   // this.binData(graphData)
 
   //   //console.log(this.props.data)
   //   //this.makeHistogramData(this.props.data.features)
@@ -64,9 +64,9 @@ export default class GraphArea extends Component {
 
   componentDidUpdate() {
 
-    //this.makeCanvasGraph(graphData)
+    this.makeCanvasGraph(graphData)
     // select(this.canvas).call(this.zoom)
-    this.binData(graphData)
+   // this.binData(graphData)
 
   //   //this.makeHistogramData(this.props.data.features)
   //   //this.makeIncidentGraph(this.props.data.features)
@@ -115,7 +115,8 @@ export default class GraphArea extends Component {
       
     //console.log(i)
     let bins = []
-    const xScl = this.getScales().xScale
+    const xScl = this.getScales(1).xScale
+
     for (let i=0; i < hourBins.length - 1; i++) {
       let bin = {}
       bin.values = []
@@ -164,17 +165,30 @@ export default class GraphArea extends Component {
     const w = canvas.width
     const h = canvas.height
 
+    //console.log(this.state.mouseX, this.state.mouseY)
+
     ctx.clearRect(0, 0, this.props.size[0], this.props.size[1])
     bins.map( (bin,i) => {
       bin.values.sort( (a,b) => {
-        return a.priority - b.priority
+        return a.wait - b.wait
       })
-      console.log(bin)
+      //console.log(bin)
       //const ht = h / bin.values.length
       //console.log(ht)
       const ht = (h - 30) / 38//bin.values.length
       const xPos = (w / bins.length) * i
+
+      //console.log(xPos, (xPos + w/bins.length))
+
+
       bin.values.map( (d,j) => {
+        //console.log(ht * j)
+        if (this.state.mouseX >= xPos && 
+          this.state.mouseX <= xPos + w/(bins.length) &&
+          this.state.mouseY >= (h - 30) - (ht * j) &&
+          this.state.mouseY <= (h - 30) - (ht * j) - ht - 1) {
+          //console.log(d)
+        }
 
         // console.log(ht * j)
         // console.log(xScl(bin.x0))
@@ -229,7 +243,7 @@ export default class GraphArea extends Component {
     const xScl = this.getScales(scalar).xScale
     const yScl = this.getScales(scalar).yScale
 
-    console.log(this.state.mouseX, this.state.mouseY)
+    // console.log(this.state.mouseX, this.state.mouseY)
     console.log(xScl(this.props.currentTime)/scalar)
 
     graphData.map( (d,i) => {
