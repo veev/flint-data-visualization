@@ -31,6 +31,8 @@ export default class GraphArea extends Component {
       mouseY: 0,
       // zoomTransform: null
     }
+
+    this.bins = []
     // this.zoom = zoom()
     //               .scaleExtent([-5, 5])
     //               .translateExtent([[-1, -1], [this.props.size[0]+1, this.props.size[1]+1]])
@@ -44,7 +46,8 @@ export default class GraphArea extends Component {
     // console.log(select(this.svgLayer))
     // select(this.svgLayer).call(this.zoom)
 
-   this.binData(graphData)
+   this.bins = this.binData(graphData)
+   //console.log(this.bins)
 
   //   //console.log(this.props.data)
   //   //this.makeHistogramData(this.props.data.features)
@@ -64,23 +67,12 @@ export default class GraphArea extends Component {
 
     //this.makeCanvasGraph(graphData)
     // select(this.canvas).call(this.zoom)
-   this.binData(graphData)
+   this.makeBinnedCanvasGraph(this.bins)
 
   //   //this.makeHistogramData(this.props.data.features)
   //   //this.makeIncidentGraph(this.props.data.features)
   //   //this.makeIncidentGraph(graphData)
   //   //this.makeAxis(graphData)
-  }
-
-  // zoomed = () => {
-  //   console.log('zoomed')
-  //   this.setState({ 
-  //     zoomTransform: transform
-  //   })
-  // }
-
-  graphAudioData = (data) => {
-
   }
 
   makeAxis = (data) => {
@@ -159,7 +151,7 @@ export default class GraphArea extends Component {
           // Victor's amazing greedy algorithm realization - this works the same as above
           if ((xScl(d.start) < xScl(x0) && xScl(d.end) < xScl(x0)) ||
                (xScl(d.start) > xScl(x1) && xScl(d.end) > xScl(x1))) {
-            return;
+            return
           }
           incidentArray.push(d);
         } 
@@ -176,7 +168,10 @@ export default class GraphArea extends Component {
       bins.push(bin)
     }
     //console.log(bins)
+    return bins
+  }
 
+  makeBinnedCanvasGraph = (bins) => {
     const canvas = this.canvas
     const ctx = canvas.getContext("2d")
     const w = canvas.width
