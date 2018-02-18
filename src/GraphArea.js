@@ -402,44 +402,5 @@ export default class GraphArea extends Component {
       </svg>
       </div>
     )
-
-    // return (
-    //   <svg 
-    //     ref={node => this.node = node}
-    //     width={this.props.size[0]}
-    //     height={this.props.size[1]}>
-    //     <g className="graph">
-    //       { graphData.map( (d, i) => {
-    //         return (
-    //         <g className="stackGroup" key={`group-${i}`}>
-    //         <rect
-    //           key={`total-${i}`}
-    //           className="totalDuration"
-    //           x={x(d.start)}
-    //           y={y(d.wait)}
-    //           width={this.getRectWidth(x, d, true)}
-    //           height={1.5}
-    //           fill={colrs[1]}
-    //         />
-    //         <rect 
-    //           key={`onScene-${i}`}
-    //           className="onSceneDuration" 
-    //           x={x(d.scene)}
-    //           y={y(d.wait)}
-    //           width={this.getRectWidth(x, d, false)}
-    //           height={1.5}
-    //           fill={colrs[0]}
-    //         />
-    //       </g>
-    //       )
-    //     })}
-    //     <Axis 
-    //       h={this.props.size[1]}
-    //       axis={xAxis}
-    //       axisType="x"
-    //     />
-    //     </g>
-    //   </svg>
-    // )
   }
 }
