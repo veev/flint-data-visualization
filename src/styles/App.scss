@@ -1,7 +1,7 @@
 $black: #3D463F;
 $gray: #878C88;
 // $white: #fefefe;
-$white: #7d7b7b;
+$white: #fefefe;//#7d7b7b;
 $green: #72D687;
 $flintRed: #FB3F48;
 $flintRedDarker: #CE2F37;
@@ -68,7 +68,8 @@ $posts-col-width: 12%;
   position: absolute;
   width: 100%;
   top: 6vh;
-  height: 76vh;
+  // height: 76vh;
+  height: 94vh;
 /*  bottom: 0;*/
 }
 
@@ -365,7 +366,44 @@ $posts-col-width: 12%;
   }
 }
 
+////////////////////////////////
+///////// START INFO ///////////
+////////////////////////////////
 
+.startInfo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  //z-index: 2147483647;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.5);
+
+}
+
+.startInfo {
+  position: relative;
+  background-color: $ig-black;
+  padding: 25px;
+  width: 600px;
+
+  p {
+    font-size: 1.2em;
+    line-height: 1.3em;
+    color: $white;
+    font-family: "AGaramondPro-Regular", "Georgia", serif;
+  }
+
+  .startCallout {
+    color: $flintRed;
+    font-family: 'fgcm', helvetica, sans-serif;
+    font-size: 1.3em;
+  }
+}
 
 ////////////////////////////////
 ////////// TIMELINE ////////////

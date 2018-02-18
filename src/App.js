@@ -10,6 +10,7 @@ import CallBoard from './CallBoard'
 import Gallery from './Gallery'
 import ControlPanel from './ControlPanel'
 import AudioManager from './AudioManager'
+import StartInfo from './StartInfo'
 // import './styles/App.css'
 // import Source from './Source'
 // import Layer from './Layer'
@@ -71,30 +72,6 @@ class App extends Component {
   }
 
   componentWillMount() {
-    // no access yet to component in React DOM (has yet to render)
-    // do init stuff here to data?
-    // console.log('componentWillMount')
-    // console.log(posts)
-
-    // data.features = data.features.map( incident => {
-    //   incident.properties.status = "preCall"
-    //   incident.properties.elapsedTime = 0
-    //   if(incident.properties.unix_onscene) {
-    //     incident.properties.waitTime = incident.properties.unix_onscene - incident.properties.unix_timestamp
-    //   } else if (incident.properties.unix_end) {
-    //     incident.properties.waitTime = incident.properties.unix_end - incident.properties.unix_timestamp
-    //   } else {
-    //     incident.properties.waitTime = 60 * 60
-    //   }
-
-    //   if (incident.properties.waitTime < 0) {
-    //     incident.properties.waitTime = 60
-    //   }
-    //   //console.log(incident.properties.waitTime)
-    //   return incident
-    // })
-    // console.log(data.features)
-    // console.log(photos)
 
     console.log(this.sortedAudio[0])
     console.log(this.state.currentTime)
@@ -118,6 +95,10 @@ class App extends Component {
     })
 
     return audioArray
+  }
+
+  handleStateTearDown = (event) => {
+    this.setState({ startState: false })
   }
 
   handleVisMode = (value) => {
@@ -413,6 +394,7 @@ class App extends Component {
 
   render() {
     const { 
+      startState,
       isPlaying,
       currentTime,
       audioIndex,
@@ -448,47 +430,57 @@ class App extends Component {
           handlePhotos={this.handlePhotoMarkerClick}
           viewMode={incidentMode}
           showHeatmap={showHeatmap}
+          startState={startState}
         />
-        <ControlPanel 
-          handleToggle={this.handleVisMode}
-          viewMode={incidentMode}
-          showHeatmap={showHeatmap}
-          handleHeatmapToggle={this.handleHeatmapToggle}
-          pausePlay={this.pausePlayback}
-          handleDropdown={this.handleTimeDropdown}
-          timeframe={timeframe}
-        />
-        { incidentMode ?
-          <div>
-          <Timeline
-            handlePlay={this.handlePlayState}
-            handleSeek={this.handleSeekChange}
-            handleSeekStart={this.handleSeekStart}
-            handleSeekEnd={this.handleSeekEnd}
-            handleNextClip={this.handleNextAudioClip}
-            handlePrevClip={this.handlePrevAudioClip}
-            hasNext={hasNextClip}
-            hasPrevious={hasPrevClip}
-            // setTime={this._updateTime}
-            //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
-            formattedTime={[formattedDay, formattedTime]}
-            currentTime={this.convertTime(currentTime)}
-            unconvertTime={this.unconvertTime}
-            totalTime={this.convertTime(endTS)}
-            isPlaying={isPlaying}
-            staticData={data}
-            activeData={this.filterIncidents(currentTime)}
-            dateRange={dateRange}
+        { startState ?
+          <StartInfo 
+            handleTearDown={this.handleStateTearDown}
           />
-          <CallBoard
-            activeData={this.filterIncidents(currentTime)}
-            currentTime={currentTime}
-            handleHighlight={this.handleBoardHighlightChange}
-            mapHighlightedFeature={highlightedMapIncident}
-            boardHighlightedFeature={highlightedBoardIncident}
-            postData={posts}
-          /></div> : null
-        }
+        : 
+        [
+          (
+          <ControlPanel 
+            handleToggle={this.handleVisMode}
+            viewMode={incidentMode}
+            showHeatmap={showHeatmap}
+            handleHeatmapToggle={this.handleHeatmapToggle}
+            pausePlay={this.pausePlayback}
+            handleDropdown={this.handleTimeDropdown}
+            timeframe={timeframe}
+          />
+          ),
+          ( incidentMode ?
+            <div>
+            <Timeline
+              handlePlay={this.handlePlayState}
+              handleSeek={this.handleSeekChange}
+              handleSeekStart={this.handleSeekStart}
+              handleSeekEnd={this.handleSeekEnd}
+              handleNextClip={this.handleNextAudioClip}
+              handlePrevClip={this.handlePrevAudioClip}
+              hasNext={hasNextClip}
+              hasPrevious={hasPrevClip}
+              // setTime={this._updateTime}
+              //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
+              formattedTime={[formattedDay, formattedTime]}
+              currentTime={this.convertTime(currentTime)}
+              unconvertTime={this.unconvertTime}
+              totalTime={this.convertTime(endTS)}
+              isPlaying={isPlaying}
+              staticData={data}
+              activeData={this.filterIncidents(currentTime)}
+              dateRange={dateRange}
+            />
+            <CallBoard
+              activeData={this.filterIncidents(currentTime)}
+              currentTime={currentTime}
+              handleHighlight={this.handleBoardHighlightChange}
+              mapHighlightedFeature={highlightedMapIncident}
+              boardHighlightedFeature={highlightedBoardIncident}
+              postData={posts}
+            /></div> : null
+          )
+        ]}
         { showLightbox ?
           <div 
             className="lightBox-wrapper"

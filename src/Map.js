@@ -58,11 +58,13 @@ export default class Map extends Component {
     this.map = new MapboxGl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/dark-v9',
-      center: [-83.6969862, 43.0215524],
-      zoom: 12,
-      pitch: 50,
-      bearing: 0
+      center: [-85.46778000907034, 43.57288613860254],
+      zoom: 6,
+      // pitch: 50,
+      // bearing: 0
     })
+
+
 
     // const tooltip = new MapboxGl.Marker(this.props.tooltipContainer, {
     //   offset: [-120, 0]
@@ -163,6 +165,20 @@ export default class Map extends Component {
       } else {
         this.map.setLayoutProperty('totalTimeHeatmap', 'visibility', 'none')
       }
+    }
+
+    if (nextProps.startState) {
+      this.map.flyTo({
+        center: [-85.46778000907034, 43.57288613860254],
+        zoom: 6,
+        pitch: 0
+      })
+    } else {
+      this.map.flyTo({
+        center: [-83.6969862, 43.0215524],
+        zoom: 12,
+        pitch: 50
+      })
     }
   }
 
@@ -426,6 +442,10 @@ export default class Map extends Component {
     const popup = new MapboxGl.Popup({
         closeButton: false,
         closeOnClick: false
+    })
+
+    this.map.on('click', (e) => {
+      console.log(this.map.getCenter(), this.map.getBounds(), this.map.getBearing())
     })
 
     this.map.on('mouseenter', 'incidentsLayer', (e) => {
