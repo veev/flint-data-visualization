@@ -15,7 +15,6 @@ import { transform } from 'd3-transform'
 import moment from 'moment'
 
 import graphData from './data/d3data.json'
-import audioMap from './data/flint-transcribed.json'
 
 // import Histogram from "./Histogram"
 // import Slider from "./Slider";
@@ -32,7 +31,6 @@ export default class GraphArea extends Component {
       mouseY: 0,
       // zoomTransform: null
     }
-    //this.audioObjects = Object.values(audioMap)
     // this.zoom = zoom()
     //               .scaleExtent([-5, 5])
     //               .translateExtent([[-1, -1], [this.props.size[0]+1, this.props.size[1]+1]])
@@ -42,11 +40,11 @@ export default class GraphArea extends Component {
 
   componentDidMount() {
 
-    this.makeCanvasGraph(graphData)
+    //this.makeCanvasGraph(graphData)
     // console.log(select(this.svgLayer))
     // select(this.svgLayer).call(this.zoom)
 
-   // this.binData(graphData)
+   this.binData(graphData)
 
   //   //console.log(this.props.data)
   //   //this.makeHistogramData(this.props.data.features)
@@ -64,9 +62,9 @@ export default class GraphArea extends Component {
 
   componentDidUpdate() {
 
-    this.makeCanvasGraph(graphData)
+    //this.makeCanvasGraph(graphData)
     // select(this.canvas).call(this.zoom)
-   // this.binData(graphData)
+   this.binData(graphData)
 
   //   //this.makeHistogramData(this.props.data.features)
   //   //this.makeIncidentGraph(this.props.data.features)
@@ -98,8 +96,8 @@ export default class GraphArea extends Component {
     const hourBins = timeHours(timeHour.offset(timeExtent[0],-1),
                                timeHour.offset(timeExtent[1],1))
 
-    // console.log(timeExtent)
-    // console.log(hourBins)
+    console.log(timeExtent)
+    console.log(hourBins)
     // console.log(typeof(hourBins[0]))
     // console.log(moment(data[0].start))
 
@@ -130,21 +128,40 @@ export default class GraphArea extends Component {
       data.forEach( (d) => {
         // if incident has an end time
         if (d.end > 0) {
+          /*
           // contained within the hour
-          if (xScl(d.start) >= xScl(x0) && xScl(d.start) < xScl(x1)) {
+          if (xScl(d.start) >= xScl(x0) && xScl(d.start) < xScl(x1) && xScl(d.end) >= xScl(x0) && xScl(d.end) <= xScl(x1)) {
             incidentArray.push(d)
             return
           } 
-          // check ending
-          else if (xScl(d.end) >= xScl(x0) && xScl(d.end) < xScl(x1)) {
+          // OR case, end or start is before or after
+          else if (xScl(d.start) > xScl(x0) && xScl(d.start) < xScl(x1) || xScl(d.end) > xScl(x0) && xScl(d.end) < xScl(x1)) {
             incidentArray.push(d)
             return
           }
+          // check ending
+          // else if (xScl(d.end) >= xScl(x0) && xScl(d.end) < xScl(x1)) {
+          //   incidentArray.push(d)
+          //   return
+          // }
           // contains an hour within incident
           else if (xScl(d.start) <= xScl(x0) && xScl(d.end) >= xScl(x1)) {
             incidentArray.push(d)
             return
           }
+          //ends before the hour is up
+          // else if (xScl(d.start) <= xScl(x0) && xScl(d.end) <= xScl(x1)) {
+          //   incidentArray.push(d)
+          //   return
+          // }
+          // 
+          */
+          // Victor's amazing greedy algorithm realization - this works the same as above
+          if ((xScl(d.start) < xScl(x0) && xScl(d.end) < xScl(x0)) ||
+               (xScl(d.start) > xScl(x1) && xScl(d.end) > xScl(x1))) {
+            return;
+          }
+          incidentArray.push(d);
         } 
         // case with made up durations (wait is 3600)
         else {
