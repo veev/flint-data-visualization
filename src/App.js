@@ -440,6 +440,7 @@ class App extends Component {
         [
           (
           <ControlPanel 
+            key="control-panel"
             handleToggle={this.handleVisMode}
             viewMode={incidentMode}
             showHeatmap={showHeatmap}
@@ -450,7 +451,7 @@ class App extends Component {
           />
           ),
           ( incidentMode ?
-            <div>
+            <div key="timeline-callboard">
             <Timeline
               handlePlay={this.handlePlayState}
               handleSeek={this.handleSeekChange}
