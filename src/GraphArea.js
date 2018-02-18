@@ -392,23 +392,6 @@ export default class GraphArea extends Component {
           axis={xAxis}
           axisType="x"
         />
-        <g className="graph">
-          {filteredCalls ?
-            filteredCalls.map( (d, i) => {
-              return (
-                <rect
-                  key={`active-${i}`}
-                  className="activeRects"
-                  x={x(d.start)}
-                  y={y(d.wait)}
-                  width={this.getRectWidth(x, d, true)}
-                  height={1}
-                  fill={'#fff'}
-                />
-              )
-            }) : null
-          }
-        </g>
         <line
           className="currentTimeLine"
           x1={xCoord}
