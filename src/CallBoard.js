@@ -3,7 +3,7 @@ import find from 'lodash.find'
 import moment from 'moment'
 import momentDurationFormatSetup from 'moment-duration-format'
 import { map_range } from './utils'
-import { interpolateHcl, interpolateRgb } from 'd3-interpolate'
+import { interpolateRgb } from 'd3-interpolate'
 import { scaleLinear, scalePow } from 'd3-scale'
 import MessageIcon from './MessageIcon'
 import CommentDrawer from './CommentDrawer'
@@ -66,7 +66,7 @@ export default class CallBoard extends Component {
       //console.log("same post", this.state.openPost)
       this.setState({ isCommentDrawerOpen: false })
       timeout(800).then(() => {
-        this.setState({ openPost: new Object() })
+        this.setState({ openPost: {} })
       })
     } 
     // first time clicked on a post
@@ -158,7 +158,7 @@ export default class CallBoard extends Component {
 
   makeRows = (data) => {
     return data.map( row => {
-      const incidentIsOpen = this.state.openIncidents.includes(row.properties.id)
+      //const incidentIsOpen = this.state.openIncidents.includes(row.properties.id)
       const rowIsHighlighted = (row.properties.id === this.props.mapHighlightedFeature.properties.id || row.properties.id === this.props.boardHighlightedFeature.properties.id)
       const numComments = this.getNumComments(row)
       //this.handleRowHighlight(row)
@@ -215,68 +215,15 @@ export default class CallBoard extends Component {
 
   getNumComments = (row) => {
     const post = find(this.props.postData, ['id', row.properties.postId])
-    if (post != undefined) {
+    if (post !== undefined) {
       const stringLength = (post.numComments).toString().length
       return {numComments: post.numComments, stringLength}
     }
   }
 
-  // insertPost = (row) => {
-  //   //const post = find(this.props.postData, ['id', row.properties.postId]);
-  //   const post = this.state.openIncident
-  //   if (post !== undefined) {
-  //     // console.log(row.properties.postId)
-  //     // console.log(post.comments.data)
-  //     return (
-  //       <div className="post-wrapper">
-  //         <div className="post">
-  //           <div className="post-info">
-  //             <div className="avatar"></div>
-  //               <div className="metadata">
-  //                 <div className="account">Flint Police Operations</div>
-  //                 <div className="time">{post.created_time}</div>
-  //               </div>
-  //           </div>
-  //           <div className="post-body"><p>{post.message}</p></div>
-  //           {post.comments ? 
-  //           <div className="postCommentWrapper">{this.insertComments(post.comments.data)}</div> : 
-  //           null }
-  //         </div>
-  //       </div>
-  //     )
-  //   }
-  // }
-
-  // insertComments = (comments) => {
-  //   //console.log(comments)
-  //   return comments.map( (comment, i) => {
-  //     //console.log(comment)
-  //     return (
-  //       <div className="whyDoWeNeedThisDiv" key={`why${i}`}>
-  //       <div className="postComment" key={`${comment.id}-${i}`}><p>{comment.message}</p></div>
-  //       {(comment.replies) ?
-  //       <ul className="commentReplyWrapper">{this.insertReplies(comment.replies.data)}</ul> :
-  //       null }
-  //       </div>
-  //     )
-  //   })
-  // }
-
-  // insertReplies = (replies) => {
-  //   return (
-  //     <ul>
-  //       {replies.map( (reply, i) => {
-  //         //console.log(reply)
-  //         return <li className="commentReply" key={`${reply.id}-${i}`}>{reply.message}</li>
-  //       })
-  //     }
-  //     </ul>
-  //   )
-  // }
-
 	render() {
 
-    const { activeData, postData, startState } = this.props
+    const { activeData, startState } = this.props
 
 		return (
       <div className={['grossWrapper', !startState && 'show'].join(' ')}>

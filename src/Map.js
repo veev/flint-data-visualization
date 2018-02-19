@@ -138,7 +138,7 @@ export default class Map extends Component {
 
         }
         this.map.setLayoutProperty('incidentsLayer', 'visibility', 'visible')
-        this.props.photoData.features.map( (feature, index) => {
+        this.props.photoData.features.forEach( (feature, index) => {
           //console.log(this.map.getLayer(`photoThumbnails-${index}`))
           if (this.map.isSourceLoaded(`photosSource-${index}`)) {
             this.map.setLayoutProperty(`photoThumbnails-${index}`, 'visibility', 'none')
@@ -148,7 +148,7 @@ export default class Map extends Component {
       } else if (this.map.getSource('incidents')) {
         // show photos if viewMode is false
         this.map.setLayoutProperty('incidentsLayer', 'visibility', 'none')
-        this.props.photoData.features.map( (feature, index) => {
+        this.props.photoData.features.forEach( (feature, index) => {
           if (this.map.isSourceLoaded(`photosSource-${index}`)) {
             // console.log(this.map.getLayer(`photoThumbnails-${index}`))
             if (this.map.getLayer(`photoThumbnails-${index}`)) {
@@ -387,7 +387,7 @@ export default class Map extends Component {
     //   'data': this.props.photoData
     // })
 
-    this.props.photoData.features.map( (feature, index) => {
+    this.props.photoData.features.forEach( (feature, index) => {
       this.map.addSource(`photosSource-${index}`, {
         'type': 'geojson',
         'data': {
@@ -402,7 +402,7 @@ export default class Map extends Component {
     })
 
     const s3path = 'https://s3.amazonaws.com/flint-pd-may/saved-for-web/thumbnails/'
-    this.props.photoData.features.map( (feature, index) => {
+    this.props.photoData.features.forEach( (feature, index) => {
       //https://s3.amazonaws.com/flint-pd-may/saved-for-web/thumbnails/TREX_AUG_FLINT_2015-122-1.png
       this.map.loadImage(`${s3path}${feature.properties.thumbnail}.png`, (error, image) => {
         if (error) throw error
@@ -492,7 +492,7 @@ export default class Map extends Component {
       this.props.handlePhotos(e.features[0])
     })
 
-    this.props.photoData.features.map( (feature, index) => {
+    this.props.photoData.features.forEach( (feature, index) => {
       this.map.on('click', `photoThumbnails-${index}`, (e) => {
         console.log(e)
         this.props.handlePhotos(e.features[0])

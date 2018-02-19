@@ -25,7 +25,7 @@ export default class Axis extends Component {
     const translate = `translate(0,${this.props.h - 25})`
 
     return (
-      <g className="axis" transform={this.props.axisType=='x'?translate:""} >
+      <g className="axis" transform={this.props.axisType ==='x' ? translate:""} >
       </g>
     )
   }

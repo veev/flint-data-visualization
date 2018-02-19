@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Img from './Img'
 const s3Path = 'https://s3.amazonaws.com/flint-pd-may/saved-for-web/'
-const localPath = 'data/photos/'
+// const localPath = 'data/photos/'
 
 export default class Gallery extends Component {
   constructor(props) {
@@ -154,7 +154,7 @@ export default class Gallery extends Component {
 
   render() {
     const { currentIndex } = this.state
-    const { infinite } = this.props
+    // const { infinite } = this.props
     const slideLeft = this._slideLeft
     const slideRight = this._slideRight
 

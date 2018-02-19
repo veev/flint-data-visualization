@@ -1,18 +1,17 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { max, min, extent, histogram } from 'd3-array'
 import { scaleLinear, scaleTime, scaleOrdinal, scalePow } from 'd3-scale'
 import { timeHours, timeHour } from 'd3-time'
-import { interpolateRound } from 'd3-interpolate'
+// import { interpolateRound } from 'd3-interpolate'
 import { select } from 'd3-selection'
 import { stack } from 'd3-shape'
-import { nest } from 'd3-collection'
+// import { nest } from 'd3-collection'
 import { axisBottom } from 'd3-axis'
 
 //import { quadtree } from 'd3-geom'
 import { zoom } from 'd3-zoom'
 import { transform } from 'd3-transform'
-import moment from 'moment'
+//import moment from 'moment'
 
 import graphData from './data/d3data.json'
 
@@ -75,11 +74,11 @@ export default class GraphArea extends Component {
   //   //this.makeAxis(graphData)
   }
 
-  makeAxis = (data) => {
-    const xS = this.getScales(1).xScale
-    const xAxis = axisBottom().scale(xS)
+  // makeAxis = (data) => {
+  //   const xS = this.getScales(1).xScale
+  //   const xAxis = axisBottom().scale(xS)
 
-  }
+  // }
 
   binData = (data) => {
     // console.log(data)
@@ -94,12 +93,12 @@ export default class GraphArea extends Component {
     // console.log(moment(data[0].start))
 
     // Use the histogram layout to create a function that will bin the data
-    const binByHour = histogram()
-      .value( (d, i) => {
-        return d.start
-      })
-      .domain(timeExtent)
-      .thresholds(hourBins)
+    // const binByHour = histogram()
+    //   .value( (d, i) => {
+    //     return d.start
+    //   })
+    //   .domain(timeExtent)
+    //   .thresholds(hourBins)
 
     //console.log(binByHour(data))
       
@@ -110,7 +109,7 @@ export default class GraphArea extends Component {
     for (let i=0; i < hourBins.length - 1; i++) {
       let bin = {}
       bin.values = []
-      let count = 0
+      //let count = 0
       const x0 = hourBins[i]
       const x1 = hourBins[i + 1]
       bin['x0'] = x0
@@ -180,7 +179,7 @@ export default class GraphArea extends Component {
     //console.log(this.state.mouseX, this.state.mouseY)
 
     ctx.clearRect(0, 0, this.props.size[0], this.props.size[1])
-    bins.map( (bin,i) => {
+    bins.forEach( (bin,i) => {
       bin.values.sort( (a,b) => {
         return a.wait - b.wait
       })
@@ -193,7 +192,7 @@ export default class GraphArea extends Component {
       //console.log(xPos, (xPos + w/bins.length))
 
 
-      bin.values.map( (d,j) => {
+      bin.values.forEach( (d,j) => {
         //console.log(ht * j)
         if (this.state.mouseX >= xPos && 
           this.state.mouseX <= xPos + w/(bins.length) &&
@@ -230,9 +229,9 @@ export default class GraphArea extends Component {
     const w = canvas.width
     const h = canvas.height
 
-    const mouseCanvas = this.mouseCanvas
-    const mouseCtx = mouseCanvas.getContext("2d")
-    const maxWidth = 40
+    // const mouseCanvas = this.mouseCanvas
+    // const mouseCtx = mouseCanvas.getContext("2d")
+    // const maxWidth = 40
 
     const scalar = 4.0
     // const factory = quadtree()
@@ -258,7 +257,7 @@ export default class GraphArea extends Component {
     // console.log(this.state.mouseX, this.state.mouseY)
     console.log(xScl(this.props.currentTime)/scalar)
 
-    graphData.map( (d,i) => {
+    graphData.forEach( (d,i) => {
       if (this.state.mouseX >= xScl(d.start) && 
           this.state.mouseX <= (xScl(d.start) + this.getRectWidth(xScl, d, true)) &&
           this.state.mouseY >= yScl(d.wait) &&
@@ -275,7 +274,7 @@ export default class GraphArea extends Component {
     //const filtered = this.filterActiveCalls(this.props.currentTime)
 
     ctx.clearRect(0, 0, w, h)
-    graphData.map( (d,i) => {
+    graphData.forEach( (d,i) => {
       ctx.fillStyle = colrs[1] // sets the color to fill in the rectangle with
       ctx.fillRect(xScl(d.start)/scalar, yScl(d.wait)/scalar, this.getRectWidth(xScl, d, true) / scalar, 1)
       ctx.fillStyle = colrs[0]
@@ -335,7 +334,7 @@ export default class GraphArea extends Component {
 
   onMouseMove = (e) => {
     //console.log(this.ref)
-    const position = this.svgLayer.getBoundingClientRect()
+    //const position = this.svgLayer.getBoundingClientRect()
     // console.log(e.nativeEvent.offsetX)
     // console.log(e.nativeEvent.offsetY)
 
@@ -352,7 +351,7 @@ export default class GraphArea extends Component {
     //                           .domain(dateRange)
 
     const x = this.getScales(1).xScale
-    const y = this.getScales(1).yScale
+    //const y = this.getScales(1).yScale
 
     const xAxis = axisBottom()
                     .scale(x)
@@ -364,7 +363,7 @@ export default class GraphArea extends Component {
 
     // console.log(this.props.activeData)
     // console.log(this.props.currentTime)
-    const filteredCalls = this.filterActiveCalls(this.props.currentTime)
+    // const filteredCalls = this.filterActiveCalls(this.props.currentTime)
     //console.log(filteredCalls)
 
     // console.log(this.state.mouseX, this.state.mouseY)

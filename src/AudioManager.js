@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AudioPlayer from './AudioPlayer'
-import audioMap from './data/audio-noMoses.json'
+//import audioMap from './data/audio-noMoses.json'
 
 export default class AudioManager extends Component {
 	constructor(props) {
@@ -75,11 +75,11 @@ export default class AudioManager extends Component {
     }
   }
 
-  importAll = (r) => {
-    let audio = {};
-    r.keys().map((item, index) => { audio[item.replace('./', '')] = r(item); });
-    return audio;
-  }
+  // importAll = (r) => {
+  //   let audio = {};
+  //   r.keys().map((item, index) => { audio[item.replace('./', '')] = r(item); });
+  //   return audio;
+  // }
 
   pauseAudio = () => {
     //console.log('PAUSED')
@@ -102,7 +102,6 @@ export default class AudioManager extends Component {
   }
 
   render() {
-    const { currentTime, isPlaying } = this.props
 
     return (
       <div>

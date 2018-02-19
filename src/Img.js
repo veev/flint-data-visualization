@@ -41,7 +41,6 @@ class Img extends React.PureComponent {
   render() {
     const {
       placeholder,
-      placeholderProps = {},
       imageProps = {},
       src,
       alt,

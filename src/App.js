@@ -130,7 +130,6 @@ class App extends Component {
     } else if (option.label === 'Friday May 5') {
       const day = moment(`${option.label} 2017`)
       //console.log(day)
-      const start = moment(day).startOf('day')
       const end = moment(day).endOf('day')
       const sTS = AUDIO_START_TS //moment(start).utcOffset('+04:00').format('x') // lowercase 'x' for millis, uppercase 'X' for seconds
       const eTS = moment(end).utcOffset('+04:00').format('x')
@@ -407,7 +406,6 @@ class App extends Component {
       hasPrevClip,
       timeframe,
       dateRange,
-      startTS,
       endTS
     } = this.state
     // const { endTS } = this.props

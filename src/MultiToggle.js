@@ -21,7 +21,7 @@ const MultiToggle = ({
   const isSelectedOption = (option) => {
     //console.log(option.value === selectedOption)
     // can't be === for some reason??
-    return option.value == selectedOption
+    return option.value === selectedOption
   }
 
   const getSelectedIndex = () => {
