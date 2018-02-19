@@ -16,7 +16,7 @@ export default class AudioManager extends Component {
   }
 
   componentWillMount() {
-  //this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
+  // this.audioFiles = this.importAll(require.context('./data/audio', false, /\.(mp3|ogg)$/));
 
   // for (let key in audioMap) {
   //   console.log(key)
