@@ -432,56 +432,62 @@ class App extends Component {
           showHeatmap={showHeatmap}
           startState={startState}
         />
-        { startState ?
           <StartInfo 
             handleTearDown={this.handleStateTearDown}
+            startState={startState}
           />
-        : 
-        [
-          (
-          <ControlPanel 
+          <div 
             key="control-panel"
-            handleToggle={this.handleVisMode}
-            viewMode={incidentMode}
-            showHeatmap={showHeatmap}
-            handleHeatmapToggle={this.handleHeatmapToggle}
-            pausePlay={this.pausePlayback}
-            handleDropdown={this.handleTimeDropdown}
-            timeframe={timeframe}
-          />
-          ),
-          ( incidentMode ?
-            <div key="timeline-callboard">
-            <Timeline
-              handlePlay={this.handlePlayState}
-              handleSeek={this.handleSeekChange}
-              handleSeekStart={this.handleSeekStart}
-              handleSeekEnd={this.handleSeekEnd}
-              handleNextClip={this.handleNextAudioClip}
-              handlePrevClip={this.handlePrevAudioClip}
-              hasNext={hasNextClip}
-              hasPrevious={hasPrevClip}
-              // setTime={this._updateTime}
-              //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
-              formattedTime={[formattedDay, formattedTime]}
-              currentTime={this.convertTime(currentTime)}
-              unconvertTime={this.unconvertTime}
-              totalTime={this.convertTime(endTS)}
-              isPlaying={isPlaying}
-              staticData={data}
-              activeData={this.filterIncidents(currentTime)}
-              dateRange={dateRange}
+            className={startState ? "hidden" : "visible"}
+          >
+            <ControlPanel
+              key="control-panel-component"
+              handleToggle={this.handleVisMode}
+              viewMode={incidentMode}
+              showHeatmap={showHeatmap}
+              handleHeatmapToggle={this.handleHeatmapToggle}
+              pausePlay={this.pausePlayback}
+              handleDropdown={this.handleTimeDropdown}
+              timeframe={timeframe}
+              startState={startState}
             />
-            <CallBoard
-              activeData={this.filterIncidents(currentTime)}
-              currentTime={currentTime}
-              handleHighlight={this.handleBoardHighlightChange}
-              mapHighlightedFeature={highlightedMapIncident}
-              boardHighlightedFeature={highlightedBoardIncident}
-              postData={posts}
-            /></div> : null
-          )
-        ]}
+          </div>
+          { incidentMode ?
+            <div 
+              key="timeline-callboard"
+            >
+              <Timeline
+                handlePlay={this.handlePlayState}
+                handleSeek={this.handleSeekChange}
+                handleSeekStart={this.handleSeekStart}
+                handleSeekEnd={this.handleSeekEnd}
+                handleNextClip={this.handleNextAudioClip}
+                handlePrevClip={this.handlePrevAudioClip}
+                hasNext={hasNextClip}
+                hasPrevious={hasPrevClip}
+                // setTime={this._updateTime}
+                //currentTime={map_range(currentTime, startTS, endTS, 0, totalTime)}
+                formattedTime={[formattedDay, formattedTime]}
+                currentTime={this.convertTime(currentTime)}
+                unconvertTime={this.unconvertTime}
+                totalTime={this.convertTime(endTS)}
+                isPlaying={isPlaying}
+                staticData={data}
+                activeData={this.filterIncidents(currentTime)}
+                dateRange={dateRange}
+                startState={startState}
+              />
+              <CallBoard
+                activeData={this.filterIncidents(currentTime)}
+                currentTime={currentTime}
+                handleHighlight={this.handleBoardHighlightChange}
+                mapHighlightedFeature={highlightedMapIncident}
+                boardHighlightedFeature={highlightedBoardIncident}
+                postData={posts}
+                startState={startState}
+              />
+            </div> : null
+          }
         { showLightbox ?
           <div 
             className="lightBox-wrapper"

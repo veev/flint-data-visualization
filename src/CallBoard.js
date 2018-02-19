@@ -276,10 +276,10 @@ export default class CallBoard extends Component {
 
 	render() {
 
-    const { activeData, postData } = this.props
+    const { activeData, postData, startState } = this.props
 
 		return (
-      <div className="grossWrapper">
+      <div className={['grossWrapper', !startState && 'show'].join(' ')}>
         <div className="Board">
           <div className="boardDescription">
           The amount of active incidents at a given moment. Some incidents have been waiting for officers to appear for over an hour.

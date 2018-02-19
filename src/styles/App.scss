@@ -25,8 +25,13 @@ $active-col-width: 20%;
 $status-col-width: 28%;
 $posts-col-width: 12%;
 
-.App {
+.visible {
+  opacity: 1;
+}
 
+.hidden {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
 }
 
 .App-header {
@@ -80,6 +85,17 @@ $posts-col-width: 12%;
 ////////////////////////////////
 //////// CONTROL BOARD /////////
 ////////////////////////////////
+
+.grossWrapper {
+  transition: opacity 1s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+
+  &.show {
+    opacity: 1;
+    visibility: visible; 
+  }
+}
 
 .Board {
   position: relative;
@@ -379,10 +395,18 @@ $posts-col-width: 12%;
   right: 0;
   bottom: 0;
   left: 0;
-  //z-index: 2147483647;
+  z-index: 10;
   cursor: pointer;
   background: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+  visibility: visible;
 
+  &.hide {
+    opacity: 0;
+    visibility: hidden;
+    z-index: -1;
+  }
 }
 
 .startInfo {
@@ -390,6 +414,15 @@ $posts-col-width: 12%;
   background-color: $ig-black;
   padding: 25px;
   width: 600px;
+  transition: opacity 0.5ss ease-in-out;
+  opacity: 1;
+  visibility: visible;
+
+  &.hide {
+    opacity: 0;
+    visibility: hidden; 
+    z-index: -1;
+  }
 
   p {
     font-size: 1.2em;
@@ -411,7 +444,7 @@ $posts-col-width: 12%;
 
 .timeOutput {
   width: 140px;
-  padding: 0px 10px;
+  padding: 5px 12px;
   color: $white;
   font-size: 1em;
   font-family: courier, monospace;
@@ -432,9 +465,18 @@ $posts-col-width: 12%;
   position: absolute;
   width: 100vw;
   bottom: 0;
-  z-index: 600;
+  z-index: 60;
+  padding-top: 1vh;
   /* height: 17vh; */
   background-color: #222;
+  transition: opacity 1s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+
+  &.show {
+    opacity: 1;
+    visibility: visible; 
+  }
 }
 
 .PlaybackControls {
@@ -833,7 +875,15 @@ $posts-col-width: 12%;
   min-width: 210px;
   min-height: 100px;
   position: absolute;
-  right: 10px;
+  right: 10px;  
+  transition: opacity 1s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+
+  &.show {
+    opacity: 1;
+    visibility: visible; 
+  }
 
   .buttonLayer {
     padding: 10px 0px;

@@ -76,10 +76,10 @@ export default class Timeline extends Component {
 
   render() {
     const { isPlayable, showPrevious, showNext, isSeekable, graphWidth, graphHeight } = this.state
-    const { currentTime, totalTime, isPlaying, staticData, formattedTime, hasNext, hasPrevious } = this.props
+    const { currentTime, totalTime, isPlaying, staticData, formattedTime, hasNext, hasPrevious, startState } = this.props
 
     return(
-      <div className="Timeline">
+      <div className={['Timeline', !startState && 'show'].join(' ')}>
         <div className="timeOutput">
           <div className="time">{formattedTime[1]}</div>
           <div className="day">{formattedTime[0]}</div>

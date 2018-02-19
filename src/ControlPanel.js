@@ -29,10 +29,10 @@ export default class ControlPanel extends Component {
   }
 
   render() {
-    const { viewMode, showHeatmap, timeframe } = this.props
+    const { viewMode, showHeatmap, timeframe, startState } = this.props
 
     return (
-      <div className="ControlPanel">
+      <div className={['ControlPanel', !startState && 'show'].join(' ')}>
         <MultiToggle
           options={viewOptions}
           selectedOption={viewMode}
