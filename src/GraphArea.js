@@ -45,7 +45,7 @@ export default class GraphArea extends Component {
     // console.log(select(this.svgLayer))
     // select(this.svgLayer).call(this.zoom)
 
-   this.bins = this.binData(graphData)
+   this.bins = this.binData(graphData, this.props.dateRange)
    //console.log(this.bins)
 
   //   //console.log(this.props.data)
@@ -56,10 +56,14 @@ export default class GraphArea extends Component {
 
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    //console.log("shouldComponentUpdate")
+  componentWillUpdate(nextProps) {
+    console.log(nextProps.dateRange, this.props.dateRange)
+    console.log(nextProps.dateRange[0] !== this.props.dateRange[0] && nextProps.dateRange[1] !== this.props.dateRange[1])
     //return nextProps.data !== this.props.data
-    return true
+    if (nextProps.dateRange[0] !== this.props.dateRange[0] && nextProps.dateRange[1] !== this.props.dateRange[1]) {
+      this.bins.length = 0
+      this.bins = this.binData(graphData, nextProps.dateRange)
+    }
   }
 
   componentDidUpdate() {
@@ -80,10 +84,10 @@ export default class GraphArea extends Component {
 
   // }
 
-  binData = (data) => {
+  binData = (data, timeExtent) => {
     // console.log(data)
     // Determine the first and list dates in the data set
-    const timeExtent = extent(data, function(d) { return d.start })
+    //const timeExtent = extent(data, function(d) { return d.start })
     const hourBins = timeHours(timeHour.offset(timeExtent[0],-1),
                                timeHour.offset(timeExtent[1],1))
 
@@ -103,23 +107,26 @@ export default class GraphArea extends Component {
     //console.log(binByHour(data))
       
     //console.log(i)
-    let bins = []
+    const bins = []
     const xScl = this.getScales(1).xScale
 
     for (let i=0; i < hourBins.length - 1; i++) {
       let bin = {}
+
       bin.values = []
+      if (bin.values.length > 0) bin.values.length = 0
+      
       //let count = 0
       const x0 = hourBins[i]
       const x1 = hourBins[i + 1]
       bin['x0'] = x0
       bin['x1'] = x1
 
-      let incidentArray = []
+      const incidentArray = []
       data.forEach( (d) => {
         // if incident has an end time
         if (d.end > 0) {
-          /*
+          
           // contained within the hour
           if (xScl(d.start) >= xScl(x0) && xScl(d.start) < xScl(x1) && xScl(d.end) >= xScl(x0) && xScl(d.end) <= xScl(x1)) {
             incidentArray.push(d)
@@ -146,13 +153,13 @@ export default class GraphArea extends Component {
           //   return
           // }
           // 
-          */
+          
           // Victor's amazing greedy algorithm realization - this works the same as above
-          if ((xScl(d.start) < xScl(x0) && xScl(d.end) < xScl(x0)) ||
-               (xScl(d.start) > xScl(x1) && xScl(d.end) > xScl(x1))) {
-            return
-          }
-          incidentArray.push(d);
+          // if ((xScl(d.start) < xScl(x0) && xScl(d.end) < xScl(x0)) ||
+          //      (xScl(d.start) > xScl(x1) && xScl(d.end) > xScl(x1))) {
+          //   return
+          // }
+          // incidentArray.push(d);
         } 
         // case with made up durations (wait is 3600)
         else {
@@ -166,7 +173,7 @@ export default class GraphArea extends Component {
       bin.values = incidentArray
       bins.push(bin)
     }
-    //console.log(bins)
+    console.log(bins)
     return bins
   }
 
