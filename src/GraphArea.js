@@ -111,8 +111,8 @@ export default class GraphArea extends Component {
     //console.log(i)
     const bins = []
 
-    console.log(xScl(hourBins[0]), xScl(hourBins[hourBins.length - 1]))
-    console.log(xScl(data[0].start))
+    // console.log(xScl(hourBins[0]), xScl(hourBins[hourBins.length - 1]))
+   // console.log(xScl(data[0].start))
 
     for (let i=0; i < hourBins.length - 1; i++) {
       let bin = {}
@@ -130,7 +130,7 @@ export default class GraphArea extends Component {
 
       const incidentArray = []
       incidentArray.length = 0
-      console.log(incidentArray)
+     // console.log(incidentArray)
       data.forEach( (d) => {
         
         // if incident has an end time
@@ -167,6 +167,8 @@ export default class GraphArea extends Component {
           if ((xScl(d.start) <= xScl(x0) && xScl(d.end) < xScl(x0)) ||
                (xScl(d.start) > xScl(x1) && xScl(d.end) >= xScl(x1))) {
             return
+          } else if (xScl(d.start) === xScl(d.end)) {
+            return
           }
           console.log('d.start', xScl(d.start), 'd.end', xScl(d.end))
           incidentArray.push(d)
@@ -180,8 +182,8 @@ export default class GraphArea extends Component {
         }
         
       })
-      console.log(incidentArray)
-      console.log('bin.values', bin.values)
+      //console.log(incidentArray)
+      //console.log('bin.values', bin.values)
       bin.values = incidentArray
       bins.push(bin)
     }
