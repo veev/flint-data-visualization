@@ -44,8 +44,8 @@ export default class GraphArea extends Component {
     //this.makeCanvasGraph(graphData)
     // console.log(select(this.svgLayer))
     // select(this.svgLayer).call(this.zoom)
-
-   this.bins = this.binData(graphData, this.props.dateRange)
+   const nextScale = this.getScales(1, this.props.dateRange).xScale
+   this.bins = this.binData(graphData, this.props.dateRange, nextScale)
    //console.log(this.bins)
 
   //   //console.log(this.props.data)
@@ -57,12 +57,13 @@ export default class GraphArea extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    console.log(nextProps.dateRange, this.props.dateRange)
-    console.log(nextProps.dateRange[0] !== this.props.dateRange[0] && nextProps.dateRange[1] !== this.props.dateRange[1])
+    // console.log(nextProps.dateRange, this.props.dateRange)
+    // console.log(nextProps.dateRange[0] !== this.props.dateRange[0] && nextProps.dateRange[1] !== this.props.dateRange[1])
     //return nextProps.data !== this.props.data
     if (nextProps.dateRange[0] !== this.props.dateRange[0] && nextProps.dateRange[1] !== this.props.dateRange[1]) {
       this.bins.length = 0
-      this.bins = this.binData(graphData, nextProps.dateRange)
+      const nextScale = this.getScales(1, nextProps.dateRange).xScale
+      this.bins = this.binData(graphData, nextProps.dateRange, nextScale)
     }
   }
 
@@ -84,7 +85,7 @@ export default class GraphArea extends Component {
 
   // }
 
-  binData = (data, timeExtent) => {
+  binData = (data, timeExtent, xScl) => {
     // console.log(data)
     // Determine the first and list dates in the data set
     //const timeExtent = extent(data, function(d) { return d.start })
@@ -93,6 +94,7 @@ export default class GraphArea extends Component {
 
     console.log(timeExtent)
     console.log(hourBins)
+    console.log(xScl)
     // console.log(typeof(hourBins[0]))
     // console.log(moment(data[0].start))
 
@@ -108,7 +110,9 @@ export default class GraphArea extends Component {
       
     //console.log(i)
     const bins = []
-    const xScl = this.getScales(1).xScale
+
+    console.log(xScl(hourBins[0]), xScl(hourBins[hourBins.length - 1]))
+    console.log(xScl(data[0].start))
 
     for (let i=0; i < hourBins.length - 1; i++) {
       let bin = {}
@@ -122,11 +126,16 @@ export default class GraphArea extends Component {
       bin['x0'] = x0
       bin['x1'] = x1
 
+      console.log('x0', xScl(x0), 'x1', xScl(x1))
+
       const incidentArray = []
+      incidentArray.length = 0
+      console.log(incidentArray)
       data.forEach( (d) => {
+        
         // if incident has an end time
         if (d.end > 0) {
-          
+          /*
           // contained within the hour
           if (xScl(d.start) >= xScl(x0) && xScl(d.start) < xScl(x1) && xScl(d.end) >= xScl(x0) && xScl(d.end) <= xScl(x1)) {
             incidentArray.push(d)
@@ -153,13 +162,14 @@ export default class GraphArea extends Component {
           //   return
           // }
           // 
-          
+          */
           // Victor's amazing greedy algorithm realization - this works the same as above
-          // if ((xScl(d.start) < xScl(x0) && xScl(d.end) < xScl(x0)) ||
-          //      (xScl(d.start) > xScl(x1) && xScl(d.end) > xScl(x1))) {
-          //   return
-          // }
-          // incidentArray.push(d);
+          if ((xScl(d.start) <= xScl(x0) && xScl(d.end) < xScl(x0)) ||
+               (xScl(d.start) > xScl(x1) && xScl(d.end) >= xScl(x1))) {
+            return
+          }
+          console.log('d.start', xScl(d.start), 'd.end', xScl(d.end))
+          incidentArray.push(d)
         } 
         // case with made up durations (wait is 3600)
         else {
@@ -170,6 +180,8 @@ export default class GraphArea extends Component {
         }
         
       })
+      console.log(incidentArray)
+      console.log('bin.values', bin.values)
       bin.values = incidentArray
       bins.push(bin)
     }
@@ -258,8 +270,8 @@ export default class GraphArea extends Component {
     // canvas.height = h * pixelRatio
     //console.log(canvas.width, canvas.height)
 
-    const xScl = this.getScales(scalar).xScale
-    const yScl = this.getScales(scalar).yScale
+    const xScl = this.getScales(scalar, this.props.dateRange).xScale
+    const yScl = this.getScales(scalar, this.props.dateRange).yScale
 
     // console.log(this.state.mouseX, this.state.mouseY)
     console.log(xScl(this.props.currentTime)/scalar)
@@ -297,7 +309,7 @@ export default class GraphArea extends Component {
     // })
   }
 
-  getScales = (scalar) => {
+  getScales = (scalar, dateRange) => {
     //const dateRangeGD = [graphData[0].start, graphData[graphData.length - 1].end]
     const waitRange = extent(graphData, d => {
       return d.wait
@@ -306,7 +318,7 @@ export default class GraphArea extends Component {
     //console.log(this.props.dateRange)
 
     const xScale = scaleTime().range([0, (this.props.size[0]) * scalar])
-                              .domain([+this.props.dateRange[0], +this.props.dateRange[1]])
+                              .domain([+dateRange[0], +dateRange[1]])
                               .clamp(true)
 
     const yScale = scalePow().exponent(0.7)
@@ -357,7 +369,7 @@ export default class GraphArea extends Component {
     // const xScale = scaleTime().range([0, this.props.size[0]])
     //                           .domain(dateRange)
 
-    const x = this.getScales(1).xScale
+    const x = this.getScales(1, this.props.dateRange).xScale
     //const y = this.getScales(1).yScale
 
     const xAxis = axisBottom()
