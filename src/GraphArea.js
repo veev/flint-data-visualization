@@ -94,7 +94,6 @@ export default class GraphArea extends Component {
 
     console.log(timeExtent)
     console.log(hourBins)
-    console.log(xScl)
     // console.log(typeof(hourBins[0]))
     // console.log(moment(data[0].start))
 
@@ -126,7 +125,7 @@ export default class GraphArea extends Component {
       bin['x0'] = x0
       bin['x1'] = x1
 
-      console.log('x0', xScl(x0), 'x1', xScl(x1))
+      // console.log('x0', xScl(x0), 'x1', xScl(x1))
 
       const incidentArray = []
       incidentArray.length = 0
@@ -170,7 +169,7 @@ export default class GraphArea extends Component {
           } else if (xScl(d.start) === xScl(d.end)) {
             return
           }
-          console.log('d.start', xScl(d.start), 'd.end', xScl(d.end))
+          // console.log('d.start', xScl(d.start), 'd.end', xScl(d.end))
           incidentArray.push(d)
         } 
         // case with made up durations (wait is 3600)
