@@ -57,8 +57,8 @@ export default class GraphArea extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    console.log(nextProps.dateRange, this.props.dateRange)
-    console.log(nextProps.dateRange[0] !== this.props.dateRange[0] || nextProps.dateRange[1] !== this.props.dateRange[1])
+    // console.log(nextProps.dateRange, this.props.dateRange)
+    // console.log(nextProps.dateRange[0] !== this.props.dateRange[0] || nextProps.dateRange[1] !== this.props.dateRange[1])
     //return nextProps.data !== this.props.data
     if (nextProps.dateRange[0] !== this.props.dateRange[0] || nextProps.dateRange[1] !== this.props.dateRange[1]) {
       this.bins.length = 0
