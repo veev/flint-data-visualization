@@ -28,7 +28,7 @@ class App extends Component {
 
     this.state = {
       startState: true,
-      isPlaying: false,
+      isPlaying: false, // starts audio automatically
       wasPlaying: false,
       // currentTime: data['features'][0].properties.unix_timestamp,
       currentTime: AUDIO_START_TS,
@@ -98,7 +98,12 @@ class App extends Component {
   }
 
   handleStateTearDown = (event) => {
-    this.setState({ startState: false })
+    this.setState({ startState: false, isPlaying: true }, () => {
+      // need this for autoplay
+      this.handlePlayState(this.state.isPlaying)
+      // need this to find next clip
+      this.handleNextAudioClip()
+    })
   }
 
   handleVisMode = (value) => {

@@ -33,22 +33,22 @@ export default class AudioManager extends Component {
     // need to not trigger audio to play once file is playing
     if (nextProps.isPlaying) {
       const t = nextProps.currentTime
-      console.log(t)
+      //console.log(t)
 
       const element = this.props.sortedAudio.find( (a) => {
         const tStart = a.timestamp
         const tEnd = tStart + a.length
         return (t >= tStart && t <= tEnd)
       })
-      console.log(element)
+      //console.log(element)
 
       if (element && this.childAudio.audioEl.paused) {
 
         // check to see if currentKey and element id are the same
         // if they are, play the file back at the right timestamp
         // not from the beginning
-        console.log(element.id)
-        console.log(this.state.currentKey)
+        // console.log(element.id)
+        // console.log(this.state.currentKey)
 
         if (element.id !== this.state.currentKey) {
           // play back new file from the beginning
@@ -58,13 +58,13 @@ export default class AudioManager extends Component {
             this.fetchAudioAndPlay()
             //this.childAudio.audioEl.play()
           })
-          console.log(this.childAudio.audioEl.src)
+          // console.log(this.childAudio.audioEl.src)
         } else {
           // play back same file from current time
           // we don't need to update currentKey
           // just to update audio currentTime
-          console.log(this.childAudio.audioEl.src)
-          console.log(this.childAudio.audioEl.currentTime)
+          // console.log(this.childAudio.audioEl.src)
+          // console.log(this.childAudio.audioEl.currentTime)
           this.childAudio.audioEl.play()
         } 
       }
