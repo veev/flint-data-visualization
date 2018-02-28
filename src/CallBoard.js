@@ -35,6 +35,18 @@ export default class CallBoard extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    const compareArray = nextProps.activeData.filter(e => !this.props.activeData.includes(e))
+    // console.log(compareArray)
+    // console.log(compareArray.length)
+    if (compareArray.length > 0) {
+      this.setState({ isCommentDrawerOpen: false })
+      timeout(800).then(() => {
+        this.setState({ openPost: {} })
+      })
+    }
+  }
+
   toggleOpenIncident = (r) => {
     const temp = this.state.openIncidents
     if (this.state.openIncidents.includes(r)) {
